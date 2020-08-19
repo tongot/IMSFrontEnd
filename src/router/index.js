@@ -1,27 +1,115 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Login from '../views/Login.vue';
+import Dashboard from '../views/Dashboard.vue';
 
-Vue.use(VueRouter)
+import Policy from '../views/Policy.vue';
 
-  const routes = [
+import Funeral from '../components/Funeral.vue';
+import FuneralList from '../sections/FuneralPolicy/FuneralList';
+import FuneralDetail from '../sections/FuneralPolicy/FuneralDetails';
+
+import Settings from '../views/Settings';
+
+import GlobalEntities from '../components/GlobalEntities';
+import Underwriters from '../sections/GlobalEntities/ListUnderwriters';
+import Organizations from '../sections/GlobalEntities/ListOrganizations';
+
+import Processes from '../components/Processes';
+import Status from '../sections/Processes/PolicyStates';
+
+import Users from '../components/Users';
+
+Vue.use(VueRouter);
+
+const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/Login',
+    name: 'login',
+    component: Login,
   },
   {
+    path: '/Settings',
+    name: 'settings',
+    component: Settings,
+    children: [
+      {
+        path: 'GlobalEntities',
+        name: 'globalEntities',
+        component: GlobalEntities,
+        children: [
+          {
+            path: 'Underwriters',
+            name: 'underwriters',
+            component: Underwriters,
+          },
+          {
+            path: 'organizations',
+            name: 'organizations',
+            component: Organizations,
+          },
+        ],
+      },
+      {
+        path: 'Processes',
+        name: 'processes',
+        component: Processes,
+        children: [
+          {
+            path: 'Status',
+            name: 'status',
+            component: Status,
+          },
+        ],
+      },
+      {
+        path: 'Users',
+        name: 'users',
+        component: Users,
+      },
+    ],
+  },
+  {
+    path: '/Policy',
+    name: 'policy',
+    component: Policy,
+    children: [
+      {
+        path: 'funeral-policy',
+        name: 'funeral',
+        component: Funeral,
+        children: [
+          {
+            path: 'list',
+            name: 'funeralList',
+            component: FuneralList,
+          },
+          {
+            path: ':PolicyId',
+            name: 'funeralDetail',
+            component: FuneralDetail,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard,
+  },
+  /*{
     path: '/about',
     name: 'About',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    component: () => import(/* webpackChunkName: "about" '../views/About.vue'),
+  },*/
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

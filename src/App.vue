@@ -1,32 +1,123 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    <underwriterEdit />
+    <underwriterAdd />
+    <organizationEdit />
+    <organizationAdd />
+    <v-app id="inspire">
+      <v-navigation-drawer v-model="draw" left clipped app>
+        <v-list dense>
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon>{{ menus[0].icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ menus[0].name }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-group :prepend-icon="menus[1].icon">
+            <template v-slot:activator>
+              <v-list-item-title>{{ menus[1].name }}</v-list-item-title>
+            </template>
+            <v-list-group dense no-action sub-group v-for="(term, index) in menus[1].terms" :key="index">
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title :to="term.link">{{ term.term }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item :to="item.link" link v-for="(item, index) in term.items" :key="index">
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+              </v-list-item>
+            </v-list-group>
+          </v-list-group>
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon>{{ menus[2].icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ menus[2].name }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-group>
+            <template v-slot:activator>
+              <v-list-item-action>
+                <v-icon>{{ menus[3].icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-title>{{ menus[3].name }}</v-list-item-title>
+            </template>
+            <v-list-item :to="item.link" link v-for="(item, index) in menus[3].items" :key="index">
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+        </v-list>
+      </v-navigation-drawer>
+
+      <v-app-bar app color="primary" clipped-left dark>
+        <v-app-bar-nav-icon @click.stop="draw = !draw"></v-app-bar-nav-icon>
+        <v-toolbar-title>IMS</v-toolbar-title>
+      </v-app-bar>
+
+      <v-main>
+        <div fluid>
+          <router-view></router-view>
+        </div>
+      </v-main>
+      <v-footer color="primary" app>
+        <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
+      </v-footer>
+    </v-app>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+import { mapGetters } from 'vuex';
+import underwriterEdit from './sections/GlobalEntities/EditUnderwrites';
+import underwriterAdd from './sections/GlobalEntities/AddUnderwriters';
+import organizationEdit from './sections/GlobalEntities/EditOrganizations';
+import organizationAdd from './sections/GlobalEntities/AddOrganizations';
+export default {
+  components: {
+    underwriterEdit,
+    underwriterAdd,
+    organizationEdit,
+    organizationAdd,
+  },
+  data: () => ({
+    draw: null,
+    menus: [
+      { name: 'Dashboard', link: '/', icon: 'mdi-view-dashboard' },
+      {
+        name: 'Policies',
+        icon: 'mdi-sitemap',
+        terms: [
+          {
+            term: 'Long term',
+            items: [{ name: 'Funeral', link: { name: 'funeralList' } }],
+          },
+          {
+            term: 'Short term',
+            items: [],
+          },
+        ],
+      },
+      {
+        name: 'Policy Holders',
+        icon: 'mdi-account-multiple',
+        link: { name: 'policyHolders' },
+      },
+      {
+        name: 'Settings',
+        icon: 'mdi-locker',
+        items: [
+          { name: 'Global Entities', link: { name: 'underwriters' } },
+          { name: 'Processes', link: { name: 'status' } },
+          { name: 'Users', link: { name: 'users' } },
+        ],
+      },
+    ],
+  }),
+  methods: {},
+  computed: mapGetters(['get_user']),
+  created() {},
+};
+</script>
