@@ -4,6 +4,9 @@
     <underwriterAdd />
     <organizationEdit />
     <organizationAdd />
+    <newPolicyHolder />
+    <editPolicyHolder />
+    <errorPop />
     <v-app id="inspire">
       <v-navigation-drawer v-model="draw" left clipped app>
         <v-list dense>
@@ -30,7 +33,7 @@
               </v-list-item>
             </v-list-group>
           </v-list-group>
-          <v-list-item link>
+          <v-list-item link :to="menus[2].link">
             <v-list-item-action>
               <v-icon>{{ menus[2].icon }}</v-icon>
             </v-list-item-action>
@@ -75,12 +78,18 @@ import underwriterEdit from './sections/GlobalEntities/EditUnderwrites';
 import underwriterAdd from './sections/GlobalEntities/AddUnderwriters';
 import organizationEdit from './sections/GlobalEntities/EditOrganizations';
 import organizationAdd from './sections/GlobalEntities/AddOrganizations';
+import newPolicyHolder from './sections/PolicyHolder/NewPolicyHolder';
+import errorPop from './components/ErrorPop';
+import editPolicyHolder from './sections/PolicyHolder/EditPolicyHolder';
 export default {
   components: {
     underwriterEdit,
     underwriterAdd,
     organizationEdit,
     organizationAdd,
+    errorPop,
+    newPolicyHolder,
+    editPolicyHolder,
   },
   data: () => ({
     draw: null,
@@ -103,7 +112,7 @@ export default {
       {
         name: 'Policy Holders',
         icon: 'mdi-account-multiple',
-        link: { name: 'policyHolders' },
+        link: { name: 'policyholderList' },
       },
       {
         name: 'Settings',
@@ -112,6 +121,7 @@ export default {
           { name: 'Global Entities', link: { name: 'underwriters' } },
           { name: 'Processes', link: { name: 'status' } },
           { name: 'Users', link: { name: 'users' } },
+          { name: 'Funera Policy Packages', link: { name: 'packagesList' } },
         ],
       },
     ],

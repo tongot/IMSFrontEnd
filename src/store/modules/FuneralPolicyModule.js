@@ -1,19 +1,23 @@
 import axios from 'axios';
-import router from '../../router';
-
-//import router from '../../router';
 
 const state = {
   funeralPolicy: null,
   funeralPolicies: [],
   loadingFPolicy: false,
+  newPolicyHolderId: null,
+  hasPolicy: null,
 };
 const getters = {
   get_funeralPolicies: (state) => state.funeralPolicies,
   get_funeralPolicy: (state) => state.funeralPolicy,
   get_loadingFPolicy: (state) => state.loadingFPolicy,
+  get_hasPolicy: (state) => state.hasPolicy,
 };
 const actions = {
+  setPolicyHolderId({ commit }, id) {
+    state.hasPolicy = null;
+    commit('set_newPolicyHolderId', id);
+  },
   async GetFuneralPolicies({ commit }) {
     state.loadingFPolicy = true;
     axios
@@ -40,7 +44,6 @@ const actions = {
         (response) => {
           if (response.status === 200) {
             commit('set_funeralPolicy', response.data.data);
-            router.push({ name: 'funeralDetail', params: { PolicyId: id } });
             state.loadingFPolicy = false;
             return;
           }
@@ -57,10 +60,30 @@ const actions = {
         state.loadingFPolicy = false;
       });
   },
+  async HasPolicy({ commit }) {
+    state.loadingFPolicy = true;
+    axios
+      .get('/funeralPolicy/HasPolicy/' + state.newPolicyHolderId)
+      .then((response) => {
+        if (response.status === 200) {
+          commit('set_hasPolicy', response.data.data);
+          state.loadingFPolicy = false;
+          return;
+        }
+        alert(response.data.message);
+        state.loadingFPolicy = false;
+      })
+      .catch(() => {
+        alert('something happened');
+        state.loadingFPolicy = false;
+      });
+  },
 };
 const mutations = {
   set_funeralPolicies: (state, data) => (state.funeralPolicies = data),
   set_funeralPolicy: (state, data) => (state.funeralPolicy = data),
+  set_newPolicyHolderId: (state, data) => (state.newPolicyHolderId = data),
+  set_hasPolicy: (state, data) => (state.hasPolicy = data),
 };
 export default {
   state,

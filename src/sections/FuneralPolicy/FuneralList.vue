@@ -26,7 +26,7 @@
 
             <td>{{ policy.effectiveDate }}</td>
             <td>
-              <v-btn small @click="GetPolicyById(policy.id)" icon>
+              <v-btn small :to="{ name: 'funeralDetail', params: { PolicyId: policy.id } }" icon>
                 <v-icon>
                   mdi-eye
                 </v-icon>

@@ -6,8 +6,9 @@
         <v-icon left>
           mdi-format-list-bulleted
         </v-icon>
-        All Policies
+        Policies
       </v-btn>
+      <v-spacer></v-spacer>
     </v-toolbar>
     <v-container fluid>
       <router-view></router-view>

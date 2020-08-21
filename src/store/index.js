@@ -5,11 +5,19 @@ import funeralPolicyModule from './modules/FuneralPolicyModule';
 import underwriterModule from './modules/UnderwritersModule';
 import organizationModule from './modules/OrganizationModule';
 import processesModule from './modules/ProcessesModule';
+import policyHolderModule from './modules/PolicyHolderModule';
+import packageModule from './modules/PackagesModules';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    showSnack: false,
+    snackText: '',
+  },
+  getters: {
+    get_snackText: (state) => state.snackText,
+  },
   mutations: {},
   actions: {},
   modules: {
@@ -18,5 +26,7 @@ export default new Vuex.Store({
     underwriterModule,
     organizationModule,
     processesModule,
+    policyHolderModule,
+    packageModule,
   },
 });

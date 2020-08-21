@@ -15,10 +15,18 @@ import GlobalEntities from '../components/GlobalEntities';
 import Underwriters from '../sections/GlobalEntities/ListUnderwriters';
 import Organizations from '../sections/GlobalEntities/ListOrganizations';
 
+import Packages from '../components/Packages';
+import packagesList from '../sections/Packages/PackagesList';
+
 import Processes from '../components/Processes';
 import Status from '../sections/Processes/PolicyStates';
 
 import Users from '../components/Users';
+
+import PolicyHolder from '../components/PolicyHolder';
+
+import policyholderList from '../sections/PolicyHolder/policyHolderList';
+import policyholderDetail from '../sections/PolicyHolder/policyHolderDetail';
 
 Vue.use(VueRouter);
 
@@ -67,6 +75,18 @@ const routes = [
         name: 'users',
         component: Users,
       },
+      {
+        path: 'Packages',
+        name: 'packages',
+        component: Packages,
+        children: [
+          {
+            path: 'list',
+            name: 'packagesList',
+            component: packagesList,
+          },
+        ],
+      },
     ],
   },
   {
@@ -90,6 +110,23 @@ const routes = [
             component: FuneralDetail,
           },
         ],
+      },
+    ],
+  },
+  {
+    path: '/PolicyHolder',
+    name: 'policyHolder',
+    component: PolicyHolder,
+    children: [
+      {
+        path: 'list',
+        name: 'policyholderList',
+        component: policyholderList,
+      },
+      {
+        path: 'holder/:policyHolderId',
+        name: 'policyholderDetail',
+        component: policyholderDetail,
       },
     ],
   },
