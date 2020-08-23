@@ -6,6 +6,7 @@ const state = {
   loadingPackages: false,
   packagesError: null,
   ModalAddPackage: false,
+  ModalEditPackage: false,
 };
 const getters = {
   get_Packages: (state) => state.Packages,
@@ -13,10 +14,14 @@ const getters = {
   get_loadingPackage: (state) => state.loadingPackages,
   get_packagesError: (state) => state.packagesError,
   get_ModalAddPackage: (state) => state.ModalAddPackage,
+  get_ModalEditPackage: (state) => state.ModalEditPackage,
 };
 const actions = {
   CloseModalPackage() {
     state.ModalAddPackage = !state.ModalAddPackage;
+  },
+  CloseModalPackageEdit() {
+    state.ModalEditPackage = !state.ModalEditPackage;
   },
   async GetPackages({ commit }) {
     state.loadingPackages = true;
@@ -75,10 +80,131 @@ const actions = {
         state.policyHolderError = 'Error Posting please try again later';
       });
   },
+  async EditPackage({ commit }, Package) {
+    state.packagesError = null;
+    state.loadingPackages = true;
+    axios
+      .put('/package', {
+        id: Package.id,
+        name: Package.name,
+        monthlyContribution: Package.monthlyContribution,
+        coverAmount: Package.coverAmount,
+        tombStone: Package.tombStone,
+        groceryAmount: Package.groceryAmount,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            state.packagesError = null;
+            state.loadingPackages = false;
+            state.ModalEditPackage = false;
+            commit('set_EditPackage', Package);
+            return;
+          }
+          state.loadingPackages = false;
+          state.packagesError = response.data.message;
+        },
+        (e) => {
+          state.loadingPackages = false;
+          state.packagesError = e.response.data.message;
+        }
+      )
+      .catch(() => {
+        state.loadingPackages = false;
+        state.policyHolderError = 'Error Posting please try again later';
+      });
+  },
+  async AddDependentPackage({ commit }, Package) {
+    console.log(Package);
+    state.packagesError = null;
+    state.loadingPackages = true;
+    axios
+      .post('/DependentPackage', {
+        name: Package.name,
+        monthlyContribution: Package.monthlyContribution,
+        coverAmount: Package.coverAmount,
+        tombStone: Package.tombStone,
+        groceryAmount: Package.groceryAmount,
+        packageId: Package.packageId,
+      })
+      .then(
+        (response) => {
+          if (response.status === 201) {
+            state.packagesError = null;
+            state.loadingPackages = false;
+            state.ModalAddPackage = false;
+            //push dependent package added
+            state.Packages[Package.index].dependentPackages.push(response.data.data);
+            commit('set_Package', response.data.data);
+            return;
+          }
+          state.loadingPackages = false;
+          state.packagesError = response.data.message;
+        },
+        (e) => {
+          state.loadingPackages = false;
+          state.packagesError = e.response.data.message;
+        }
+      )
+      .catch(() => {
+        state.loadingPackages = false;
+        state.policyHolderError = 'Error Posting please try again later';
+      });
+  },
+  async EditDependentPackage({ commit }, Package) {
+    state.packagesError = null;
+    state.loadingPackages = true;
+    axios
+      .put('/DependentPackage', {
+        id: Package.id,
+        name: Package.name,
+        monthlyContribution: Package.monthlyContribution,
+        coverAmount: Package.coverAmount,
+        tombStone: Package.tombStone,
+        groceryAmount: Package.groceryAmount,
+        packageId: Package.packageId,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            state.packagesError = null;
+            state.loadingPackages = false;
+            state.ModalEditPackage = false;
+            commit('set_EditDependentPackage', Package);
+            return;
+          }
+          state.loadingPackages = false;
+          state.packagesError = response.data.message;
+        },
+        (e) => {
+          state.loadingPackages = false;
+          state.packagesError = e.response.data.message;
+        }
+      )
+      .catch(() => {
+        state.loadingPackages = false;
+        state.policyHolderError = 'Error Posting please try again later';
+      });
+  },
 };
 const mutations = {
   set_Packages: (state, data) => (state.Packages = data),
   set_Package: (state, data) => (state.Package = data),
+  set_EditPackage: (state, data) => (
+    (state.Packages[data.index].name = data.name),
+    (state.Packages[data.index].monthlyContribution = data.monthlyContribution),
+    (state.Packages[data.index].coverAmount = data.coverAmount),
+    (state.Packages[data.index].tombStone = data.tombStone),
+    (state.Packages[data.index].groceryAmount = data.groceryAmount)
+  ),
+  set_EditDependentPackage: (state, data) => (
+    (state.Packages[data.index].dependentPackages[data.index2].name = data.name),
+    (state.Packages[data.index].dependentPackages[data.index2].monthlyContribution = data.monthlyContribution),
+    (state.Packages[data.index].dependentPackages[data.index2].coverAmount = data.coverAmount),
+    (state.Packages[data.index].dependentPackages[data.index2].tombStone = data.tombStone),
+    (state.Packages[data.index].dependentPackages[data.index2].groceryAmount = data.groceryAmount),
+    (state.Packages[data.index].dependentPackages[data.index2].packageId = data.packageId)
+  ),
 };
 export default {
   state,
