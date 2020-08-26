@@ -14,24 +14,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="policy in get_funeralPolicies" :key="policy.id">
+          <tr @click="Details(policy.id)" v-for="policy in get_funeralPolicies" :key="policy.id">
             <td>
-              <v-chip small="" :class="status(policy.stateName)">
-                {{ policy.stateName }}
-              </v-chip>
+              <v-chip small :class="status(policy.stateName)">{{ policy.stateName }}</v-chip>
             </td>
             <td>{{ policy.policyHolder.firstName }}</td>
             <td>{{ policy.policyHolder.lastName }}</td>
             <td>{{ policy.policyNumber }}</td>
 
             <td>{{ policy.effectiveDate }}</td>
-            <td>
-              <v-btn small :to="{ name: 'funeralDetail', params: { PolicyId: policy.id } }" icon>
-                <v-icon>
-                  mdi-eye
-                </v-icon>
-              </v-btn>
-            </td>
+            <td></td>
           </tr>
         </tbody>
       </template>
@@ -40,17 +32,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   methods: {
     status(name) {
-      if (name == 'Active') {
-        return 'success';
+      if (name == "Active") {
+        return "success";
       }
     },
-    ...mapActions(['GetFuneralPolicies', 'GetPolicyById']),
+    Details(id) {
+      this.$router.push({ name: "funeralDetail", params: { PolicyId: id } });
+    },
+    ...mapActions(["GetFuneralPolicies", "GetPolicyById"]),
   },
-  computed: mapGetters(['get_funeralPolicies', 'get_loadingFPolicy']),
+  computed: mapGetters(["get_funeralPolicies", "get_loadingFPolicy"]),
   mounted() {
     this.GetFuneralPolicies();
   },

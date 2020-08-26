@@ -7,6 +7,9 @@ const state = {
   packagesError: null,
   ModalAddPackage: false,
   ModalEditPackage: false,
+  dependentPackage: null,
+  DependentCover: null,
+  policyHolderCover: null,
 };
 const getters = {
   get_Packages: (state) => state.Packages,
@@ -15,6 +18,8 @@ const getters = {
   get_packagesError: (state) => state.packagesError,
   get_ModalAddPackage: (state) => state.ModalAddPackage,
   get_ModalEditPackage: (state) => state.ModalEditPackage,
+  get_dependentCover: (state) => state.dependentPackage,
+  get_policyHolderCover: (state) => state.policyHolderCover,
 };
 const actions = {
   CloseModalPackage() {
@@ -25,6 +30,7 @@ const actions = {
   },
   async GetPackages({ commit }) {
     state.loadingPackages = true;
+    state.packagesError = null;
     axios
       .get('/package/getAll')
       .then(
@@ -115,7 +121,6 @@ const actions = {
       });
   },
   async AddDependentPackage({ commit }, Package) {
-    console.log(Package);
     state.packagesError = null;
     state.loadingPackages = true;
     axios
@@ -186,10 +191,60 @@ const actions = {
         state.policyHolderError = 'Error Posting please try again later';
       });
   },
+  async GetDependentCover({ commit }, id) {
+    state.loadingPackages = true;
+    state.DependentCover = null;
+    axios
+      .get('/DependentPackage/' + id)
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            commit('set_dependentCover', response.data.data);
+            state.loadingPackages = false;
+            return;
+          }
+          state.packagesError = response.data.message;
+          state.loadingPackages = false;
+        },
+        (e) => {
+          state.loadingPackages = false;
+          state.packagesError = e.response.data.message;
+        }
+      )
+      .catch(() => {
+        alert('something happened');
+      });
+  },
+  async GetPolicyHolderCover({ commit }, id) {
+    state.loadingPackages = true;
+    state.policyHolderCover = null;
+    axios
+      .get('/policyCover/GetPolicyHolderCover/' + id)
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            commit('set_policyHolderCover', response.data.data);
+            state.loadingPackages = false;
+            return;
+          }
+          state.packagesError = response.data.message;
+          state.loadingPackages = false;
+        },
+        (e) => {
+          state.loadingPackages = false;
+          state.packagesError = e.response.data.message;
+        }
+      )
+      .catch(() => {
+        alert('something happened');
+      });
+  },
 };
 const mutations = {
   set_Packages: (state, data) => (state.Packages = data),
   set_Package: (state, data) => (state.Package = data),
+  set_dependentCover: (state, data) => (state.dependentPackage = data),
+  set_policyHolderCover: (state, data) => (state.policyHolderCover = data),
   set_EditPackage: (state, data) => (
     (state.Packages[data.index].name = data.name),
     (state.Packages[data.index].monthlyContribution = data.monthlyContribution),

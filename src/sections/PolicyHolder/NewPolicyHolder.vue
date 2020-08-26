@@ -7,19 +7,20 @@
       transition="dialog-bottom-transition"
       persistent
     >
-      <v-card flat="">
+      <v-card flat>
         <v-toolbar dark>
-          <v-toolbar-title>Add New Policy Holder</v-toolbar-title> <v-spacer></v-spacer>
-          <v-btn color="error" class="mr-2" @click="Cancel()" depressed>
-            Cancel
-          </v-btn>
-          <v-btn color="grey" @click.prevent="PostHolder()" class="mr-2" :loading="get_loadingPolicyHolder" depressed>
-            Add
-          </v-btn>
+          <v-toolbar-title>Add New Policy Holder</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn color="error" class="mr-2" @click="Cancel()" depressed>Cancel</v-btn>
+          <v-btn
+            color="grey"
+            @click.prevent="PostHolder()"
+            class="mr-2"
+            :loading="get_loadingPolicyHolder"
+            depressed
+          >Add</v-btn>
           <v-btn color="red" icon @click="Close()">
-            <v-icon>
-              mdi-close
-            </v-icon>
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card-text>
@@ -31,23 +32,39 @@
               <v-form ref="formAdd">
                 <v-row>
                   <v-col md="1" sm="4" xs="4">
-                    <v-combobox label="Title" :items="getTitle()" :rules="[rules.required]" v-model="holder.salutation">
-                    </v-combobox>
+                    <v-combobox
+                      label="Title"
+                      :items="getTitle()"
+                      :rules="[rules.required]"
+                      v-model="holder.salutation"
+                    ></v-combobox>
                   </v-col>
                   <v-col md="1" sm="4" xs="4">
-                    <v-combobox label="Gender" :rules="[rules.required]" :items="getGender()" v-model="holder.gender">
-                    </v-combobox>
+                    <v-combobox
+                      label="Gender"
+                      :rules="[rules.required]"
+                      :items="getGender()"
+                      v-model="holder.gender"
+                    ></v-combobox>
                   </v-col>
                   <v-col md="3" sm="12" xs="12">
-                    <v-text-field v-model="holder.firstName" :rules="[rules.required]" label="Fisrt Name"></v-text-field>
+                    <v-text-field
+                      v-model="holder.firstName"
+                      :rules="[rules.required]"
+                      label="Fisrt Name"
+                    ></v-text-field>
                   </v-col>
                   <v-col md="3" sm="12" xs="12">
                     <v-text-field v-model="holder.middleName" label="Middle Name"></v-text-field>
                   </v-col>
                   <v-col md="4" sm="12" xs="12">
-                    <v-text-field v-model="holder.lastName" :rules="[rules.required]" label="Last Name"></v-text-field>
+                    <v-text-field
+                      v-model="holder.lastName"
+                      :rules="[rules.required]"
+                      label="Last Name"
+                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="4" sm="12"> </v-col>
+                  <v-col cols="12" md="4" sm="12"></v-col>
                 </v-row>
                 <v-row>
                   <v-col md="3" sm="12" xs="12">
@@ -78,11 +95,19 @@
                     </v-menu>
                   </v-col>
                   <v-col md="2" sm="4" xs="4">
-                    <v-combobox label="Id Type" :rules="[rules.required]" :items="getIdType()" v-model="holder.idType">
-                    </v-combobox>
+                    <v-combobox
+                      label="Id Type"
+                      :rules="[rules.required]"
+                      :items="getIdType()"
+                      v-model="holder.idType"
+                    ></v-combobox>
                   </v-col>
                   <v-col md="3" sm="12" xs="12">
-                    <v-text-field v-model="holder.idNumber" :rules="[rules.required]" label="Id Number"></v-text-field>
+                    <v-text-field
+                      v-model="holder.idNumber"
+                      :rules="[rules.required]"
+                      label="Id Number"
+                    ></v-text-field>
                   </v-col>
                   <v-col md="4" sm="12" xs="12">
                     <v-text-field
@@ -94,9 +119,7 @@
                 </v-row>
                 <v-row>
                   <v-col md="4" sm="12">
-                    <v-subheader>
-                      Disabled
-                    </v-subheader>
+                    <v-subheader>Disabled</v-subheader>
                     <v-divider></v-divider>
                     <v-radio-group :rules="[rules.required]" v-model="holder.disabled" row>
                       <v-radio value="true" label="Yes"></v-radio>
@@ -109,8 +132,7 @@
                       :rules="[rules.required]"
                       v-model="holder.maritalStatus"
                       :items="getMaritalState()"
-                    >
-                    </v-combobox>
+                    ></v-combobox>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -181,41 +203,41 @@
 </template>
 
 <script>
-import enums from '../../Dictionary/Dictionary';
-import { mapGetters, mapActions } from 'vuex';
+import enums from "../../Dictionary/Dictionary";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     menu: false,
     holder: {
-      department: '',
-      branch: '',
-      maritalStatus: '',
-      occupation: '',
-      salutation: '',
-      firstName: '',
-      lastName: '',
-      middleName: '',
-      gender: '',
-      dateOfBirth: '',
-      idNumber: '',
-      idType: '',
-      countryOfIssue: '',
-      disabled: '',
+      department: "",
+      branch: "",
+      maritalStatus: "",
+      occupation: "",
+      salutation: "",
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      gender: "",
+      dateOfBirth: "",
+      idNumber: "",
+      idType: "",
+      countryOfIssue: "",
+      disabled: "",
       contact: {
-        mobile: '',
-        telephoneHome: '',
-        telephoneWork: '',
-        primaryEmail: '',
-        workAddress: '',
-        postalAddress: '',
-        physicalAddress: '',
+        mobile: "",
+        telephoneHome: "",
+        telephoneWork: "",
+        primaryEmail: "",
+        workAddress: "",
+        postalAddress: "",
+        physicalAddress: "",
       },
     },
     rules: {
-      required: (v) => !!v || 'This fieled is required',
+      required: (v) => !!v || "This fieled is required",
       email: (value) => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(value) || 'Invalid e-mail.';
+        return pattern.test(value) || "Invalid e-mail.";
       },
     },
   }),
@@ -234,7 +256,7 @@ export default {
     },
     PostHolder() {
       if (this.$refs.formAdd.validate()) {
-        console.log('hit');
+        console.log("hit");
         this.AddPolicyHolder(this.holder);
       }
     },
@@ -246,31 +268,35 @@ export default {
       this.CloseAddPolicyHolderDialog();
     },
     clearForm() {
-      this.holder.department = '';
-      this.holder.branch = '';
-      this.holder.maritalStatus = '';
-      this.holder.occupation = '';
-      this.holder.salutation = '';
-      this.holder.firstName = '';
-      this.holder.lastName = '';
-      this.holder.middleName = '';
-      this.holder.gender = '';
-      this.holder.dateOfBirth = '';
-      this.holder.idNumber = '';
-      this.holder.idType = '';
-      this.holder.countryOfIssue = '';
-      this.holder.disabled = '';
-      this.holder.contact.mobile = '';
-      this.holder.contact.telephoneHome = '';
-      this.holder.contact.telephoneWork = '';
-      this.holder.contact.primaryEmail = '';
-      this.holder.contact.workAddress = '';
-      this.holder.contact.postalAddress = '';
-      this.holder.contact.physicalAddress = '';
+      this.holder.department = "";
+      this.holder.branch = "";
+      this.holder.maritalStatus = "";
+      this.holder.occupation = "";
+      this.holder.salutation = "";
+      this.holder.firstName = "";
+      this.holder.lastName = "";
+      this.holder.middleName = "";
+      this.holder.gender = "";
+      this.holder.dateOfBirth = "";
+      this.holder.idNumber = "";
+      this.holder.idType = "";
+      this.holder.countryOfIssue = "";
+      this.holder.disabled = "";
+      this.holder.contact.mobile = "";
+      this.holder.contact.telephoneHome = "";
+      this.holder.contact.telephoneWork = "";
+      this.holder.contact.primaryEmail = "";
+      this.holder.contact.workAddress = "";
+      this.holder.contact.postalAddress = "";
+      this.holder.contact.physicalAddress = "";
     },
-    ...mapActions(['CloseAddPolicyHolderDialog', 'AddPolicyHolder']),
+    ...mapActions(["CloseAddPolicyHolderDialog", "AddPolicyHolder"]),
   },
-  computed: mapGetters(['get_dialogAddPolicyHolder', 'get_policyHolderError', 'get_loadingPolicyHolder']),
+  computed: mapGetters([
+    "get_dialogAddPolicyHolder",
+    "get_policyHolderError",
+    "get_loadingPolicyHolder",
+  ]),
 };
 </script>
 

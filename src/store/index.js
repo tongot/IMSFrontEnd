@@ -7,6 +7,7 @@ import organizationModule from './modules/OrganizationModule';
 import processesModule from './modules/ProcessesModule';
 import policyHolderModule from './modules/PolicyHolderModule';
 import packageModule from './modules/PackagesModules';
+import dependentModule from './modules/DependentModule';
 
 Vue.use(Vuex);
 
@@ -28,5 +29,6 @@ export default new Vuex.Store({
     processesModule,
     policyHolderModule,
     packageModule,
+    dependentModule,
   },
 });

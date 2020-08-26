@@ -1,8 +1,9 @@
 <template>
   <div v-if="get_funeralPolicy != null">
     <v-card v-if="get_funeralPolicy.policyHolder != null" outlined>
-      <v-card-title>Policy holder details</v-card-title>
-      <v-divider></v-divider>
+      <v-toolbar dark color="light-blue" flat>
+        <v-toolbar-title>Policy holder details</v-toolbar-title>
+      </v-toolbar>
       <v-row class="pa-2">
         <v-col md="4" xs="12" sm="12">
           <h4>Personal Details</h4>
@@ -10,9 +11,9 @@
           <v-subheader>Salutation</v-subheader>
           <p class="pl-4">{{ getTitle(get_funeralPolicy.policyHolder.salutation) }}</p>
           <v-subheader>Name</v-subheader>
-          <p class="pl-4">
-            {{ get_funeralPolicy.policyHolder.firstName + ' ' + get_funeralPolicy.policyHolder.middleName }}
-          </p>
+          <p
+            class="pl-4"
+          >{{ get_funeralPolicy.policyHolder.firstName + ' ' + get_funeralPolicy.policyHolder.middleName }}</p>
           <v-subheader>Surname</v-subheader>
           <p class="pl-4">{{ get_funeralPolicy.policyHolder.lastName }}</p>
           <v-subheader>Marital Status</v-subheader>
@@ -23,7 +24,7 @@
           <p class="pl-4">{{ get_funeralPolicy.policyHolder.dateOfBirth }}</p>
           <v-subheader>Disabled</v-subheader>
           <span class="ml-4">
-            <v-chip small v-if="!get_funeralPolicy.policyHolder.disables">No</v-chip>
+            <v-chip small v-if="!get_funeralPolicy.policyHolder.disabled">No</v-chip>
             <v-chip small class="red white--text" v-if="get_funeralPolicy.policyHolder.disabled">Yes</v-chip>
           </span>
         </v-col>
@@ -48,97 +49,281 @@
           <p class="pl-4">{{ get_funeralPolicy.policyHolder.countryOfIssue }}</p>
         </v-col>
       </v-row>
+      <v-divider></v-divider>
+      <v-card flat>
+        <v-card-title>Cover Details</v-card-title>
+        <div v-if="get_policyHolderCover!=null" class="ma-2">
+          <v-row>
+            <v-col md="6" sm="12">
+              <v-subheader>Effective Date</v-subheader>
+              <p class="pl-4">{{get_policyHolderCover.effectiveDate}}</p>
+              <v-subheader>Pay Point</v-subheader>
+              <p class="pl-4">{{ get_policyHolderCover.payPoint}}</p>
+              <v-subheader>DJC</v-subheader>
+              <p class="pl-4">{{ get_policyHolderCover.djcDate }}</p>
+              <v-subheader>DJF</v-subheader>
+              <p class="pl-4">{{get_policyHolderCover.djfDate}}</p>
+              <v-subheader>DPS</v-subheader>
+              <p class="pl-4">{{get_policyHolderCover.dpsDate }}</p>
+            </v-col>
+            <v-col md="6" sm="12">
+              <v-card v-if="get_policyHolderCover.package!=null" outlined>
+                <v-card-title>Package details</v-card-title>
+                <div class="ma-2">
+                  <v-card>
+                    <v-card-title>
+                      {{ get_policyHolderCover.package.name }}
+                      <v-spacer></v-spacer>
+                      <v-chip
+                        color="success white--text"
+                      >{{ get_policyHolderCover.package.coverAmount }}</v-chip>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                      <v-list dense>
+                        <v-list-item>
+                          <v-list-item-title>Monthly Contribution</v-list-item-title>
+                          <v-list-item-action>{{ get_policyHolderCover.package.monthlyContribution }}</v-list-item-action>
+                        </v-list-item>
+                        <v-list-item>
+                          <v-list-item-title>Tombstone</v-list-item-title>
+                          <v-list-item-action>{{ get_policyHolderCover.package.tombStone }}</v-list-item-action>
+                        </v-list-item>
+                        <v-list-item>
+                          <v-list-item-title>Grocery Amount</v-list-item-title>
+                          <v-list-item-action>{{ get_policyHolderCover.package.groceryAmount }}</v-list-item-action>
+                        </v-list-item>
+                      </v-list>
+                    </v-card-text>
+                  </v-card>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
+      </v-card>
     </v-card>
-    <v-row>
-      <v-col md="4" xs="12" sm="12">
-        <v-card outlined="">
-          <v-card-title
-            >Policy
-            <v-spacer></v-spacer>
-            <v-btn depressed disabled>Funeral</v-btn>
-          </v-card-title>
-          <v-divider></v-divider>
-          <v-subheader>Status</v-subheader>
-          <span v-if="get_funeralPolicy.status != null">
-            <p class="pl-4">{{ get_funeralPolicy.status.name }}</p>
-          </span>
 
-          <v-subheader>Policy Number</v-subheader>
-          <p class="pl-4">{{ get_funeralPolicy.policyNumber }}</p>
-          <v-subheader>Effective Date</v-subheader>
-          <p class="pl-4">{{ get_funeralPolicy.effectiveDate }}</p>
-          <v-subheader>Application Date</v-subheader>
-          <p class="pl-4">{{ get_funeralPolicy.applicationDate }}</p>
-          <v-subheader>Joining Date</v-subheader>
-          <p class="pl-4">{{ get_funeralPolicy.joiningDate }}</p>
-          <v-subheader>Created On</v-subheader>
-          <p class="pl-4">{{ get_funeralPolicy.createdOn }}</p>
-        </v-card>
-      </v-col>
-      <v-col md="4" xs="12" sm="12">
-        <v-card outlined="" v-if="get_funeralPolicy.underwriter != null">
-          <v-card-title>Underwriter </v-card-title>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col md="6" xs="12" sm="12">
-              <v-subheader>Name</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.name }}</p>
-              <v-subheader>Commission</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.commission }}</p>
-              <v-subheader>Phone Number</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.phone }}</p>
-              <v-subheader>Email</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.email }}</p>
-              <v-subheader>Contact Person</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.contactPerson }}</p>
-            </v-col>
-            <v-col md="6" xs="12" sm="12">
-              <v-subheader>Contact Person Phone</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.contactPersonNumber }}</p>
-              <v-subheader>Postal Address</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.postalAddress }}</p>
-              <v-subheader>Physical Address</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.underwriter.physicalAddress }}</p>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-      <v-col md="4" xs="12" sm="12">
-        <v-card v-if="get_funeralPolicy.organization != null" outlined="">
-          <v-card-title>Organization </v-card-title>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col md="6" xs="12" sm="12">
-              <v-subheader>Name</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.name }}</p>
-              <v-subheader>Phone Number</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.phone }}</p>
-              <v-subheader>Email</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.email }}</p>
-              <v-subheader>Contact Person</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.contactPerson }}</p>
-            </v-col>
-            <v-col md="6" xs="12" sm="12">
-              <v-subheader>Contact Person Phone</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.contactPersonNumber }}</p>
-              <v-subheader>Postal Address</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.postalAddress }}</p>
-              <v-subheader>Physical Address</v-subheader>
-              <p class="pl-4">{{ get_funeralPolicy.organization.physicalAddress }}</p>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
+    <!--dependencies card -->
+    <v-card class="mt-2" outlined>
+      <v-toolbar flat dark color="light-blue">
+        <v-toolbar-title>Dependencies</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          :loading="get_loadingDependent"
+          text
+          @click=" addDependent(get_funeralPolicy.policyHolder.id,get_funeralPolicy.funeralPolicy.id)"
+        >
+          <v-icon left>mdi-plus</v-icon>Add
+        </v-btn>
+      </v-toolbar>
+      <v-card-text v-if="get_Dependencies.length>0">
+        <v-expansion-panels flat>
+          <v-expansion-panel
+            @click="openDependent(dependent.policyCover.dependentPackageId)"
+            v-for="dependent in get_Dependencies"
+            :key="dependent.id"
+          >
+            <v-expansion-panel-header>
+              {{dependent.firstName +" "+dependent.middleName+" "+dependent.lastName}}
+              <v-spacer></v-spacer>
+              <v-chip>{{dependent.relationship}}</v-chip>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-card flat>
+                <v-row class="ma-1">
+                  <v-col md="4" sm="12">
+                    <v-subheader>Salutation</v-subheader>
+                    <p class="pl-4">{{dependent.salutation}}</p>
+                    <v-subheader>Name</v-subheader>
+                    <p class="pl-4">{{ dependent.firstName + ' ' + dependent.middleName }}</p>
+                    <v-subheader>Surname</v-subheader>
+                    <p class="pl-4">{{ dependent.lastName }}</p>
+                    <v-subheader>Marital Status</v-subheader>
+                    <p class="pl-4">{{dependent.maritalStatus}}</p>
+                    <v-subheader>Gender</v-subheader>
+                    <p class="pl-4">{{dependent.gender }}</p>
+                    <v-subheader>Date of birth</v-subheader>
+                    <p class="pl-4">{{ dependent.dateOfBirth }}</p>
+                    <v-subheader>Disabled</v-subheader>
+                    <span class="ml-4">
+                      <v-chip small v-if="dependent.disabled=='No'">No</v-chip>
+                      <v-chip small class="red white--text" v-if="dependent.disabled=='Yes'">Yes</v-chip>
+                    </span>
+                  </v-col>
+                  <v-col md="4" sm="12">
+                    <v-card outlined>
+                      <v-card-title>Cover details</v-card-title>
+                      <div class="ma-2">
+                        <v-subheader>Effective Date</v-subheader>
+                        <p class="pl-4">{{dependent.policyCover.effectiveDate}}</p>
+                        <v-subheader>Pay Point</v-subheader>
+                        <p class="pl-4">{{ dependent.policyCover.payPoint}}</p>
+                        <v-subheader>DJC</v-subheader>
+                        <p class="pl-4">{{ dependent.policyCover.djcDate }}</p>
+                        <v-subheader>DJF</v-subheader>
+                        <p class="pl-4">{{dependent.policyCover.djfDate}}</p>
+                        <v-subheader>DPS</v-subheader>
+                        <p class="pl-4">{{dependent.policyCover.dpsDate }}</p>
+                      </div>
+                    </v-card>
+                  </v-col>
+                  <v-col md="4" sm="12">
+                    <v-card v-if="get_dependentCover!=null" outlined>
+                      <v-card-title>Package details</v-card-title>
+                      <div class="ma-2">
+                        <v-card>
+                          <v-card-title>
+                            {{ get_dependentCover.name }}
+                            <v-spacer></v-spacer>
+                            <v-chip color="success white--text">{{ get_dependentCover.coverAmount }}</v-chip>
+                          </v-card-title>
+                          <v-divider></v-divider>
+                          <v-card-text>
+                            <v-list dense>
+                              <v-list-item>
+                                <v-list-item-title>Monthly Contribution</v-list-item-title>
+                                <v-list-item-action>{{ get_dependentCover.monthlyContribution }}</v-list-item-action>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Tombstone</v-list-item-title>
+                                <v-list-item-action>{{ get_dependentCover.tombStone }}</v-list-item-action>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Grocery Amount</v-list-item-title>
+                                <v-list-item-action>{{ get_dependentCover.groceryAmount }}</v-list-item-action>
+                              </v-list-item>
+                            </v-list>
+                          </v-card-text>
+                        </v-card>
+                      </div>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-card-text>
+      <v-card-text v-if="get_Dependencies.length==0">
+        <v-row justify="center">
+          <v-btn
+            large
+            :loading="get_loadingDependent"
+            text
+            @click=" addDependent(get_funeralPolicy.policyHolder.id,get_funeralPolicy.funeralPolicy.id)"
+          >
+            <v-icon left>mdi-plus</v-icon>Add Dependencies Here
+          </v-btn>
+        </v-row>
+      </v-card-text>
+    </v-card>
+
+    <v-card class="mt-2" outlined>
+      <v-toolbar dark color="light-blue" flat>
+        <v-toolbar-title>Policy Details</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn depressed disabled>Funeral</v-btn>
+      </v-toolbar>
+      <v-row>
+        <v-col md="4" xs="12" sm="12">
+          <v-card outlined>
+            <v-card-title>
+              Policy
+              <v-spacer></v-spacer>
+              <v-btn depressed disabled>Funeral</v-btn>
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-subheader>Status</v-subheader>
+            <span v-if="get_funeralPolicy.status != null">
+              <p class="pl-4">{{ get_funeralPolicy.status.name }}</p>
+            </span>
+
+            <v-subheader>Policy Number</v-subheader>
+            <p class="pl-4">{{ get_funeralPolicy.policyNumber }}</p>
+            <v-subheader>Effective Date</v-subheader>
+            <p class="pl-4">{{ get_funeralPolicy.effectiveDate }}</p>
+            <v-subheader>Application Date</v-subheader>
+            <p class="pl-4">{{ get_funeralPolicy.applicationDate }}</p>
+            <v-subheader>Joining Date</v-subheader>
+            <p class="pl-4">{{ get_funeralPolicy.joiningDate }}</p>
+            <v-subheader>Created On</v-subheader>
+            <p class="pl-4">{{ get_funeralPolicy.createdOn }}</p>
+          </v-card>
+        </v-col>
+        <v-col md="4" xs="12" sm="12">
+          <v-card outlined v-if="get_funeralPolicy.underwriter != null">
+            <v-card-title>Underwriter</v-card-title>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col md="6" xs="12" sm="12">
+                <v-subheader>Name</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.name }}</p>
+                <v-subheader>Commission</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.commission }}</p>
+                <v-subheader>Phone Number</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.phone }}</p>
+                <v-subheader>Email</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.email }}</p>
+                <v-subheader>Contact Person</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.contactPerson }}</p>
+              </v-col>
+              <v-col md="6" xs="12" sm="12">
+                <v-subheader>Contact Person Phone</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.contactPersonNumber }}</p>
+                <v-subheader>Postal Address</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.postalAddress }}</p>
+                <v-subheader>Physical Address</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.underwriter.physicalAddress }}</p>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+        <v-col md="4" xs="12" sm="12">
+          <v-card v-if="get_funeralPolicy.organization != null" outlined>
+            <v-card-title>Organization</v-card-title>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col md="6" xs="12" sm="12">
+                <v-subheader>Name</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.name }}</p>
+                <v-subheader>Phone Number</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.phone }}</p>
+                <v-subheader>Email</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.email }}</p>
+                <v-subheader>Contact Person</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.contactPerson }}</p>
+              </v-col>
+              <v-col md="6" xs="12" sm="12">
+                <v-subheader>Contact Person Phone</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.contactPersonNumber }}</p>
+                <v-subheader>Postal Address</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.postalAddress }}</p>
+                <v-subheader>Physical Address</v-subheader>
+                <p class="pl-4">{{ get_funeralPolicy.organization.physicalAddress }}</p>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
   </div>
 </template>
 
 <script>
-import enums from '../../Dictionary/Dictionary';
-import { mapGetters, mapActions } from 'vuex';
+import enums from "../../Dictionary/Dictionary";
+import { mapGetters, mapActions } from "vuex";
 export default {
   methods: {
-    ...mapActions(['GetPolicyById']),
+    ...mapActions([
+      "GetPolicyById",
+      "CloseAddDependentDialog",
+      "GetDependentPackage",
+      "SetPolicyId",
+      "GetDependenciesForPolicy",
+      "GetDependentCover",
+      "GetPolicyHolderCover",
+    ]),
     getGender(n) {
       return enums.gender[n];
     },
@@ -151,10 +336,27 @@ export default {
     getIdType(id) {
       return enums.idType[id];
     },
+    addDependent(holderId, policyId) {
+      this.GetDependentPackage(holderId);
+      this.SetPolicyId(policyId);
+      this.CloseAddDependentDialog();
+    },
+    openDependent(PackageId) {
+      this.GetDependentCover(PackageId);
+    },
   },
-  computed: mapGetters(['get_funeralPolicy']),
+  computed: mapGetters([
+    "get_funeralPolicy",
+    "get_Dependencies",
+    "get_loadingDependent",
+    "get_dependentCover",
+    "get_policyHolderCover",
+  ]),
   mounted() {
-    this.GetPolicyById(this.$route.params.PolicyId);
+    this.GetPolicyById(this.$route.params.PolicyId).then(() => {
+      this.GetDependenciesForPolicy(this.get_funeralPolicy.funeralPolicy.id);
+      this.GetPolicyHolderCover(this.get_funeralPolicy.policyHolder.id);
+    });
   },
 };
 </script>

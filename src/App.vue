@@ -6,6 +6,8 @@
     <organizationAdd />
     <newPolicyHolder />
     <editPolicyHolder />
+    <addNewFPolicy />
+    <addDependent />
     <errorPop />
     <v-app id="inspire">
       <v-navigation-drawer v-model="draw" left clipped app>
@@ -22,7 +24,13 @@
             <template v-slot:activator>
               <v-list-item-title>{{ menus[1].name }}</v-list-item-title>
             </template>
-            <v-list-group dense no-action sub-group v-for="(term, index) in menus[1].terms" :key="index">
+            <v-list-group
+              dense
+              no-action
+              sub-group
+              v-for="(term, index) in menus[1].terms"
+              :key="index"
+            >
               <template v-slot:activator>
                 <v-list-item-content>
                   <v-list-item-title :to="term.link">{{ term.term }}</v-list-item-title>
@@ -73,14 +81,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import underwriterEdit from './sections/GlobalEntities/EditUnderwrites';
-import underwriterAdd from './sections/GlobalEntities/AddUnderwriters';
-import organizationEdit from './sections/GlobalEntities/EditOrganizations';
-import organizationAdd from './sections/GlobalEntities/AddOrganizations';
-import newPolicyHolder from './sections/PolicyHolder/NewPolicyHolder';
-import errorPop from './components/ErrorPop';
-import editPolicyHolder from './sections/PolicyHolder/EditPolicyHolder';
+import { mapGetters } from "vuex";
+import errorPop from "./components/ErrorPop";
+import underwriterEdit from "./sections/GlobalEntities/EditUnderwrites";
+import underwriterAdd from "./sections/GlobalEntities/AddUnderwriters";
+import organizationEdit from "./sections/GlobalEntities/EditOrganizations";
+import organizationAdd from "./sections/GlobalEntities/AddOrganizations";
+import newPolicyHolder from "./sections/PolicyHolder/NewPolicyHolder";
+import editPolicyHolder from "./sections/PolicyHolder/EditPolicyHolder";
+import addNewFPolicy from "./sections/FuneralPolicy/NewFuneralPolicy";
+import addDependent from "./sections/Dependent/NewDependent";
 export default {
   components: {
     underwriterEdit,
@@ -90,44 +100,46 @@ export default {
     errorPop,
     newPolicyHolder,
     editPolicyHolder,
+    addNewFPolicy,
+    addDependent,
   },
   data: () => ({
     draw: null,
     menus: [
-      { name: 'Dashboard', link: '/', icon: 'mdi-view-dashboard' },
+      { name: "Dashboard", link: "/", icon: "mdi-view-dashboard" },
       {
-        name: 'Policies',
-        icon: 'mdi-sitemap',
+        name: "Policies",
+        icon: "mdi-sitemap",
         terms: [
           {
-            term: 'Long term',
-            items: [{ name: 'Funeral', link: { name: 'funeralList' } }],
+            term: "Long term",
+            items: [{ name: "Funeral", link: { name: "funeralList" } }],
           },
           {
-            term: 'Short term',
+            term: "Short term",
             items: [],
           },
         ],
       },
       {
-        name: 'Policy Holders',
-        icon: 'mdi-account-multiple',
-        link: { name: 'policyholderList' },
+        name: "Policy Holders",
+        icon: "mdi-account-multiple",
+        link: { name: "policyholderList" },
       },
       {
-        name: 'Settings',
-        icon: 'mdi-locker',
+        name: "Settings",
+        icon: "mdi-locker",
         items: [
-          { name: 'Global Entities', link: { name: 'underwriters' } },
-          { name: 'Processes', link: { name: 'status' } },
-          { name: 'Users', link: { name: 'users' } },
-          { name: 'Funera Policy Packages', link: { name: 'packagesList' } },
+          { name: "Global Entities", link: { name: "underwriters" } },
+          { name: "Processes", link: { name: "status" } },
+          { name: "Users", link: { name: "users" } },
+          { name: "Funera Policy Packages", link: { name: "packagesList" } },
         ],
       },
     ],
   }),
   methods: {},
-  computed: mapGetters(['get_user']),
+  computed: mapGetters(["get_user"]),
   created() {},
 };
 </script>

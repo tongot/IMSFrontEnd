@@ -46,7 +46,6 @@ const actions = {
         alert('Error ' + ex);
       });
   },
-
   async GetPolicyHolderById({ commit }, id) {
     state.policyHolderError = null;
     state.loadingPolicyHolder = true;
@@ -132,7 +131,7 @@ const actions = {
       .then(
         (response) => {
           if (response.status === 204) {
-            commit('set_policyHolder', person);
+            commit('set_localPolicyHolder', person);
             state.policyHolderError = null;
             state.loadingPolicyHolder = false;
             state.dialogEditPolicyHolder = false;
