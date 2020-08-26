@@ -65,6 +65,8 @@ const actions = {
         alert('failed to post dependent');
       });
   },
+
+  //get the covers eligible for the dependents of current policy holder
   async GetDependentPackage({ commit }, holderId) {
     state.loadingDependent = true;
     state.dependentError = null;

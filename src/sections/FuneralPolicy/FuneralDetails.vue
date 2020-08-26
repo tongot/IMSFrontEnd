@@ -76,22 +76,22 @@
                       <v-spacer></v-spacer>
                       <v-chip
                         color="success white--text"
-                      >{{ get_policyHolderCover.package.coverAmount }}</v-chip>
+                      >{{ get_policyHolderCover.package.coverAmountS }}</v-chip>
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-text>
                       <v-list dense>
                         <v-list-item>
                           <v-list-item-title>Monthly Contribution</v-list-item-title>
-                          <v-list-item-action>{{ get_policyHolderCover.package.monthlyContribution }}</v-list-item-action>
+                          <v-list-item-action>{{ get_policyHolderCover.package.monthlyContributionS }}</v-list-item-action>
                         </v-list-item>
                         <v-list-item>
                           <v-list-item-title>Tombstone</v-list-item-title>
-                          <v-list-item-action>{{ get_policyHolderCover.package.tombStone }}</v-list-item-action>
+                          <v-list-item-action>{{ get_policyHolderCover.package.tombStoneS }}</v-list-item-action>
                         </v-list-item>
                         <v-list-item>
                           <v-list-item-title>Grocery Amount</v-list-item-title>
-                          <v-list-item-action>{{ get_policyHolderCover.package.groceryAmount }}</v-list-item-action>
+                          <v-list-item-action>{{ get_policyHolderCover.package.groceryAmountS }}</v-list-item-action>
                         </v-list-item>
                       </v-list>
                     </v-card-text>
@@ -121,7 +121,7 @@
         <v-expansion-panels flat>
           <v-expansion-panel
             @click="openDependent(dependent.policyCover.dependentPackageId)"
-            v-for="dependent in get_Dependencies"
+            v-for="(dependent,index) in get_Dependencies"
             :key="dependent.id"
           >
             <v-expansion-panel-header>
@@ -131,6 +131,18 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card flat>
+                <v-card-title>
+                  <v-spacer>
+                    <v-spacer></v-spacer>
+                  </v-spacer>
+                  <v-btn
+                    icon
+                    :loading="get_loadingPackage"
+                    @click="openModalEditCover(dependent.policyCover.id,index,get_funeralPolicy.policyHolder.id)"
+                  >
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                </v-card-title>
                 <v-row class="ma-1">
                   <v-col md="4" sm="12">
                     <v-subheader>Salutation</v-subheader>
@@ -176,22 +188,24 @@
                           <v-card-title>
                             {{ get_dependentCover.name }}
                             <v-spacer></v-spacer>
-                            <v-chip color="success white--text">{{ get_dependentCover.coverAmount }}</v-chip>
+                            <v-chip
+                              color="success white--text"
+                            >{{ get_dependentCover.coverAmountS }}</v-chip>
                           </v-card-title>
                           <v-divider></v-divider>
                           <v-card-text>
                             <v-list dense>
                               <v-list-item>
                                 <v-list-item-title>Monthly Contribution</v-list-item-title>
-                                <v-list-item-action>{{ get_dependentCover.monthlyContribution }}</v-list-item-action>
+                                <v-list-item-action>{{ get_dependentCover.monthlyContributionS }}</v-list-item-action>
                               </v-list-item>
                               <v-list-item>
                                 <v-list-item-title>Tombstone</v-list-item-title>
-                                <v-list-item-action>{{ get_dependentCover.tombStone }}</v-list-item-action>
+                                <v-list-item-action>{{ get_dependentCover.tombStoneS }}</v-list-item-action>
                               </v-list-item>
                               <v-list-item>
                                 <v-list-item-title>Grocery Amount</v-list-item-title>
-                                <v-list-item-action>{{ get_dependentCover.groceryAmount }}</v-list-item-action>
+                                <v-list-item-action>{{ get_dependentCover.groceryAmountS }}</v-list-item-action>
                               </v-list-item>
                             </v-list>
                           </v-card-text>
@@ -323,7 +337,17 @@ export default {
       "GetDependenciesForPolicy",
       "GetDependentCover",
       "GetPolicyHolderCover",
+      "OpenModalEditCover",
+      "GetCoverById",
     ]),
+    openModalEditCover(id, index, holderId) {
+      const cv = {
+        index: index,
+        id: id,
+      };
+      this.GetCoverById(cv);
+      this.GetDependentPackage(holderId);
+    },
     getGender(n) {
       return enums.gender[n];
     },
@@ -351,6 +375,7 @@ export default {
     "get_loadingDependent",
     "get_dependentCover",
     "get_policyHolderCover",
+    "get_loadingPackage",
   ]),
   mounted() {
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {

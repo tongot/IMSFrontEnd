@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 
 const state = {
   Packages: [],
@@ -10,6 +11,9 @@ const state = {
   dependentPackage: null,
   DependentCover: null,
   policyHolderCover: null,
+  ModalEditCover: false,
+  dependentIndex: null,
+  EditCover: null,
 };
 const getters = {
   get_Packages: (state) => state.Packages,
@@ -20,10 +24,19 @@ const getters = {
   get_ModalEditPackage: (state) => state.ModalEditPackage,
   get_dependentCover: (state) => state.dependentPackage,
   get_policyHolderCover: (state) => state.policyHolderCover,
+  get_ModalEditCover: (state) => state.ModalEditCover,
+  get_EditCover: (state) => state.EditCover,
 };
 const actions = {
   CloseModalPackage() {
     state.ModalAddPackage = !state.ModalAddPackage;
+  },
+  OpenModalEditCover({ commit }, cover) {
+    state.ModalEditCover = !state.ModalEditCover;
+    commit('set_EditCover', _.clone(cover.obj));
+  },
+  CloseModalEditCover() {
+    state.ModalEditCover = !state.ModalEditCover;
   },
   CloseModalPackageEdit() {
     state.ModalEditPackage = !state.ModalEditPackage;
@@ -239,8 +252,58 @@ const actions = {
         alert('something happened');
       });
   },
+  async EditCover({ rootState }, cover) {
+    state.loadingPackages = true;
+    state.packagesError = null;
+    await axios
+      .put('/policyCover', {
+        id: cover.id,
+        payPoint: cover.payPoint,
+        djcDate: cover.djcDate,
+        djfDate: cover.djfDate,
+        dpsDate: cover.dpsDate,
+        dependentPackageId: cover.dependentPackageId,
+        packageId: cover.packageId,
+        effectiveDate: cover.effectiveDate,
+        dependentId: cover.dependentId,
+        ownerId: cover.ownerId,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            rootState.dependentModule.Dependencies.policyCover = response.data.data;
+            return;
+          }
+          state.packagesError = response.data.message;
+          state.loadingPackages = false;
+        },
+        (e) => {
+          state.packagesError = e.response.data.message;
+          state.loadingPackages = false;
+        }
+      )
+      .catch(() => {
+        alert('failed to edit package');
+      });
+  },
+  async GetCoverById({ commit }, cover) {
+    state.loadingPackages = true;
+    state.packagesError = null;
+    await axios.get('/policyCover/' + cover.id).then((response) => {
+      if (response.status === 200) {
+        //check if edit is for dependent or for policy holder
+        if (response.data.data.ownerId === null || response.data.data.ownerId == '') {
+          state.dependentIndex = cover.index;
+          state.ModalEditCover = !state.ModalEditCover;
+          commit('set_EditCover', response.data.data);
+        }
+        state.loadingPackages = false;
+      }
+    });
+  },
 };
 const mutations = {
+  set_EditCover: (state, data) => (state.EditCover = data),
   set_Packages: (state, data) => (state.Packages = data),
   set_Package: (state, data) => (state.Package = data),
   set_dependentCover: (state, data) => (state.dependentPackage = data),

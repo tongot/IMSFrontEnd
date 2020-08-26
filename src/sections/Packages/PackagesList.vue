@@ -2,13 +2,11 @@
   <div>
     <v-dialog v-model="get_ModalAddPackage" persistent width="500">
       <v-card>
-        <v-card-title
-          >{{ AddTilte }}
+        <v-card-title>
+          {{ AddTilte }}
           <v-spacer></v-spacer>
           <v-btn icon @click="CloseModalPackage()">
-            <v-icon>
-              mdi-close
-            </v-icon>
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
@@ -44,31 +42,30 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn v-if="isDependent == false" :loading="get_loadingPackage" @click.prevent="addPackage()" depressed>
-            Add
-          </v-btn>
+          <v-btn
+            v-if="isDependent == false"
+            :loading="get_loadingPackage"
+            @click.prevent="addPackage()"
+            depressed
+          >Add</v-btn>
           <v-btn
             v-if="isDependent"
             color="success"
             :loading="get_loadingPackage"
             @click.prevent="addDependentPackage()"
             depressed
-          >
-            Add
-          </v-btn>
+          >Add</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <!--Edit window-->
     <v-dialog v-model="get_ModalEditPackage" persistent width="500">
       <v-card>
-        <v-card-title
-          >{{ EditTilte }}
+        <v-card-title>
+          {{ EditTilte }}
           <v-spacer></v-spacer>
           <v-btn icon @click="CloseModalPackageEdit()">
-            <v-icon>
-              mdi-close
-            </v-icon>
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
@@ -104,27 +101,25 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn v-if="isDependent == false" :loading="get_loadingPackage" @click.prevent="editPackage()" depressed>
-            Edit
-          </v-btn>
+          <v-btn
+            v-if="isDependent == false"
+            :loading="get_loadingPackage"
+            @click.prevent="editPackage()"
+            depressed
+          >Edit</v-btn>
           <v-btn
             v-if="isDependent"
             color="success"
             :loading="get_loadingPackage"
             @click.prevent="editDependentPackage()"
             depressed
-          >
-            Edit
-          </v-btn>
+          >Edit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-btn text @click="openAddPackage()">
-      <v-icon left>
-        mdi-plus
-      </v-icon>
-      Package
+      <v-icon left>mdi-plus</v-icon>Package
     </v-btn>
     <v-card flat>
       <v-card-text>
@@ -134,65 +129,64 @@
               <v-card-title>
                 {{ Package.name }}
                 <v-spacer></v-spacer>
-                <v-chip color="pink darken-1 white--text">{{ Package.coverAmount }} </v-chip>
+                <v-chip color="pink darken-1 white--text">{{ Package.coverAmountS }}</v-chip>
               </v-card-title>
               <v-divider></v-divider>
               <v-card-text>
                 <v-list dense>
                   <v-list-item>
                     <v-list-item-title>Monthly Contribution</v-list-item-title>
-                    <v-list-item-action>{{ Package.monthlyContribution }}</v-list-item-action>
+                    <v-list-item-action>{{ Package.monthlyContributionS }}</v-list-item-action>
                   </v-list-item>
                   <v-list-item>
                     <v-list-item-title>Tombstone</v-list-item-title>
-                    <v-list-item-action>{{ Package.tombStone }}</v-list-item-action>
+                    <v-list-item-action>{{ Package.tombStoneS }}</v-list-item-action>
                   </v-list-item>
                   <v-list-item>
                     <v-list-item-title>Grocery Amount</v-list-item-title>
-                    <v-list-item-action>{{ Package.groceryAmount }}</v-list-item-action>
+                    <v-list-item-action>{{ Package.groceryAmountS }}</v-list-item-action>
                   </v-list-item>
                 </v-list>
                 <v-card flat>
-                  <v-card-title
-                    >Dependent covers
+                  <v-card-title>
+                    Dependent covers
                     <v-spacer></v-spacer>
                     <v-btn text @click="openAddDependent(index, Package.id)">
-                      <v-icon>
-                        mdi-plus
-                      </v-icon>
-                      Add
+                      <v-icon>mdi-plus</v-icon>Add
                     </v-btn>
                   </v-card-title>
                   <v-card-text>
-                    <v-card class="mb-2" v-for="(dep, index2) in Package.dependentPackages" :key="dep.id">
-                      <v-card-title
-                        >{{ dep.name }}
+                    <v-card
+                      class="mb-2"
+                      v-for="(dep, index2) in Package.dependentPackages"
+                      :key="dep.id"
+                    >
+                      <v-card-title>
+                        {{ dep.name }}
                         <v-spacer></v-spacer>
-                        <v-chip color="success white--text">{{ Package.coverAmount }} </v-chip>
+                        <v-chip color="success white--text">{{ Package.coverAmountS }}</v-chip>
                       </v-card-title>
                       <v-divider></v-divider>
                       <v-card-text>
                         <v-list dense>
                           <v-list-item>
-                            <v-list-item-title>Monthly Contribution</v-list-item-title>
-                            <v-list-item-action>{{ dep.monthlyContribution }}</v-list-item-action>
+                            <v-list-item-title>Monthly ContributionS</v-list-item-title>
+                            <v-list-item-action>{{ dep.monthlyContributionS }}</v-list-item-action>
                           </v-list-item>
                           <v-list-item>
                             <v-list-item-title>Tombstone</v-list-item-title>
-                            <v-list-item-action>{{ dep.tombStone }}</v-list-item-action>
+                            <v-list-item-action>{{ dep.tombStoneS }}</v-list-item-action>
                           </v-list-item>
                           <v-list-item>
                             <v-list-item-title>Grocery Amount</v-list-item-title>
-                            <v-list-item-action>{{ dep.groceryAmount }}</v-list-item-action>
+                            <v-list-item-action>{{ dep.groceryAmountS }}</v-list-item-action>
                           </v-list-item>
                         </v-list>
                       </v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn icon @click="openEditDependentPackage(dep, index, index2)">
-                          <v-icon>
-                            mdi-pencil
-                          </v-icon>
+                          <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                       </v-card-actions>
                     </v-card>
@@ -202,9 +196,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="openEditPackage(Package, index)">
-                  <v-icon>
-                    mdi-pencil
-                  </v-icon>
+                  <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -216,35 +208,35 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     isDependent: false,
-    AddTilte: '',
-    EditTilte: '',
+    AddTilte: "",
+    EditTilte: "",
     Package: {
-      name: '',
-      monthlyContribution: '',
-      coverAmount: '',
-      tombStone: '',
-      groceryAmount: '',
-      id: '',
+      name: "",
+      monthlyContribution: "",
+      coverAmount: "",
+      tombStone: "",
+      groceryAmount: "",
+      id: "",
       // for adding dependent
-      index: '',
-      packageId: '',
-      index2: '',
+      index: "",
+      packageId: "",
+      index2: "",
     },
     rules: {
-      required: (v) => !!v || 'Feild requierd',
+      required: (v) => !!v || "Feild requierd",
     },
   }),
   methods: {
     clearData() {
-      this.Package.name = '';
-      this.Package.monthlyContribution = '';
-      this.Package.coverAmount = '';
-      this.Package.tombStone = '';
-      this.Package.groceryAmount = '';
+      this.Package.name = "";
+      this.Package.monthlyContribution = "";
+      this.Package.coverAmount = "";
+      this.Package.tombStone = "";
+      this.Package.groceryAmount = "";
     },
     openEditPackage(item, index) {
       this.isDependent = false;
@@ -255,7 +247,7 @@ export default {
       this.Package.groceryAmount = item.groceryAmount;
       this.Package.id = item.id;
       this.Package.index = index;
-      this.EditTilte = 'Edit Package';
+      this.EditTilte = "Edit Package";
       this.CloseModalPackageEdit();
     },
     openEditDependentPackage(item, index, index2) {
@@ -269,7 +261,7 @@ export default {
       this.Package.packageId = item.packageId;
       this.Package.index = index;
       this.Package.index2 = index2;
-      this.EditTilte = 'Edit Dependent Package';
+      this.EditTilte = "Edit Dependent Package";
       this.CloseModalPackageEdit();
     },
     editPackage() {
@@ -286,14 +278,14 @@ export default {
       this.clearData();
       this.CloseModalPackage();
       this.isDependent = true;
-      this.AddTilte = 'Add Dependent Package';
+      this.AddTilte = "Add Dependent Package";
       this.Package.index = index;
       this.Package.packageId = id;
     },
     openAddPackage() {
       this.isDependent = false;
       this.CloseModalPackage();
-      this.AddTilte = 'Add Package';
+      this.AddTilte = "Add Package";
     },
     addPackage() {
       if (this.$refs.formAdd.validate()) {
@@ -306,21 +298,21 @@ export default {
       }
     },
     ...mapActions([
-      'GetPackages',
-      'AddPackage',
-      'CloseModalPackage',
-      'AddDependentPackage',
-      'CloseModalPackageEdit',
-      'EditDependentPackage',
-      'EditPackage',
+      "GetPackages",
+      "AddPackage",
+      "CloseModalPackage",
+      "AddDependentPackage",
+      "CloseModalPackageEdit",
+      "EditDependentPackage",
+      "EditPackage",
     ]),
   },
   computed: mapGetters([
-    'get_Packages',
-    'get_loadingPackage',
-    'get_packagesError',
-    'get_ModalAddPackage',
-    'get_ModalEditPackage',
+    "get_Packages",
+    "get_loadingPackage",
+    "get_packagesError",
+    "get_ModalAddPackage",
+    "get_ModalEditPackage",
   ]),
   mounted() {
     this.GetPackages();
