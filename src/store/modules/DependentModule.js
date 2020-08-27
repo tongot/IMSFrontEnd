@@ -1,26 +1,38 @@
 import axios from 'axios';
 import enums from '../../Dictionary/Dictionary';
-
+import _ from 'lodash';
 const state = {
   Dependent: null,
   Dependencies: [],
   loadingDependent: false,
   dependentError: null,
   dialogAddDependent: false,
+  dialogEditDependent: false,
   DependentPackages: [],
   PolicyId: null,
+  EditDependent: null,
 };
 const getters = {
   get_Dependent: (state) => state.Dependent,
   get_Dependencies: (state) => state.Dependencies,
   get_dialogAddDependent: (state) => state.dialogAddDependent,
+  get_dialogEditDependent: (state) => state.dialogEditDependent,
   get_dependentError: (state) => state.dependentError,
   get_dependentPackages: (state) => state.DependentPackages,
   get_loadingDependent: (state) => state.loadingDependent,
+  get_EditDependent: (state) => state.EditDependent,
 };
 const actions = {
   CloseAddDependentDialog() {
     state.dialogAddDependent = !state.dialogAddDependent;
+  },
+  CloseEditDependentDialog() {
+    state.dialogEditDependent = !state.dialogEditDependent;
+  },
+  OpenEditDependentDialog({ commit }, dependent) {
+    commit('set_editDependent', _.cloneDeep(dependent));
+
+    state.dialogEditDependent = true;
   },
   SetPolicyId({ commit }, policyId) {
     commit('set_policyId', policyId);
@@ -35,7 +47,7 @@ const actions = {
         firstName: person.firstName,
         lastName: person.lastName,
         middleName: person.middleName,
-        relationship: person.relationship,
+        relationshipId: person.relationshipId,
         gender: person.gender,
         dateOfBirth: person.dateOfBirth,
         idNumber: person.idNumber,
@@ -116,6 +128,7 @@ const actions = {
   },
 };
 const mutations = {
+  set_editDependent: (state, data) => (state.EditDependent = data),
   set_dependentPackages: (state, data) => (state.DependentPackages = data),
   set_policyId: (state, data) => (state.PolicyId = data),
   set_Dependent: (state, data) => (
@@ -142,7 +155,6 @@ const mutations = {
       element.maritalStatus = enums.maritalStatus[element.maritalStatus];
       element.gender = enums.gender[element.gender];
       element.idType = enums.idType[element.idType];
-      element.relationship = enums.relationships[element.relationship];
       element.disabled = element.disabled ? 'Yes' : 'No';
       state.Dependencies.push(element);
     }),

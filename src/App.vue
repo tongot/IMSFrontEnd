@@ -10,6 +10,7 @@
     <addDependent />
     <errorPop />
     <editCover />
+    <editDependent />
     <v-app id="inspire">
       <v-navigation-drawer v-model="draw" left clipped app>
         <v-list dense>
@@ -93,6 +94,7 @@ import editPolicyHolder from "./sections/PolicyHolder/EditPolicyHolder";
 import addNewFPolicy from "./sections/FuneralPolicy/NewFuneralPolicy";
 import addDependent from "./sections/Dependent/NewDependent";
 import editCover from "./sections/Packages/EditCover";
+import editDependent from "./sections/Dependent/EditDependent";
 export default {
   components: {
     underwriterEdit,
@@ -105,6 +107,7 @@ export default {
     addNewFPolicy,
     addDependent,
     editCover,
+    editDependent,
   },
   data: () => ({
     draw: null,
@@ -137,6 +140,7 @@ export default {
           { name: "Processes", link: { name: "status" } },
           { name: "Users", link: { name: "users" } },
           { name: "Funera Policy Packages", link: { name: "packagesList" } },
+          { name: "Relationships", link: { name: "relationshipList" } },
         ],
       },
     ],

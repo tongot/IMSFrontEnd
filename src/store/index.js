@@ -8,6 +8,7 @@ import processesModule from './modules/ProcessesModule';
 import policyHolderModule from './modules/PolicyHolderModule';
 import packageModule from './modules/PackagesModules';
 import dependentModule from './modules/DependentModule';
+import relationshipModule from './modules/RelationshipModule';
 
 Vue.use(Vuex);
 
@@ -30,5 +31,6 @@ export default new Vuex.Store({
     policyHolderModule,
     packageModule,
     dependentModule,
+    relationshipModule,
   },
 });

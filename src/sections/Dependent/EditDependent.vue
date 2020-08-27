@@ -1,24 +1,23 @@
 <template>
   <div>
     <v-dialog
-      v-model="get_dialogAddDependent"
+      v-model="get_dialogEditDependent"
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
       persistent
     >
-      <v-card flat>
+      <v-card v-if="get_EditDependent!=null" flat>
         <v-toolbar dark>
-          <v-toolbar-title>Add New Dependent</v-toolbar-title>
+          <v-toolbar-title>Edit Dependent</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="error" class="mr-2" @click="Cancel()" depressed>Cancel</v-btn>
           <v-btn
             color="grey"
-            @click.prevent="addDependent()"
+            @click.prevent="editDependent()"
             class="mr-2"
             :loading="get_loadingDependent"
             depressed
-          >Add</v-btn>
+          >Edit</v-btn>
           <v-btn color="red" icon @click="Close()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -29,7 +28,7 @@
               <v-alert type="error" v-if="get_dependentError != null">{{ get_dependentError }}</v-alert>
               <v-card-title>Person details</v-card-title>
               <v-divider></v-divider>
-              <v-form ref="formAdd" id="newDependent">
+              <v-form ref="formEdit" id="newDependent">
                 <v-row>
                   <v-col md="4" sm="12">
                     <v-overflow-btn
@@ -37,7 +36,7 @@
                       target="#newDependent"
                       width="auto"
                       :items="get_Relationships"
-                      v-model="dependent.relationshipId"
+                      v-model="get_EditDependent.relationshipId"
                       item-value="id"
                       :loading="get_loadingRelationship"
                       :rules="[rules.required]"
@@ -51,7 +50,7 @@
                       label="Title"
                       :items="getTitle()"
                       :rules="[rules.required]"
-                      v-model="dependent.salutation"
+                      v-model="get_EditDependent.salutation"
                     ></v-combobox>
                   </v-col>
                   <v-col md="1" sm="4" xs="4">
@@ -59,22 +58,22 @@
                       label="Gender"
                       :rules="[rules.required]"
                       :items="getGender()"
-                      v-model="dependent.gender"
+                      v-model="get_EditDependent.gender"
                     ></v-combobox>
                   </v-col>
                   <v-col md="3" sm="12" xs="12">
                     <v-text-field
-                      v-model="dependent.firstName"
+                      v-model="get_EditDependent.firstName"
                       :rules="[rules.required]"
                       label="Fisrt Name"
                     ></v-text-field>
                   </v-col>
                   <v-col md="3" sm="12" xs="12">
-                    <v-text-field v-model="dependent.middleName" label="Middle Name"></v-text-field>
+                    <v-text-field v-model="get_EditDependent.middleName" label="Middle Name"></v-text-field>
                   </v-col>
                   <v-col md="4" sm="12" xs="12">
                     <v-text-field
-                      v-model="dependent.lastName"
+                      v-model="get_EditDependent.lastName"
                       :rules="[rules.required]"
                       label="Last Name"
                     ></v-text-field>
@@ -87,14 +86,14 @@
                       ref="menu"
                       v-model="menu"
                       :close-on-content-click="false"
-                      :return-value.sync="dependent.dateOfBirth"
+                      :return-value.sync="get_EditDependent.dateOfBirth"
                       transition="scale-transition"
                       offset-y
                       min-width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          v-model="dependent.dateOfBirth"
+                          v-model="get_EditDependent.dateOfBirth"
                           label="Date Of Birth"
                           prepend-icon="mdi-calendar"
                           readonly
@@ -102,13 +101,13 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="dependent.dateOfBirth" no-title scrollable>
+                      <v-date-picker v-model="get_EditDependent.dateOfBirth" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.menu.save(dependent.dateOfBirth)"
+                          @click="$refs.menu.save(get_EditDependent.dateOfBirth)"
                         >OK</v-btn>
                       </v-date-picker>
                     </v-menu>
@@ -118,19 +117,19 @@
                       label="Id Type"
                       :rules="[rules.required]"
                       :items="getIdType()"
-                      v-model="dependent.idType"
+                      v-model="get_EditDependent.idType"
                     ></v-combobox>
                   </v-col>
                   <v-col md="3" sm="12" xs="12">
                     <v-text-field
-                      v-model="dependent.idNumber"
+                      v-model="get_EditDependent.idNumber"
                       :rules="[rules.required]"
                       label="Id Number"
                     ></v-text-field>
                   </v-col>
                   <v-col md="4" sm="12" xs="12">
                     <v-text-field
-                      v-model="dependent.countryOfIssue"
+                      v-model="get_EditDependent.countryOfIssue"
                       :rules="[rules.required]"
                       label="Country Of Issue"
                     ></v-text-field>
@@ -140,16 +139,20 @@
                   <v-col md="4" sm="12">
                     <v-subheader>Disabled</v-subheader>
                     <v-divider></v-divider>
-                    <v-radio-group :rules="[rules.required]" v-model="dependent.disabled" row>
-                      <v-radio value="true" label="Yes"></v-radio>
-                      <v-radio value="false" label="No"></v-radio>
+                    <v-radio-group
+                      :rules="[rules.required]"
+                      v-model="get_EditDependent.disabled"
+                      row
+                    >
+                      <v-radio :value="'Yes'" label="Yes"></v-radio>
+                      <v-radio :value="'No'" label="No"></v-radio>
                     </v-radio-group>
                   </v-col>
                   <v-col md="4" sm="12">
                     <v-combobox
                       label="Marital Status"
                       :rules="[rules.required]"
-                      v-model="dependent.maritalStatus"
+                      v-model="get_EditDependent.maritalStatus"
                       :items="getMaritalState()"
                     ></v-combobox>
                   </v-col>
@@ -161,7 +164,7 @@
                       <v-card-title>Cover Details</v-card-title>
                       <v-card-text>
                         <v-text-field
-                          v-model="dependent.cover.payPoint"
+                          v-model="get_EditDependent.policyCover.payPoint"
                           :rules="[rules.required]"
                           label="Pay point"
                         ></v-text-field>
@@ -169,14 +172,14 @@
                           ref="menuEdate"
                           v-model="effectiveDate"
                           :close-on-content-click="false"
-                          :return-value.sync="dependent.cover.effectiveDate"
+                          :return-value.sync="get_EditDependent.policyCover.effectiveDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="dependent.cover.effectiveDate"
+                              v-model="get_EditDependent.policyCover.effectiveDate"
                               label="Effective Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -186,7 +189,7 @@
                             ></v-text-field>
                           </template>
                           <v-date-picker
-                            v-model="dependent.cover.effectiveDate"
+                            v-model="get_EditDependent.policyCover.effectiveDate"
                             no-title
                             scrollable
                           >
@@ -195,7 +198,7 @@
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuEdate.save(dependent.cover.effectiveDate)"
+                              @click="$refs.menuEdate.save(get_EditDependent.policyCover.effectiveDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -203,14 +206,14 @@
                           ref="menuDJC"
                           v-model="dJCDate"
                           :close-on-content-click="false"
-                          :return-value.sync="dependent.cover.dJCDate"
+                          :return-value.sync="get_EditDependent.policyCover.dJCDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="dependent.cover.dJCDate"
+                              v-model="get_EditDependent.policyCover.dJCDate"
                               label="DJC Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -219,13 +222,17 @@
                               v-on="on"
                             ></v-text-field>
                           </template>
-                          <v-date-picker v-model="dependent.cover.dJCDate" no-title scrollable>
+                          <v-date-picker
+                            v-model="get_EditDependent.policyCover.dJCDate"
+                            no-title
+                            scrollable
+                          >
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="effectiveDate = false">Cancel</v-btn>
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuDJC.save(dependent.cover.dJCDate)"
+                              @click="$refs.menuDJC.save(get_EditDependent.policyCover.dJCDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -233,14 +240,14 @@
                           ref="menuDJF"
                           v-model="dJFDate"
                           :close-on-content-click="false"
-                          :return-value.sync="dependent.cover.dJFDate"
+                          :return-value.sync="get_EditDependent.policyCover.dJFDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="dependent.cover.dJFDate"
+                              v-model="get_EditDependent.policyCover.dJFDate"
                               label="DJF Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -249,13 +256,17 @@
                               v-on="on"
                             ></v-text-field>
                           </template>
-                          <v-date-picker v-model="dependent.cover.dJFDate" no-title scrollable>
+                          <v-date-picker
+                            v-model="get_EditDependent.policyCover.dJFDate"
+                            no-title
+                            scrollable
+                          >
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="dJFDate = false">Cancel</v-btn>
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuDJF.save(dependent.cover.dJFDate)"
+                              @click="$refs.menuDJF.save(get_EditDependent.policyCover.dJFDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -263,14 +274,14 @@
                           ref="menuDPS"
                           v-model="dPSDate"
                           :close-on-content-click="false"
-                          :return-value.sync="dependent.cover.dPSDate"
+                          :return-value.sync="get_EditDependent.policyCover.dPSDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="dependent.cover.dPSDate"
+                              v-model="get_EditDependent.policyCover.dPSDate"
                               label="DPS Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -279,13 +290,17 @@
                               v-on="on"
                             ></v-text-field>
                           </template>
-                          <v-date-picker v-model="dependent.cover.dPSDate" no-title scrollable>
+                          <v-date-picker
+                            v-model="get_EditDependent.policyCover.dPSDate"
+                            no-title
+                            scrollable
+                          >
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="dPSDate = false">Cancel</v-btn>
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuDPS.save(dependent.cover.dPSDate)"
+                              @click="$refs.menuDPS.save(get_EditDependent.policyCover.dPSDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -294,7 +309,7 @@
                           target="#newPolicy"
                           width="auto"
                           :items="get_dependentPackages.dependentPackages"
-                          v-model="dependent.cover.dependentPackageId"
+                          v-model="get_EditDependent.policyCover.dependentPackageId"
                           item-value="id"
                           :loading="get_loadingDependent"
                           :rules="[rules.required]"
@@ -337,7 +352,7 @@ export default {
       countryOfIssue: "",
       disabled: "",
       relationshipId: "",
-      cover: {
+      policyCover: {
         payPoint: "",
         dJCDate: "",
         dJFDate: "",
@@ -356,7 +371,7 @@ export default {
   }),
 
   methods: {
-    ...mapActions(["AddDependent", "CloseAddDependentDialog"]),
+    ...mapActions(["EditDependent", "CloseEditDependentDialog"]),
     getTitle() {
       return enums.title;
     },
@@ -373,40 +388,14 @@ export default {
       return enums.relationships;
     },
     Close() {
-      this.CloseAddDependentDialog();
-    },
-    Clear() {
-      this.dependent.department = "";
-      this.dependent.branch = "";
-      this.dependent.maritalStatus = "";
-      this.dependent.occupation = "";
-      this.dependent.salutation = "";
-      this.dependent.firstName = "";
-      this.dependent.lastName = "";
-      this.dependent.middleName = "";
-      this.dependent.gender = "";
-      this.dependent.dateOfBirth = "";
-      this.dependent.idNumber = "";
-      this.dependent.idType = "";
-      this.dependent.countryOfIssue = "";
-      this.dependent.disabled = "";
-      this.dependent.cover.payPoint = "";
-      this.dependent.cover.dJCDate = "";
-      this.dependent.cover.dJFDate = "";
-      this.dependent.cover.dPSDate = "";
-      this.dependent.cover.packageId = "";
-      this.dependent.cover.effectiveDate = "";
-    },
-    Cancel() {
-      this.Clear();
-      this.CloseAddDependentDialog();
+      this.CloseEditDependentDialog();
     },
     RelationshipChanged(value) {
       this.isOthers = value == "Other" ? true : false;
     },
-    addDependent() {
-      if (this.$refs.formAdd.validate()) {
-        this.AddDependent(this.dependent);
+    editDependent() {
+      if (this.$refs.formEdit.validate()) {
+        this.EditDependent(this.dependent);
       }
     },
   },
@@ -414,10 +403,11 @@ export default {
     ...mapGetters([
       "get_loadingDependent",
       "get_dependentError",
-      "get_dialogAddDependent",
+      "get_dialogEditDependent",
       "get_dependentPackages",
       "get_loadingRelationship",
       "get_Relationships",
+      "get_EditDependent",
     ]),
   },
 };

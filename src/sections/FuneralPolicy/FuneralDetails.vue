@@ -51,7 +51,17 @@
       </v-row>
       <v-divider></v-divider>
       <v-card flat>
-        <v-card-title>Cover Details</v-card-title>
+        <v-card-title>
+          Cover Details
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            :loading="get_loadingPackage"
+            @click="openModalEditCover(get_policyHolderCover.id)"
+          >
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+        </v-card-title>
         <div v-if="get_policyHolderCover!=null" class="ma-2">
           <v-row>
             <v-col md="6" sm="12">
@@ -127,7 +137,17 @@
             <v-expansion-panel-header>
               {{dependent.firstName +" "+dependent.middleName+" "+dependent.lastName}}
               <v-spacer></v-spacer>
-              <v-chip>{{dependent.relationship}}</v-chip>
+              <v-overflow-btn
+                label="Relationship"
+                target="#newDependent"
+                width="auto"
+                disabled
+                :items="get_Relationships"
+                v-model="dependent.relationshipId"
+                item-value="id"
+                :loading="get_loadingRelationship"
+                item-text="name"
+              ></v-overflow-btn>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card flat>
@@ -138,7 +158,7 @@
                   <v-btn
                     icon
                     :loading="get_loadingPackage"
-                    @click="openModalEditCover(dependent.policyCover.id,index,get_funeralPolicy.policyHolder.id)"
+                    @click="openModalEditDependent(dependent,index,get_funeralPolicy.policyHolder.id)"
                   >
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
@@ -157,6 +177,8 @@
                     <p class="pl-4">{{dependent.gender }}</p>
                     <v-subheader>Date of birth</v-subheader>
                     <p class="pl-4">{{ dependent.dateOfBirth }}</p>
+                    <v-subheader>Age</v-subheader>
+                    <p class="pl-4">{{ dependent.age }}</p>
                     <v-subheader>Disabled</v-subheader>
                     <span class="ml-4">
                       <v-chip small v-if="dependent.disabled=='No'">No</v-chip>
@@ -333,20 +355,25 @@ export default {
       "GetPolicyById",
       "CloseAddDependentDialog",
       "GetDependentPackage",
+      "GetPackages",
       "SetPolicyId",
       "GetDependenciesForPolicy",
       "GetDependentCover",
       "GetPolicyHolderCover",
       "OpenModalEditCover",
       "GetCoverById",
+      "GetRelationships",
+      "OpenEditDependentDialog",
     ]),
-    openModalEditCover(id, index, holderId) {
-      const cv = {
-        index: index,
-        id: id,
-      };
-      this.GetCoverById(cv);
+    openModalEditCover(id) {
+      this.GetCoverById(id);
+      this.OpenModalEditCover();
+      this.GetPackages();
+    },
+    openModalEditDependent(dependent, index, holderId) {
+      this.GetCoverById(dependent.policyCover.id);
       this.GetDependentPackage(holderId);
+      this.OpenEditDependentDialog(dependent);
     },
     getGender(n) {
       return enums.gender[n];
@@ -376,11 +403,14 @@ export default {
     "get_dependentCover",
     "get_policyHolderCover",
     "get_loadingPackage",
+    "get_Relationships",
+    "get_loadingRelationship",
   ]),
   mounted() {
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {
       this.GetDependenciesForPolicy(this.get_funeralPolicy.funeralPolicy.id);
       this.GetPolicyHolderCover(this.get_funeralPolicy.policyHolder.id);
+      this.GetRelationships();
     });
   },
 };

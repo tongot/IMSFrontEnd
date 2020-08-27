@@ -18,17 +18,5 @@ const enums = {
   ],
   idType: ['Birth', 'NationalId', 'Passport', 'DriversLicense'],
   title: ['Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Eng', 'Cmd', 'Miss'],
-  relationships: [
-    'Spouse',
-    'Son',
-    'Daughter',
-    'Father',
-    'Mother',
-    'Grandmother',
-    'Grandfather',
-    'Nephew',
-    'Niece',
-    'Other',
-  ],
 };
 export default enums;

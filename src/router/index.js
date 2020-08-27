@@ -28,6 +28,10 @@ import PolicyHolder from '../components/PolicyHolder';
 import policyholderList from '../sections/PolicyHolder/policyHolderList';
 import policyholderDetail from '../sections/PolicyHolder/policyHolderDetail';
 
+import Relationship from '../components/Relationship';
+
+import relationshipList from '../sections/Relationships/RelationshipList';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -67,6 +71,18 @@ const routes = [
             path: 'Status',
             name: 'status',
             component: Status,
+          },
+        ],
+      },
+      {
+        path: 'Relationship',
+        name: 'relationship',
+        component: Relationship,
+        children: [
+          {
+            path: 'relationship',
+            name: 'relationshipList',
+            component: relationshipList,
           },
         ],
       },

@@ -14,29 +14,50 @@
             <v-alert type="error" v-if="get_packagesError != null">{{ get_packagesError }}</v-alert>
             <v-text-field :rules="[rules.required]" v-model="Package.name" label="Package name"></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.monthlyContribution"
               label="Monthly Contribution"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.coverAmount"
               label="Cover Amount"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.tombStone"
               label="Tombstone"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.groceryAmount"
               label="Grocery Amount"
             ></v-text-field>
+            <v-card outlined v-if="isDependent">
+              <v-card-text>
+                <v-overflow-btn
+                  label="Select relationship"
+                  target="#newPolicy"
+                  width="auto"
+                  :items="get_Relationships"
+                  v-model="Package.relationshipId"
+                  item-value="id"
+                  :loading="get_loadingRelationship"
+                  :rules="[rules.required]"
+                  item-text="name"
+                ></v-overflow-btn>
+                <v-text-field
+                  :rules="[rules.required,rules.wholeNumber]"
+                  type="number"
+                  v-model="Package.ageLimit"
+                  label="Age Limit (0 means no age limit)"
+                ></v-text-field>
+              </v-card-text>
+            </v-card>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -73,29 +94,50 @@
             <v-alert type="error" v-if="get_packagesError != null">{{ get_packagesError }}</v-alert>
             <v-text-field :rules="[rules.required]" v-model="Package.name" label="Package name"></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.monthlyContribution"
               label="Monthly Contribution"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.coverAmount"
               label="Cover Amount"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.tombStone"
               label="Tombstone"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required]"
+              :rules="[rules.required,rules.wholeNumber]"
               type="number"
               v-model="Package.groceryAmount"
               label="Grocery Amount"
             ></v-text-field>
+            <v-card outlined v-if="isDependent">
+              <v-card-text>
+                <v-overflow-btn
+                  label="Select relationship"
+                  target="#newPolicy"
+                  width="auto"
+                  :items="get_Relationships"
+                  v-model="Package.relationshipId"
+                  item-value="id"
+                  :loading="get_loadingRelationship"
+                  :rules="[rules.required]"
+                  item-text="name"
+                ></v-overflow-btn>
+                <v-text-field
+                  :rules="[rules.required,rules.wholeNumber]"
+                  type="number"
+                  v-model="Package.ageLimit"
+                  label="Age Limit (0 means no age limit)"
+                ></v-text-field>
+              </v-card-text>
+            </v-card>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -147,6 +189,7 @@
                     <v-list-item-action>{{ Package.groceryAmountS }}</v-list-item-action>
                   </v-list-item>
                 </v-list>
+                <v-divider></v-divider>
                 <v-card flat>
                   <v-card-title>
                     Dependent covers
@@ -155,6 +198,7 @@
                       <v-icon>mdi-plus</v-icon>Add
                     </v-btn>
                   </v-card-title>
+
                   <v-card-text>
                     <v-card
                       class="mb-2"
@@ -164,7 +208,7 @@
                       <v-card-title>
                         {{ dep.name }}
                         <v-spacer></v-spacer>
-                        <v-chip color="success white--text">{{ Package.coverAmountS }}</v-chip>
+                        <v-chip color="success white--text">{{ dep.coverAmountS }}</v-chip>
                       </v-card-title>
                       <v-divider></v-divider>
                       <v-card-text>
@@ -224,10 +268,13 @@ export default {
       // for adding dependent
       index: "",
       packageId: "",
+      relationshipId: null,
+      ageLimit: "",
       index2: "",
     },
     rules: {
       required: (v) => !!v || "Feild requierd",
+      wholeNumber: (v) => v >= 0 || "Field must be greater than or 0",
     },
   }),
   methods: {
@@ -237,6 +284,11 @@ export default {
       this.Package.coverAmount = "";
       this.Package.tombStone = "";
       this.Package.groceryAmount = "";
+      this.Package.id = "";
+      this.Package.packageId = "";
+      this.Package.relationshipId = null;
+      this.Package.ageLimit = "";
+      this.index2 = "";
     },
     openEditPackage(item, index) {
       this.isDependent = false;
@@ -251,6 +303,7 @@ export default {
       this.CloseModalPackageEdit();
     },
     openEditDependentPackage(item, index, index2) {
+      //index of parent package index2 child index
       this.isDependent = true;
       this.Package.name = item.name;
       this.Package.monthlyContribution = item.monthlyContribution;
@@ -259,8 +312,11 @@ export default {
       this.Package.groceryAmount = item.groceryAmount;
       this.Package.id = item.id;
       this.Package.packageId = item.packageId;
+      this.Package.ageLimit = item.ageLimit;
+      this.Package.relationshipId = item.relationshipId;
       this.Package.index = index;
       this.Package.index2 = index2;
+      this.GetRelationships();
       this.EditTilte = "Edit Dependent Package";
       this.CloseModalPackageEdit();
     },
@@ -277,6 +333,7 @@ export default {
     openAddDependent(index, id) {
       this.clearData();
       this.CloseModalPackage();
+      this.GetRelationships();
       this.isDependent = true;
       this.AddTilte = "Add Dependent Package";
       this.Package.index = index;
@@ -305,6 +362,7 @@ export default {
       "CloseModalPackageEdit",
       "EditDependentPackage",
       "EditPackage",
+      "GetRelationships",
     ]),
   },
   computed: mapGetters([
@@ -313,6 +371,8 @@ export default {
     "get_packagesError",
     "get_ModalAddPackage",
     "get_ModalEditPackage",
+    "get_Relationships",
+    "get_loadingRelationship",
   ]),
   mounted() {
     this.GetPackages();
