@@ -57,7 +57,7 @@
           <v-btn
             icon
             :loading="get_loadingPackage"
-            @click="openModalEditCover(get_policyHolderCover.id)"
+            @click="openModalEditCover(get_policyHolderCover.id,get_funeralPolicy.funeralPolicy.id)"
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
@@ -365,10 +365,11 @@ export default {
       "GetRelationships",
       "OpenEditDependentDialog",
     ]),
-    openModalEditCover(id) {
+    openModalEditCover(id, policyId) {
       this.GetCoverById(id);
       this.OpenModalEditCover();
       this.GetPackages();
+      this.SetPolicyId(policyId);
     },
     openModalEditDependent(dependent, index, holderId) {
       this.GetCoverById(dependent.policyCover.id);

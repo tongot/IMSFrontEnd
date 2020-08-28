@@ -260,14 +260,16 @@ const actions = {
     state.packagesError = null;
     await axios
       .put('/policyCover', {
-        id: cover.id,
-        payPoint: cover.payPoint,
-        djcDate: cover.djcDate,
-        djfDate: cover.djfDate,
-        dpsDate: cover.dpsDate,
-        packageId: cover.packageId,
-        effectiveDate: cover.effectiveDate,
-        ownerId: cover.ownerId,
+        fPolicyId: cover.policyId,
+        id: cover.Cover.id,
+        payPoint: cover.Cover.payPoint,
+        djcDate: cover.Cover.djcDate,
+        djfDate: cover.Cover.djfDate,
+        dpsDate: cover.Cover.dpsDate,
+        packageId: cover.Cover.packageId,
+        effectiveDate: cover.Cover.effectiveDate,
+        ownerId: cover.Cover.ownerId,
+        oldPolicyPackageId: cover.oldPackageId,
       })
       .then(
         (response) => {

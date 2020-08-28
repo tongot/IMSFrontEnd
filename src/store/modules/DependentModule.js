@@ -21,6 +21,7 @@ const getters = {
   get_dependentPackages: (state) => state.DependentPackages,
   get_loadingDependent: (state) => state.loadingDependent,
   get_EditDependent: (state) => state.EditDependent,
+  get_PolicyId: (state) => state.PolicyId,
 };
 const actions = {
   CloseAddDependentDialog() {
@@ -37,7 +38,7 @@ const actions = {
   SetPolicyId({ commit }, policyId) {
     commit('set_policyId', policyId);
   },
-  async AddDependent({ commit }, person) {
+  async AddDependent({ dispatch }, person) {
     state.loadingDependent = true;
     state.dependentError = null;
     await axios
@@ -60,7 +61,7 @@ const actions = {
       .then(
         (response) => {
           if (response.status === 200) {
-            commit('set_localDependent', response.data.data);
+            dispatch('CloseAddDependentDialog');
             state.dialogAddDependent = false;
             state.dependentError = null;
             state.loadingDependent = false;
@@ -77,7 +78,47 @@ const actions = {
         alert('failed to post dependent');
       });
   },
-
+  async EditDependentF({ dispatch }, person) {
+    state.loadingDependent = true;
+    state.dependentError = null;
+    await axios
+      .put('/policyHolder/UpdateDependent', {
+        id: person.id,
+        policyId: person.policyId,
+        createdOn: person.createdOn,
+        maritalStatus: person.maritalStatus,
+        salutation: person.salutation,
+        firstName: person.firstName,
+        lastName: person.lastName,
+        middleName: person.middleName,
+        relationshipId: person.relationshipId,
+        gender: person.gender,
+        dateOfBirth: person.dateOfBirth,
+        idNumber: person.idNumber,
+        idType: person.idType,
+        countryOfIssue: person.countryOfIssue,
+        disabled: person.disabled == 'Yes' ? true : false,
+        PolicyCover: person.policyCover,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            dispatch('CloseEditDependentDialog');
+            state.dialogEditDependent = false;
+            state.loadingDependent = false;
+          }
+          state.dependentError = response.data.message;
+          state.loadingDependent = false;
+        },
+        (e) => {
+          state.dependentError = e.response.data.message;
+          state.loadingDependent = false;
+        }
+      )
+      .catch(() => {
+        alert('failed to post dependent');
+      });
+  },
   //get the covers eligible for the dependents of current policy holder
   async GetDependentPackage({ commit }, holderId) {
     state.loadingDependent = true;

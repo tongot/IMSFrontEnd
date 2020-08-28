@@ -356,7 +356,11 @@ export default {
   }),
 
   methods: {
-    ...mapActions(["AddDependent", "CloseAddDependentDialog"]),
+    ...mapActions([
+      "AddDependent",
+      "CloseAddDependentDialog",
+      "GetDependenciesForPolicy",
+    ]),
     getTitle() {
       return enums.title;
     },
@@ -406,7 +410,11 @@ export default {
     },
     addDependent() {
       if (this.$refs.formAdd.validate()) {
-        this.AddDependent(this.dependent);
+        this.AddDependent(this.dependent).then(() => {
+          this.GetDependenciesForPolicy(
+            this.get_funeralPolicy.funeralPolicy.id
+          );
+        });
       }
     },
   },
@@ -418,6 +426,7 @@ export default {
       "get_dependentPackages",
       "get_loadingRelationship",
       "get_Relationships",
+      "get_funeralPolicy",
     ]),
   },
 };

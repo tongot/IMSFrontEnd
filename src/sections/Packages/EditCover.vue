@@ -172,11 +172,25 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["CloseModalEditCover", "EditCover", "GetPolicyHolderCover"]),
+    ...mapActions([
+      "CloseModalEditCover",
+      "EditCover",
+      "GetPolicyHolderCover",
+      "GetDependenciesForPolicy",
+    ]),
     editCover() {
       if (this.$refs.fromAdd.validate()) {
-        this.EditCover(this.get_EditCover).then(() => {
-          this.GetPolicyHolderCover(this.get_EditCover.ownerId);
+        var cover = {
+          Cover: this.get_EditCover,
+          policyId: this.get_PolicyId,
+          oldPackageId: this.get_policyHolderCover.package.id,
+        };
+        this.EditCover(cover).then(() => {
+          this.GetPolicyHolderCover(this.get_EditCover.ownerId).then(() =>
+            this.GetDependenciesForPolicy(
+              this.get_funeralPolicy.funeralPolicy.id
+            )
+          );
         });
       }
     },
@@ -187,6 +201,9 @@ export default {
     "get_packagesError",
     "get_loadingDependent",
     "get_EditCover",
+    "get_PolicyId",
+    "get_policyHolderCover",
+    "get_funeralPolicy",
   ]),
 };
 </script>

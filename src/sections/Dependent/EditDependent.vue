@@ -206,14 +206,14 @@
                           ref="menuDJC"
                           v-model="dJCDate"
                           :close-on-content-click="false"
-                          :return-value.sync="get_EditDependent.policyCover.dJCDate"
+                          :return-value.sync="get_EditDependent.policyCover.djcDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="get_EditDependent.policyCover.dJCDate"
+                              v-model="get_EditDependent.policyCover.djcDate"
                               label="DJC Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -223,7 +223,7 @@
                             ></v-text-field>
                           </template>
                           <v-date-picker
-                            v-model="get_EditDependent.policyCover.dJCDate"
+                            v-model="get_EditDependent.policyCover.djcDate"
                             no-title
                             scrollable
                           >
@@ -232,7 +232,7 @@
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuDJC.save(get_EditDependent.policyCover.dJCDate)"
+                              @click="$refs.menuDJC.save(get_EditDependent.policyCover.djcDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -240,14 +240,14 @@
                           ref="menuDJF"
                           v-model="dJFDate"
                           :close-on-content-click="false"
-                          :return-value.sync="get_EditDependent.policyCover.dJFDate"
+                          :return-value.sync="get_EditDependent.policyCover.djfDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="get_EditDependent.policyCover.dJFDate"
+                              v-model="get_EditDependent.policyCover.djfDate"
                               label="DJF Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -257,16 +257,16 @@
                             ></v-text-field>
                           </template>
                           <v-date-picker
-                            v-model="get_EditDependent.policyCover.dJFDate"
+                            v-model="get_EditDependent.policyCover.djfDate"
                             no-title
                             scrollable
                           >
                             <v-spacer></v-spacer>
-                            <v-btn text color="primary" @click="dJFDate = false">Cancel</v-btn>
+                            <v-btn text color="primary" @click="djfDate = false">Cancel</v-btn>
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuDJF.save(get_EditDependent.policyCover.dJFDate)"
+                              @click="$refs.menuDJF.save(get_EditDependent.policyCover.djfDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -274,14 +274,14 @@
                           ref="menuDPS"
                           v-model="dPSDate"
                           :close-on-content-click="false"
-                          :return-value.sync="get_EditDependent.policyCover.dPSDate"
+                          :return-value.sync="get_EditDependent.policyCover.dpsDate"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="get_EditDependent.policyCover.dPSDate"
+                              v-model="get_EditDependent.policyCover.dpsDate"
                               label="DPS Date"
                               prepend-icon="mdi-calendar"
                               readonly
@@ -291,16 +291,16 @@
                             ></v-text-field>
                           </template>
                           <v-date-picker
-                            v-model="get_EditDependent.policyCover.dPSDate"
+                            v-model="get_EditDependent.policyCover.dpsDate"
                             no-title
                             scrollable
                           >
                             <v-spacer></v-spacer>
-                            <v-btn text color="primary" @click="dPSDate = false">Cancel</v-btn>
+                            <v-btn text color="primary" @click="dpsDate = false">Cancel</v-btn>
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.menuDPS.save(get_EditDependent.policyCover.dPSDate)"
+                              @click="$refs.menuDPS.save(get_EditDependent.policyCover.dpsDate)"
                             >OK</v-btn>
                           </v-date-picker>
                         </v-menu>
@@ -371,7 +371,12 @@ export default {
   }),
 
   methods: {
-    ...mapActions(["EditDependent", "CloseEditDependentDialog"]),
+    ...mapActions([
+      "EditDependent",
+      "CloseEditDependentDialog",
+      "EditDependentF",
+      "GetDependenciesForPolicy",
+    ]),
     getTitle() {
       return enums.title;
     },
@@ -395,7 +400,9 @@ export default {
     },
     editDependent() {
       if (this.$refs.formEdit.validate()) {
-        this.EditDependent(this.dependent);
+        this.EditDependentF(this.get_EditDependent).then(() => {
+          this.GetDependenciesForPolicy(this.get_EditDependent.policyId);
+        });
       }
     },
   },
