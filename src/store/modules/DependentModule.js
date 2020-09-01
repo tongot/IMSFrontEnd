@@ -1,6 +1,7 @@
 import axios from 'axios';
 import enums from '../../Dictionary/Dictionary';
 import _ from 'lodash';
+import store from '../index';
 const state = {
   Dependent: null,
   Dependencies: [],
@@ -39,6 +40,9 @@ const actions = {
     commit('set_policyId', policyId);
   },
   async AddDependent({ dispatch }, person) {
+    store.state.runningMethod = 'AddDependent';
+    store.state.dataForMethod = person;
+
     state.loadingDependent = true;
     state.dependentError = null;
     await axios
@@ -74,11 +78,17 @@ const actions = {
           state.loadingDependent = false;
         }
       )
-      .catch(() => {
-        alert('failed to post dependent');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditDependentF({ dispatch }, person) {
+    store.state.runningMethod = 'EditDependentF';
+    store.state.dataForMethod = person;
     state.loadingDependent = true;
     state.dependentError = null;
     await axios
@@ -115,12 +125,19 @@ const actions = {
           state.loadingDependent = false;
         }
       )
-      .catch(() => {
-        alert('failed to post dependent');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   //get the covers eligible for the dependents of current policy holder
   async GetDependentPackage({ commit }, holderId) {
+    store.state.runningMethod = 'GetDependentPackage';
+    store.state.dataForMethod = holderId;
+
     state.loadingDependent = true;
     state.dependentError = null;
     await axios
@@ -141,12 +158,18 @@ const actions = {
           state.loadingDependent = false;
         }
       )
-      .catch(() => {
-        alert('failed to get dependent packages');
-        state.loadingDependent = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetDependenciesForPolicy({ commit }, id) {
+    store.state.runningMethod = 'GetDependenciesForPolicy';
+    store.state.dataForMethod = id;
+
     state.Dependencies = [];
     state.loadingDependent = true;
     await axios
@@ -163,8 +186,12 @@ const actions = {
           alert('Error ' + e.response.data.message);
         }
       )
-      .catch(() => {
-        alert('failed to load dependencies');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
 };

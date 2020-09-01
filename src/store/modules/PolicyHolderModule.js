@@ -1,5 +1,6 @@
 import axios from 'axios';
 import enums from '../../Dictionary/Dictionary';
+import store from '../index';
 const state = {
   policyHolder: null,
   policyHolders: [],
@@ -28,6 +29,7 @@ const actions = {
     state.dialogEditPolicyHolder = true;
   },
   async GetPolicyHolders({ commit }) {
+    store.state.runningMethod = 'GetPolicyHolders';
     state.policyHolderError = null;
     state.loadingPolicyHolder = true;
     axios
@@ -43,10 +45,16 @@ const actions = {
         state.policyHolderError = response.data.message;
       })
       .catch((ex) => {
-        alert('Error ' + ex);
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetPolicyHolderById({ commit }, id) {
+    store.state.runningMethod = 'GetPolicyHolderById';
+    store.state.dataForMethod = id;
     state.policyHolderError = null;
     state.loadingPolicyHolder = true;
     axios
@@ -61,10 +69,16 @@ const actions = {
         state.policyHolderError = response.data.message;
       })
       .catch((ex) => {
-        alert('Error ' + ex);
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddPolicyHolder({ commit }, person) {
+    store.state.runningMethod = 'AddPolicyHolder';
+    store.state.dataForMethod = person;
     state.policyHolderError = null;
     state.loadingPolicyHolder = true;
     axios
@@ -101,13 +115,18 @@ const actions = {
           state.policyHolderError = e.response.data.message;
         }
       )
-      .catch(() => {
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
         state.loadingPolicyHolder = false;
-        state.policyHolderError = 'Error Posting please try again later';
       });
   },
   async EditPolicyHolder({ commit }, person) {
-    state.policyHolderError = null;
+    (store.state.runningMethod = 'EditPolicyHolder'),
+      (store.state.dataForMethod = person),
+      (state.policyHolderError = null);
     state.loadingPolicyHolder = true;
     axios
       .put('/PolicyHolder', {
@@ -144,9 +163,12 @@ const actions = {
           state.policyHolderError = e.response.data.message;
         }
       )
-      .catch(() => {
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
         state.loadingPolicyHolder = false;
-        state.policyHolderError = 'Error Posting please try again later';
       });
   },
 };

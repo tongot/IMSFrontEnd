@@ -30,6 +30,8 @@ const actions = {
           if (response.status === 200) {
             commit('set_user', response.data.data);
             state.openMenu = true;
+            sessionStorage.setItem('authToken', response.data.data.token);
+            sessionStorage.setItem('ref', response.data.data.refreshToken);
             router.push({ name: 'dashboard' });
             state.loginLoading = false;
             return;
@@ -55,7 +57,9 @@ const actions = {
         return response;
       }
     } catch (error) {
-      alert('failed to load roles ' + error.response);
+      if (error.response.status !== 401 || error.response.status !== 403) {
+        alert('failed to load roles ' + error.response);
+      }
     }
   },
 };

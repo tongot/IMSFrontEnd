@@ -1,6 +1,6 @@
 import axios from 'axios';
 import router from '../../router';
-
+import store from '../index';
 const state = {
   underwriterError: null,
   loadingUnderwriter: false,
@@ -25,6 +25,7 @@ const actions = {
     state.underwriterAddModal = !state.underwriterAddModal;
   },
   async GetUnderwriters({ commit }) {
+    store.state.runningMethod = 'GetUnderwriters';
     state.loadingUnderwriter = true;
     state.underwriterError = null;
     axios
@@ -42,12 +43,17 @@ const actions = {
           state.loadingUnderwriter = false;
         }
       )
-      .catch(() => {
-        commit('set_underwriterError', 'Failed to load data');
-        state.loadingUnderwriter = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetUnderwriterById({ commit }, id) {
+    store.state.runningMethod = 'GetUnderwriterById';
+    store.state.dataForMethod = id;
     state.loadingUnderwriter = true;
     state.underwriterError = null;
     axios
@@ -65,12 +71,17 @@ const actions = {
           state.loadingUnderwriter = false;
         }
       )
-      .catch(() => {
-        commit('set_underwriterError', 'Failed to load data');
-        state.loadingUnderwriter = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async UpdateUnderwriter({ commit }) {
+    store.state.runningMethod = 'UpdateUnderwriter';
+
     state.loadingUnderwriter = true;
     state.underwriterError = null;
     axios
@@ -98,12 +109,17 @@ const actions = {
           state.loadingUnderwriter = false;
         }
       )
-      .catch(() => {
-        commit('set_underwriterError', 'Failed to load data');
-        state.loadingUnderwriter = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddNewUnderwriter({ commit }, underwriter) {
+    store.state.runningMethod = 'AddNewUnderwriter';
+    store.state.dataForMethod = underwriter;
     state.loadingUnderwriter = true;
     state.underwriterError = null;
     axios
@@ -130,9 +146,12 @@ const actions = {
           state.loadingUnderwriter = false;
         }
       )
-      .catch(() => {
-        commit('set_underwriterError', 'Failed to load data');
-        state.loadingUnderwriter = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
 };

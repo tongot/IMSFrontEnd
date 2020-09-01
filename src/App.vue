@@ -14,7 +14,7 @@
     <v-app id="inspire">
       <v-navigation-drawer v-model="draw" left clipped app>
         <v-list dense>
-          <v-list-item link>
+          <v-list-item link :to="menus[0].link">
             <v-list-item-action>
               <v-icon>{{ menus[0].icon }}</v-icon>
             </v-list-item-action>
@@ -112,7 +112,11 @@ export default {
   data: () => ({
     draw: null,
     menus: [
-      { name: "Dashboard", link: "/", icon: "mdi-view-dashboard" },
+      {
+        name: "Dashboard",
+        link: { name: "dashboard" },
+        icon: "mdi-view-dashboard",
+      },
       {
         name: "Policies",
         icon: "mdi-sitemap",

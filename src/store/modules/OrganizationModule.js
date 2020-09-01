@@ -1,6 +1,6 @@
 import axios from 'axios';
 import router from '../../router';
-
+import store from '../index';
 const state = {
   organizationError: null,
   loadingOrganization: false,
@@ -25,6 +25,8 @@ const actions = {
     state.organizationAddModal = !state.organizationAddModal;
   },
   async GetOrganizations({ commit }) {
+    store.state.runningMethod = 'GetOrganizations';
+
     state.loadingOrganization = true;
     state.organizationError = null;
     axios
@@ -42,12 +44,18 @@ const actions = {
           state.loadingOrganization = false;
         }
       )
-      .catch(() => {
-        commit('set_organizationError', 'Failed to load data');
-        state.loadingOrganization = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetOrganizationById({ commit }, id) {
+    store.state.runningMethod = 'GetOrganizationById';
+    store.state.dataForMethod = id;
+
     state.loadingOrganization = true;
     state.organizationError = null;
     axios
@@ -65,12 +73,17 @@ const actions = {
           state.loadingOrganization = false;
         }
       )
-      .catch(() => {
-        commit('set_organizationError', 'Failed to load data');
-        state.loadingOrganization = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async UpdateOrganization({ commit }) {
+    store.state.runningMethod = 'UpdateOrganization';
+
     state.loadingOrganization = true;
     state.organizationError = null;
     axios
@@ -97,12 +110,18 @@ const actions = {
           state.loadingOrganization = false;
         }
       )
-      .catch(() => {
-        commit('set_organizationError', 'Failed to load data');
-        state.loadingOrganization = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddNewOrganization({ commit }, organization) {
+    store.state.runningMethod = 'AddNewOrganization';
+    store.state.dataForMethod = organization;
+
     state.loadingOrganization = true;
     state.organizationError = null;
     axios
@@ -128,9 +147,12 @@ const actions = {
           state.loadingOrganization = false;
         }
       )
-      .catch(() => {
-        commit('set_organizationError', 'Failed to load data');
-        state.loadingOrganization = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
 };

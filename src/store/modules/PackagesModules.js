@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '..';
 //import _ from 'lodash';
 
 const state = {
@@ -41,6 +42,8 @@ const actions = {
     state.ModalEditPackage = !state.ModalEditPackage;
   },
   async GetPackages({ commit }) {
+    store.state.runningMethod = 'GetPackages';
+
     state.loadingPackages = true;
     state.packagesError = null;
     axios
@@ -60,11 +63,18 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        alert('something happened');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddPackage({ commit }, Package) {
+    store.state.runningMethod = 'AddPackage';
+    store.state.dataForMethod = Package;
+
     state.packagesError = null;
     state.loadingPackages = true;
     axios
@@ -93,12 +103,17 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        state.loadingPackages = false;
-        state.policyHolderError = 'Error Posting please try again later';
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditPackage({ commit }, Package) {
+    store.state.runningMethod = 'EditPackage';
+    store.state.dataForMethod = Package;
     state.packagesError = null;
     state.loadingPackages = true;
     axios
@@ -127,12 +142,17 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        state.loadingPackages = false;
-        state.policyHolderError = 'Error Posting please try again later';
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddDependentPackage({ commit }, Package) {
+    store.state.runningMethod = 'AddDependentPackage';
+    store.state.dataForMethod = Package;
     state.packagesError = null;
     state.loadingPackages = true;
     axios
@@ -165,12 +185,17 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        state.loadingPackages = false;
-        state.policyHolderError = 'Error Posting please try again later';
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditDependentPackage({ commit }, Package) {
+    store.state.runningMethod = 'EditDependentPackage';
+    store.state.dataForMethod = Package;
     state.packagesError = null;
     state.loadingPackages = true;
     axios
@@ -202,12 +227,17 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        state.loadingPackages = false;
-        state.policyHolderError = 'Error Posting please try again later';
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetDependentCover({ commit }, id) {
+    store.state.runningMethod = 'GetDependentCover';
+    store.state.dataForMethod = id;
     state.loadingPackages = true;
     state.DependentCover = null;
     axios
@@ -227,11 +257,17 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        alert('something happened');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetPolicyHolderCover({ commit }, id) {
+    store.state.runningMethod = 'GetPolicyHolderCover';
+    store.state.dataForMethod = id;
     state.loadingPackages = true;
     state.policyHolderCover = null;
     axios
@@ -251,11 +287,17 @@ const actions = {
           state.packagesError = e.response.data.message;
         }
       )
-      .catch(() => {
-        alert('something happened');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditCover({ commit }, cover) {
+    store.state.runningMethod = 'EditCover';
+    store.state.dataForMethod = cover;
     state.loadingPackages = true;
     state.packagesError = null;
     await axios
@@ -287,11 +329,17 @@ const actions = {
           state.loadingPackages = false;
         }
       )
-      .catch(() => {
-        alert('failed to edit package');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetCoverById({ commit }, id) {
+    store.state.runningMethod = 'GetCoverById';
+    store.state.dataForMethod = id;
     state.loadingPackages = true;
     state.packagesError = null;
     await axios.get('/policyCover/' + id).then((response) => {

@@ -16,6 +16,8 @@ export default new Vuex.Store({
   state: {
     showSnack: false,
     snackText: '',
+    runningMethod: '',
+    dataForMethod: null,
   },
   getters: {
     get_snackText: (state) => state.snackText,

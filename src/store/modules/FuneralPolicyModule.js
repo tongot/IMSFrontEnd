@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from '../../router';
+import store from '../index';
 const state = {
   funeralPolicy: null,
   funeralPolicies: [],
@@ -29,6 +30,8 @@ const actions = {
     state.ModalAddNewFPolicy = !state.ModalAddNewFPolicy;
   },
   async GetFuneralPolicies({ commit }) {
+    store.state.runningMethod = 'GetFuneralPolicies';
+
     state.loadingFPolicy = true;
     await axios
       .get('/funeralPolicy/getAll/2')
@@ -41,12 +44,18 @@ const actions = {
         alert(response.data.message);
         state.loadingFPolicy = false;
       })
-      .catch(() => {
-        alert('something happened');
-        state.loadingFPolicy = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async GetPolicyById({ commit }, id) {
+    store.state.runningMethod = 'GetPolicyById';
+    store.state.dataForMethod = id;
+
     state.loadingFPolicy = true;
     await axios
       .get('/funeralPolicy/GetFuneralPolicy/' + id)
@@ -65,12 +74,16 @@ const actions = {
           state.loadingFPolicy = false;
         }
       )
-      .catch(() => {
-        alert('Failed to load data');
-        state.loadingFPolicy = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async HasPolicy({ commit }) {
+    store.state.runningMethod = 'HasPolicy';
     state.loadingFPolicy = true;
     await axios
       .get('/funeralPolicy/HasPolicy/' + state.newPolicyHolderId)
@@ -88,12 +101,18 @@ const actions = {
         alert(response.data.message);
         state.loadingFPolicy = false;
       })
-      .catch(() => {
-        alert('something happened');
-        state.loadingFPolicy = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddFuneralPolicy({ commit }, policy) {
+    store.state.runningMethod = 'AddFuneralPolicy';
+    store.state.dataForMethod = policy;
+
     state.loadingFPolicy = true;
     state.funeralPolicyErrors = null;
     await axios
@@ -124,8 +143,12 @@ const actions = {
           state.funeralPolicyErrors = e.response.data.message;
         }
       )
-      .catch(() => {
-        alert('failed to post funeral policy');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
 };

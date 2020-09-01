@@ -1,7 +1,7 @@
 import axios from 'axios';
 import router from '../../router';
 //import router from '../../router';
-
+import store from '../index';
 const state = {
   processes: [],
   process: null,
@@ -20,6 +20,8 @@ const getters = {
 };
 const actions = {
   async GetProcesses({ commit }) {
+    store.state.runningMethod = 'GetProcesses';
+
     state.loadingProcess = true;
     state.processError = null;
     axios
@@ -37,12 +39,17 @@ const actions = {
           state.loadingProcess = false;
         }
       )
-      .catch(() => {
-        commit('set_processError', 'Failed to load data');
-        state.loadingProcess = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddProcess({ commit }, process) {
+    store.state.runningMethod = 'AddProcess';
+    store.state.dataForMethod = process;
     state.loadingProcess = true;
     state.processError = null;
     axios
@@ -62,12 +69,17 @@ const actions = {
           state.loadingProcess = false;
         }
       )
-      .catch(() => {
-        commit('set_processError', 'Failed to load data');
-        state.loadingProcess = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditProcess({ commit }, process) {
+    store.state.runningMethod = 'EditProcess';
+    store.state.dataForMethod = process;
     state.loadingProcess = true;
     state.processError = null;
     axios
@@ -88,12 +100,17 @@ const actions = {
           state.loadingProcess = false;
         }
       )
-      .catch(() => {
-        commit('set_processError', 'Failed to load data');
-        state.loadingProcess = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddStatus({ commit }, status) {
+    store.state.runningMethod = 'AddStatus';
+    store.state.dataForMethod = status;
     state.loadingState = true;
     state.processError = null;
     axios
@@ -119,12 +136,18 @@ const actions = {
           state.loadingState = false;
         }
       )
-      .catch(() => {
-        commit('set_stateError', 'Failed to load data');
-        state.loadingState = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditStatus({ commit }, status) {
+    store.state.runningMethod = 'EditStatus';
+    store.state.dataForMethod = status;
+
     state.loadingState = true;
     state.processError = null;
     console.log(status);
@@ -152,9 +175,12 @@ const actions = {
           state.loadingState = false;
         }
       )
-      .catch(() => {
-        commit('set_stateError', 'Failed to load data');
-        state.loadingState = false;
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
 };

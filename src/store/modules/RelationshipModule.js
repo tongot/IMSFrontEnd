@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import store from '../index';
 const state = {
   Relationship: null,
   Relationships: [],
@@ -21,6 +21,8 @@ const actions = {
     state.ModalRelationship = !state.ModalRelationship;
   },
   async GetRelationships({ commit }) {
+    store.state.runningMethod = 'GetRelationships';
+
     state.loadingRelationship = true;
     state.relationshipError = null;
     await axios
@@ -37,12 +39,17 @@ const actions = {
           alert(e.response.data.message);
         }
       )
-      .catch(() => {
-        state.loadingRelationship = false;
-        alert('failed to load relationships');
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async AddRelationship({ commit }, relation) {
+    store.state.runningMethod = 'AddRelationship';
+    store.state.dataForMethod = relation;
     state.loadingRelationship = true;
     state.relationshipError = null;
     axios
@@ -66,12 +73,17 @@ const actions = {
           state.relationshipError = e.response.data.message;
         }
       )
-      .catch(() => {
-        state.loadingRelationship = false;
-        state.relationshipError = 'failed to add relationship';
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
   async EditRelationship({ commit }, relation) {
+    store.state.runningMethod = 'EditRelationship';
+    store.state.dataForMethod = relation;
     console.log(relation);
     state.loadingRelationship = true;
     state.relationshipError = null;
@@ -96,9 +108,12 @@ const actions = {
           state.relationshipError = e.response.data.message;
         }
       )
-      .catch(() => {
-        state.loadingRelationship = false;
-        state.relationshipError = 'failed to edit relationship';
+      .catch((ex) => {
+        if (ex.response.status === 401 || ex.response.status === 403) {
+          return;
+        }
+        alert('Error ' + ex.response.status);
+        state.loadingPolicyHolder = false;
       });
   },
 };
