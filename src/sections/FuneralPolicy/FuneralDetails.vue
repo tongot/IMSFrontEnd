@@ -1,9 +1,15 @@
 <template>
   <div v-if="get_funeralPolicy != null">
+    <v-row>
+      <v-col>
+        <statuses />
+      </v-col>
+    </v-row>
     <v-card v-if="get_funeralPolicy.policyHolder != null" outlined>
       <v-toolbar dark color="light-blue" flat>
         <v-toolbar-title>Policy holder details</v-toolbar-title>
       </v-toolbar>
+
       <v-row class="pa-2">
         <v-col md="4" xs="12" sm="12">
           <h4>Personal Details</h4>
@@ -348,8 +354,12 @@
 
 <script>
 import enums from "../../Dictionary/Dictionary";
+import statuses from "../../components/States";
 import { mapGetters, mapActions } from "vuex";
 export default {
+  components: {
+    statuses,
+  },
   methods: {
     ...mapActions([
       "GetPolicyById",
@@ -364,6 +374,7 @@ export default {
       "GetCoverById",
       "GetRelationships",
       "OpenEditDependentDialog",
+      "GetStatus",
     ]),
     openModalEditCover(id, policyId) {
       this.GetCoverById(id);
@@ -374,6 +385,7 @@ export default {
     openModalEditDependent(dependent, index, holderId) {
       this.GetCoverById(dependent.policyCover.id);
       this.GetDependentPackage(holderId);
+      dependent.policyStateId = this.get_funeralPolicy.stateId;
       this.OpenEditDependentDialog(dependent);
     },
     getGender(n) {
@@ -409,6 +421,7 @@ export default {
   ]),
   mounted() {
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {
+      this.GetStatus(this.get_funeralPolicy.id);
       this.GetDependenciesForPolicy(this.get_funeralPolicy.funeralPolicy.id);
       this.GetPolicyHolderCover(this.get_funeralPolicy.policyHolder.id);
       this.GetRelationships();

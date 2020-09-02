@@ -184,6 +184,7 @@ export default {
           Cover: this.get_EditCover,
           policyId: this.get_PolicyId,
           oldPackageId: this.get_policyHolderCover.package.id,
+          policyState: this.get_funeralPolicy.stateId,
         };
         this.EditCover(cover).then(() => {
           this.GetPolicyHolderCover(this.get_EditCover.ownerId).then(() =>

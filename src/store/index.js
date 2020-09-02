@@ -9,6 +9,7 @@ import policyHolderModule from './modules/PolicyHolderModule';
 import packageModule from './modules/PackagesModules';
 import dependentModule from './modules/DependentModule';
 import relationshipModule from './modules/RelationshipModule';
+import StateManager from './modules/StateManager';
 
 Vue.use(Vuex);
 
@@ -18,12 +19,23 @@ export default new Vuex.Store({
     snackText: '',
     runningMethod: '',
     dataForMethod: null,
+    token: sessionStorage.getItem('authToken'),
   },
   getters: {
     get_snackText: (state) => state.snackText,
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    set_RunningAction: (state, data) => ((state.runningMethod = data.name), (state.dataForMethod = data.data)),
+    set_Token: (state, data) => (state.token = data),
+  },
+  actions: {
+    SetActionRunning({ commit }, data) {
+      commit('set_RunningAction', data);
+    },
+    SetToken({ commit }, token) {
+      commit('set_Token', token);
+    },
+  },
   modules: {
     accountsModule,
     funeralPolicyModule,
@@ -34,5 +46,6 @@ export default new Vuex.Store({
     packageModule,
     dependentModule,
     relationshipModule,
+    StateManager,
   },
 });

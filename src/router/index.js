@@ -31,6 +31,7 @@ import policyholderDetail from '../sections/PolicyHolder/policyHolderDetail';
 import Relationship from '../components/Relationship';
 
 import relationshipList from '../sections/Relationships/RelationshipList';
+import Forbidden from '../views/Forbidden';
 
 Vue.use(VueRouter);
 
@@ -150,6 +151,11 @@ const routes = [
     path: '/',
     name: 'dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/unauthorized',
+    name: 'unauthorized',
+    component: Forbidden,
   },
   /*{
     path: '/about',

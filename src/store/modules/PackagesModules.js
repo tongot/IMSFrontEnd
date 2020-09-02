@@ -265,9 +265,9 @@ const actions = {
         state.loadingPolicyHolder = false;
       });
   },
-  async GetPolicyHolderCover({ commit }, id) {
-    store.state.runningMethod = 'GetPolicyHolderCover';
-    store.state.dataForMethod = id;
+  async GetPolicyHolderCover({ commit, dispatch }, id) {
+    dispatch('SetActionRunning', { name: 'GetPolicyHolderCover', data: id });
+
     state.loadingPackages = true;
     state.policyHolderCover = null;
     axios
@@ -298,11 +298,14 @@ const actions = {
   async EditCover({ commit }, cover) {
     store.state.runningMethod = 'EditCover';
     store.state.dataForMethod = cover;
+
+    console.log(cover);
     state.loadingPackages = true;
     state.packagesError = null;
     await axios
       .put('/policyCover', {
         fPolicyId: cover.policyId,
+        policyStateId: cover.policyState,
         id: cover.Cover.id,
         payPoint: cover.Cover.payPoint,
         djcDate: cover.Cover.djcDate,

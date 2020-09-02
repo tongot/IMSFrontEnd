@@ -39,28 +39,29 @@ const actions = {
   SetPolicyId({ commit }, policyId) {
     commit('set_policyId', policyId);
   },
-  async AddDependent({ dispatch }, person) {
+  async AddDependent({ dispatch }, dependent) {
     store.state.runningMethod = 'AddDependent';
-    store.state.dataForMethod = person;
-
+    store.state.dataForMethod = dependent;
+    console.log(dependent);
     state.loadingDependent = true;
     state.dependentError = null;
     await axios
       .post('/policyHolder/addDependent', {
-        maritalStatus: person.maritalStatus,
-        salutation: person.salutation,
-        firstName: person.firstName,
-        lastName: person.lastName,
-        middleName: person.middleName,
-        relationshipId: person.relationshipId,
-        gender: person.gender,
-        dateOfBirth: person.dateOfBirth,
-        idNumber: person.idNumber,
-        idType: person.idType,
-        countryOfIssue: person.countryOfIssue,
-        disabled: person.disabled == 'Yes' ? true : false,
+        maritalStatus: dependent.person.maritalStatus,
+        salutation: dependent.person.salutation,
+        firstName: dependent.person.firstName,
+        lastName: dependent.person.lastName,
+        middleName: dependent.person.middleName,
+        relationshipId: dependent.person.relationshipId,
+        gender: dependent.person.gender,
+        dateOfBirth: dependent.person.dateOfBirth,
+        idNumber: dependent.person.idNumber,
+        idType: dependent.person.idType,
+        countryOfIssue: dependent.person.countryOfIssue,
+        disabled: dependent.person.disabled == 'Yes' ? true : false,
         policyId: state.PolicyId,
-        PolicyCover: person.cover,
+        policyStateId: dependent.stateId,
+        PolicyCover: dependent.person.cover,
       })
       .then(
         (response) => {
@@ -109,6 +110,7 @@ const actions = {
         countryOfIssue: person.countryOfIssue,
         disabled: person.disabled == 'Yes' ? true : false,
         PolicyCover: person.policyCover,
+        policyStateId: person.policyStateId,
       })
       .then(
         (response) => {
@@ -166,10 +168,8 @@ const actions = {
         state.loadingPolicyHolder = false;
       });
   },
-  async GetDependenciesForPolicy({ commit }, id) {
-    store.state.runningMethod = 'GetDependenciesForPolicy';
-    store.state.dataForMethod = id;
-
+  async GetDependenciesForPolicy({ commit, dispatch }, id) {
+    dispatch('SetActionRunning', { name: 'GetDependenciesForPolicy', data: id });
     state.Dependencies = [];
     state.loadingDependent = true;
     await axios
@@ -182,8 +182,9 @@ const actions = {
           state.loadingDependent = false;
         },
         (e) => {
+          console.log(e.response);
           state.loadingDependent = false;
-          alert('Error ' + e.response.data.message);
+          //alert('Error ' + e.response.data.message);
         }
       )
       .catch((ex) => {

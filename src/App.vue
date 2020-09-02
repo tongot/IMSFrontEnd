@@ -12,9 +12,9 @@
     <editCover />
     <editDependent />
     <v-app id="inspire">
-      <v-navigation-drawer v-model="draw" left clipped app>
+      <v-navigation-drawer v-if="get_user!=null" v-model="draw" left clipped app>
         <v-list dense>
-          <v-list-item link :to="menus[0].link">
+          <v-list-item v-if="menuRights(get_user.roles)" link :to="menus[0].link">
             <v-list-item-action>
               <v-icon>{{ menus[0].icon }}</v-icon>
             </v-list-item-action>
@@ -68,6 +68,10 @@
       <v-app-bar app color="primary" clipped-left dark>
         <v-app-bar-nav-icon @click.stop="draw = !draw"></v-app-bar-nav-icon>
         <v-toolbar-title>IMS</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <div>
+          <v-chip v-if="get_user!=null" outlined small>{{get_user.email}}</v-chip>
+        </div>
       </v-app-bar>
 
       <v-main>
@@ -83,7 +87,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import errorPop from "./components/ErrorPop";
 import underwriterEdit from "./sections/GlobalEntities/EditUnderwrites";
 import underwriterAdd from "./sections/GlobalEntities/AddUnderwriters";
@@ -116,10 +120,12 @@ export default {
         name: "Dashboard",
         link: { name: "dashboard" },
         icon: "mdi-view-dashboard",
+        roles: ["Data"],
       },
       {
         name: "Policies",
         icon: "mdi-sitemap",
+        roles: ["Admin", "Capturer"],
         terms: [
           {
             term: "Long term",
@@ -133,12 +139,14 @@ export default {
       },
       {
         name: "Policy Holders",
+        roles: ["Admin", "Capturer"],
         icon: "mdi-account-multiple",
         link: { name: "policyholderList" },
       },
       {
         name: "Settings",
         icon: "mdi-locker",
+        roles: ["Admin", "Capturer"],
         items: [
           { name: "Global Entities", link: { name: "underwriters" } },
           { name: "Processes", link: { name: "status" } },
@@ -149,8 +157,21 @@ export default {
       },
     ],
   }),
-  methods: {},
+  methods: {
+    ...mapActions(["GetUserDetails"]),
+    menuRights(roles) {
+      let count = 0;
+      roles.forEach((element) => {
+        if (this.get_user.roles.includes(element)) {
+          count++;
+        }
+      });
+      return count > 0 ? true : false;
+    },
+  },
   computed: mapGetters(["get_user"]),
-  created() {},
+  mounted() {
+    this.GetUserDetails();
+  },
 };
 </script>

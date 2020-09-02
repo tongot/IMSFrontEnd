@@ -409,8 +409,12 @@ export default {
       this.isOthers = value == "Other" ? true : false;
     },
     addDependent() {
+      const dep = {
+        stateId: this.get_funeralPolicy.stateId,
+        person: this.dependent,
+      };
       if (this.$refs.formAdd.validate()) {
-        this.AddDependent(this.dependent).then(() => {
+        this.AddDependent(dep).then(() => {
           this.GetDependenciesForPolicy(
             this.get_funeralPolicy.funeralPolicy.id
           );

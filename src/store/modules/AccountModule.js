@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from '../../router';
+//import store from '..';
 
 const state = {
   loginError: null,
@@ -17,7 +18,10 @@ const getters = {
   get_roles: (state) => state.roles,
 };
 const actions = {
-  async Login({ commit }, credentials) {
+  SetUser({ commit }, user) {
+    commit('set_user', user);
+  },
+  async Login({ commit, dispatch }, credentials) {
     state.loginLoading = true;
     axios
       .post('/userAccount/login', {
@@ -26,13 +30,14 @@ const actions = {
       })
       .then(
         (response) => {
-          console.log(response);
           if (response.status === 200) {
-            commit('set_user', response.data.data);
+            dispatch('SetUser', response.data.data);
             state.openMenu = true;
             sessionStorage.setItem('authToken', response.data.data.token);
             sessionStorage.setItem('ref', response.data.data.refreshToken);
+            sessionStorage.setItem('Oid', response.data.data.id);
             router.push({ name: 'dashboard' });
+            router.go();
             state.loginLoading = false;
             return;
           }
@@ -44,8 +49,7 @@ const actions = {
           state.loginLoading = false;
         }
       )
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
         state.loginLoading = false;
       });
   },
@@ -59,6 +63,30 @@ const actions = {
     } catch (error) {
       if (error.response.status !== 401 || error.response.status !== 403) {
         alert('failed to load roles ' + error.response);
+      }
+    }
+  },
+  async GetUserDetails({ dispatch }) {
+    dispatch('SetActionRunning', { name: 'GetUserDetails', data: null });
+    if (state.user == null) {
+      let response;
+      let id = sessionStorage.getItem('Oid');
+      if (id != null) {
+        response = await axios.get('/userAccount/GetUserDetails/' + id);
+        try {
+          if (response.status === 200) {
+            dispatch('SetUser', response.data);
+          }
+        } catch (error) {
+          if (error.response.status === 401 || error.response.status === 403) {
+            return;
+          }
+          alert('failed to load roles ' + error.response);
+        }
+      } else {
+        if (router.currentRoute.name != 'login') {
+          router.push({ name: 'login' });
+        }
       }
     }
   },

@@ -20,9 +20,8 @@ const actions = {
   CloseModalRelationship() {
     state.ModalRelationship = !state.ModalRelationship;
   },
-  async GetRelationships({ commit }) {
-    store.state.runningMethod = 'GetRelationships';
-
+  async GetRelationships({ commit, dispatch }) {
+    dispatch('SetActionRunning', { name: 'GetRelationships', data: null });
     state.loadingRelationship = true;
     state.relationshipError = null;
     await axios
@@ -36,7 +35,7 @@ const actions = {
         },
         (e) => {
           state.loadingRelationship = false;
-          alert(e.response.data.message);
+          console.log(e.response.data);
         }
       )
       .catch((ex) => {
