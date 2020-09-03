@@ -375,6 +375,7 @@ export default {
       "GetRelationships",
       "OpenEditDependentDialog",
       "GetStatus",
+      "GetPolicyOwner",
     ]),
     openModalEditCover(id, policyId) {
       this.GetCoverById(id);
@@ -424,6 +425,7 @@ export default {
       this.GetStatus(this.get_funeralPolicy.id);
       this.GetDependenciesForPolicy(this.get_funeralPolicy.funeralPolicy.id);
       this.GetPolicyHolderCover(this.get_funeralPolicy.policyHolder.id);
+      this.GetPolicyOwner(this.get_funeralPolicy.owner);
       this.GetRelationships();
     });
   },

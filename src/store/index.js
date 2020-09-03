@@ -10,6 +10,7 @@ import packageModule from './modules/PackagesModules';
 import dependentModule from './modules/DependentModule';
 import relationshipModule from './modules/RelationshipModule';
 import StateManager from './modules/StateManager';
+import PolicyModule from './modules/PolicyModule';
 
 Vue.use(Vuex);
 
@@ -47,5 +48,6 @@ export default new Vuex.Store({
     dependentModule,
     relationshipModule,
     StateManager,
+    PolicyModule,
   },
 });
