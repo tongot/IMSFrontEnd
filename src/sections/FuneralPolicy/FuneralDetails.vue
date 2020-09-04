@@ -422,7 +422,11 @@ export default {
   ]),
   mounted() {
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {
-      this.GetStatus(this.get_funeralPolicy.id);
+      const status = {
+        id: this.get_funeralPolicy.stateId,
+        processId: this.get_funeralPolicy.processId,
+      };
+      this.GetStatus(status);
       this.GetDependenciesForPolicy(this.get_funeralPolicy.funeralPolicy.id);
       this.GetPolicyHolderCover(this.get_funeralPolicy.policyHolder.id);
       this.GetPolicyOwner(this.get_funeralPolicy.owner);

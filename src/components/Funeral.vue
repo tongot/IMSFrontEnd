@@ -8,8 +8,10 @@
       <v-spacer></v-spacer>
       <v-btn :loading="get_loadingPolicy"></v-btn>
       <v-chip v-if="get_policyOwner!=null">
-        <v-btn small smalll text>{{get_policyOwner.name}}</v-btn>
-        <v-chip outlined small>{{get_policyOwner.email}}</v-chip>
+        <v-btn small smalll text>
+          {{get_policyOwner.name}}
+          <v-chip outlined small>{{get_policyOwner.email}}</v-chip>
+        </v-btn>
       </v-chip>
       <v-btn fab small class="ma-1" color="grey">
         <v-icon>mdi-pencil</v-icon>

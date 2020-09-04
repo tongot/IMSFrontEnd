@@ -10,11 +10,11 @@ const getters = {
   get_statusError: (state) => state.stateError,
 };
 const actions = {
-  async GetStatus({ commit }, id) {
+  async GetStatus({ commit }, status) {
     state.loadingState = true;
     state.stateError = null;
     await axios
-      .get('/stateManager/' + id)
+      .get('/stateManager/' + status.id + '/' + status.processId)
       .then(
         (response) => {
           if (response.status == 200) {

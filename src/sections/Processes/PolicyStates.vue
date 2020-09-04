@@ -4,49 +4,52 @@
     <v-dialog width="500" v-model="ProcessEditDialog">
       <v-card>
         <v-form ref="formEditProcess">
-          <v-card-title
-            >Edit Process
+          <v-card-title>
+            Edit Process
             <v-spacer></v-spacer>
             <v-btn icon @click.prevent="ProcessEditDialog = !ProcessEditDialog">
-              <v-icon>
-                mdi-close
-              </v-icon>
+              <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text>
             <v-alert dismissible type="error" v-if="get_processError != null">{{ get_processError }}</v-alert>
-            <v-text-field v-model="EProcess.name" :rules="[rules.required]" label="Process Name"> </v-text-field>
+            <v-text-field v-model="EProcess.name" :rules="[rules.required]" label="Process Name"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn @click.prevent="EditPro()" depressed>
-              Edit
-            </v-btn>
+            <v-btn @click.prevent="EditPro()" depressed>Edit</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
     </v-dialog>
     <!--
     Add Status
--->
+    -->
     <div>
       <v-dialog width="500" persistent v-model="dialogAddStatus">
         <v-card>
           <v-alert type="error" v-if="errorRoles != null">{{ errorRoles }}</v-alert>
-          <v-card-title
-            >Add New Status
+          <v-card-title>
+            Add New Status
             <v-spacer></v-spacer>
             <v-btn icon @click="dialogAddStatus = !dialogAddStatus">
-              <v-icon>
-                mdi-close
-              </v-icon>
+              <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text>
             <v-form ref="formAddState">
               <v-alert type="error" v-if="get_stateError != null">{{ get_stateError }}</v-alert>
-              <v-text-field v-model="State.name" :rules="[rules.required]" label="State Name"> </v-text-field>
-              <v-text-field v-model="State.displayName" :rules="[rules.required]" label="Process Name"> </v-text-field>
-              <v-text-field v-model="State.order" type="number" :rules="[rules.required]" label="Order"> </v-text-field>
+              <v-text-field v-model="State.name" :rules="[rules.required]" label="State Name"></v-text-field>
+              <v-text-field
+                v-model="State.displayName"
+                :rules="[rules.required]"
+                label="Process Name"
+              ></v-text-field>
+              <v-text-field
+                v-model="State.order"
+                type="number"
+                :rules="[rules.required]"
+                label="Order"
+              ></v-text-field>
               <v-checkbox v-model="State.isFinal" label="Is Final"></v-checkbox>
               <v-card outlined :loading="loadingRoles">
                 <v-card-text>
@@ -60,10 +63,8 @@
                 </v-card-text>
               </v-card>
               <v-card-actions>
-                <v-spacer> </v-spacer>
-                <v-btn :loading="get_loadingState" depressed @click="AddState()">
-                  Add
-                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn :loading="get_loadingState" depressed @click="AddState()">Add</v-btn>
               </v-card-actions>
             </v-form>
           </v-card-text>
@@ -76,25 +77,30 @@
         <v-dialog width="500" persistent v-model="dialogEditStatus">
           <v-card>
             <v-alert type="error" v-if="errorRoles != null">{{ errorRoles }}</v-alert>
-            <v-card-title
-              >Edit Status
+            <v-card-title>
+              Edit Status
               <v-spacer></v-spacer>
               <v-btn icon @click="dialogEditStatus = !dialogEditStatus">
-                <v-icon>
-                  mdi-close
-                </v-icon>
+                <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-card-title>
             <v-card-text>
               <v-form ref="formEditState">
                 <v-alert type="error" v-if="get_stateError != null">{{ get_stateError }}</v-alert>
-                <v-text-field v-model="StateEdit.name" :rules="[rules.required]" label="State Name"> </v-text-field>
-                <v-text-field v-model="StateEdit.displayName" :rules="[rules.required]" label="Process Name">
-                </v-text-field>
-                <v-text-field v-model="StateEdit.order" type="number" :rules="[rules.required]" label="Order">
-                </v-text-field>
+                <v-text-field v-model="StateEdit.name" :rules="[rules.required]" label="State Name"></v-text-field>
+                <v-text-field
+                  v-model="StateEdit.displayName"
+                  :rules="[rules.required]"
+                  label="Process Name"
+                ></v-text-field>
+                <v-text-field
+                  v-model="StateEdit.order"
+                  type="number"
+                  :rules="[rules.required]"
+                  label="Order"
+                ></v-text-field>
                 <v-checkbox v-model="StateEdit.active" label="Active"></v-checkbox>
-                <v-checkbox v-model="State.isFinal" label="Is Final"></v-checkbox>
+                <v-checkbox v-model="StateEdit.isFinal" label="Is Final"></v-checkbox>
                 <v-card outlined :loading="loadingRoles">
                   <v-card-text>
                     <v-checkbox
@@ -107,10 +113,8 @@
                   </v-card-text>
                 </v-card>
                 <v-card-actions>
-                  <v-spacer> </v-spacer>
-                  <v-btn :loading="get_loadingState" depressed @click="EditState()">
-                    Edit
-                  </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn :loading="get_loadingState" depressed @click="EditState()">Edit</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -121,69 +125,58 @@
     <!--main view for processes -->
     <div>
       <v-btn :loading="get_loadingProcess" @click="addDialog = !addDialog" text>
-        <v-icon left>
-          mdi-plus
-        </v-icon>
-        Process
+        <v-icon left>mdi-plus</v-icon>Process
       </v-btn>
       <v-form v-if="addDialog" ref="formAddProcess">
         <v-card width="400">
-          <v-card-title
-            >Add Process
+          <v-card-title>
+            Add Process
             <v-spacer></v-spacer>
             <v-btn icon @click.prevent="addDialog = !addDialog">
-              <v-icon>
-                mdi-close
-              </v-icon>
+              <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text>
             <v-alert dismissible type="error" v-if="get_processError != null">{{ get_processError }}</v-alert>
-            <v-text-field v-model="Process.name" :rules="[rules.required]" label="Process Name"> </v-text-field>
+            <v-text-field v-model="Process.name" :rules="[rules.required]" label="Process Name"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn @click.prevent="Add()" depressed>
-              Add
-            </v-btn>
+            <v-btn @click.prevent="Add()" depressed>Add</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
       <div class="ma-2 d-flex justify-md-space-around">
         <v-card width="300" v-for="process in get_processes" :key="process.id">
-          <v-card-title
-            >{{ process.name }}
+          <v-card-title>
+            {{ process.name }}
             <v-spacer></v-spacer>
             <v-btn @click.prevent="OpenEditProcess(process)" icon>
-              <v-icon>
-                mdi-pencil
-              </v-icon>
+              <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text>
             <v-list>
               <v-subheader>State Order</v-subheader>
-              <v-btn :loading="get_loadingState" @click.prevent="OpenAddState(process.id)" small text>
-                <v-icon left>
-                  mdi-plus
-                </v-icon>
-                State
+              <v-btn
+                :loading="get_loadingState"
+                @click.prevent="OpenAddState(process.id)"
+                small
+                text
+              >
+                <v-icon left>mdi-plus</v-icon>State
               </v-btn>
               <v-list-item-group>
                 <v-list-item v-for="state in process.state" :key="state.id">
                   <v-list-item-title>
                     <v-avatar color="primary" size="30">
-                      <span class="white--text">{{ state.order }}</span> </v-avatar
-                    >&nbsp; <span>{{ state.displayName }}</span
-                    >&nbsp;
-                    <v-chip small>
-                      {{ state.name }}
-                    </v-chip>
+                      <span class="white--text">{{ state.order }}</span>
+                    </v-avatar>&nbsp;
+                    <span>{{ state.displayName }}</span>&nbsp;
+                    <v-chip small>{{ state.name }}</v-chip>
                   </v-list-item-title>
                   <v-list-item-action>
                     <v-btn @click.prevent="OpenEditState(state)" icon>
-                      <v-icon>
-                        mdi-pencil
-                      </v-icon>
+                      <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -197,7 +190,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     loadingRoles: false,
@@ -208,37 +201,44 @@ export default {
     addDialog: false,
     errorRoles: null,
     Process: {
-      name: '',
+      name: "",
     },
     EProcess: {
-      name: '',
+      name: "",
       id: 0,
     },
     State: {
-      name: '',
-      displayName: '',
+      name: "",
+      displayName: "",
       order: null,
       processId: null,
-      roles: '',
-      isFinal: '',
+      roles: "",
+      isFinal: false,
     },
     StateEdit: {
       id: null,
-      name: '',
-      displayName: '',
+      name: "",
+      displayName: "",
       order: null,
       processId: null,
       active: null,
-      roles: '',
-      isFinal: '',
+      roles: "",
+      isFinal: false,
     },
-    PolicyTypes: [{ nama: 'Funeral', isSelected: true }],
+    PolicyTypes: [{ nama: "Funeral", isSelected: true }],
     rules: {
-      required: (v) => !!v || 'this field is required',
+      required: (v) => !!v || "this field is required",
     },
   }),
   methods: {
-    ...mapActions(['GetProcesses', 'AddProcess', 'EditProcess', 'AddStatus', 'EditStatus', 'GetAllRoles']),
+    ...mapActions([
+      "GetProcesses",
+      "AddProcess",
+      "EditProcess",
+      "AddStatus",
+      "EditStatus",
+      "GetAllRoles",
+    ]),
     OpenEditState(state) {
       this.errorRoles = null;
       this.Roles = [];
@@ -249,7 +249,7 @@ export default {
             if (response.status === 200) {
               this.loadingRoles = false;
               response.data.data.forEach((element) => {
-                state.rolesAllowed.split(',').forEach((item) => {
+                state.rolesAllowed.split(",").forEach((item) => {
                   if (element.name == item) {
                     element.isSelected = true;
                   }
@@ -259,11 +259,11 @@ export default {
             }
           },
           (e) => {
-            alert('Error ' + e.response);
+            alert("Error " + e.response);
           }
         )
         .catch(() => {
-          alert('Failed to request Roles');
+          alert("Failed to request Roles");
         });
       this.StateEdit.id = state.id;
       this.StateEdit.name = state.name;
@@ -302,11 +302,11 @@ export default {
             }
           },
           (e) => {
-            alert('Error ' + e.response);
+            alert("Error " + e.response);
           }
         )
         .catch(() => {
-          alert('Failed to request Roles');
+          alert("Failed to request Roles");
         });
       this.dialogAddStatus = true;
     },
@@ -332,20 +332,20 @@ export default {
         rolesSelected.push(item.name);
       });
       if (rolesSelected.length < 1) {
-        this.errorRoles = 'Please select at least one Role';
+        this.errorRoles = "Please select at least one Role";
         return null;
       }
-      return rolesSelected.join(',');
+      return rolesSelected.join(",");
     },
   },
   computed: mapGetters([
-    'get_processes',
-    'get_loadingProcess',
-    'get_processError',
-    'get_stateError',
-    'get_loadingState',
-    'get_loadingRoles',
-    'get_roles',
+    "get_processes",
+    "get_loadingProcess",
+    "get_processError",
+    "get_stateError",
+    "get_loadingState",
+    "get_loadingRoles",
+    "get_roles",
   ]),
   mounted() {
     this.GetProcesses();
