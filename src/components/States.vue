@@ -1,15 +1,16 @@
 <template>
   <div>
-    <v-dialog persistent width="500" v-model="dialogComment">
+    <v-dialog persistent width="500" v-model="get_dialogStatus">
       <v-form ref="commentForm">
         <v-card>
+          <v-alert type="error" v-if="get_statusError!=null">{{get_statusError}}</v-alert>
           <v-card-title>Enter Status Comment</v-card-title>
           <v-card-text>
             <v-textarea :rules="[rules.required]" label="Comment" v-model="status.statusComment"></v-textarea>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="cancel()" color="pink darken-1 white--text" depressed>cancel</v-btn>
+            <v-btn @click="cancel()" color="pink darken-1 white--text" depressed>close</v-btn>
             <v-btn @click="postNewStatus()" depressed>{{btnText}}</v-btn>
           </v-card-actions>
         </v-card>
@@ -38,16 +39,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     btnText: "",
-    dialogComment: null,
     status: {
       statusId: null,
       policyId: null,
       currentOwner: null,
       statusComment: null,
+      processId: null,
     },
 
     rules: {
@@ -55,7 +56,12 @@ export default {
     },
   }),
   methods: {
-    //  ...mapActions(['GetStatus'])
+    ...mapActions([
+      "GetStatus",
+      "ChangeStatus",
+      "ClearStateMessage",
+      "OpenDialogStatus",
+    ]),
     getClass(isCurrent) {
       return isCurrent ? true : false;
     },
@@ -72,13 +78,16 @@ export default {
       return names.length > 0 ? names[0].name : "";
     },
     setPolicy(status) {
+      this.OpenDialogStatus();
       this.dialogComment = true;
       this.btnText = status.displayName;
       this.status.statusId = status.id;
       this.status.policyId = this.get_funeralPolicy.id;
       this.status.currentOwner = this.get_policyOwner.id;
+      this.status.processId = status.processId;
     },
     cancel() {
+      this.OpenDialogStatus();
       this.dialogComment = false;
       this.btnText = "";
       this.status.statusId = null;
@@ -87,6 +96,7 @@ export default {
     postNewStatus() {
       if (this.$refs.commentForm.validate()) {
         console.log(this.status);
+        this.ChangeStatus(this.status);
       }
     },
   },
@@ -96,6 +106,7 @@ export default {
     "get_statusError",
     "get_policyOwner",
     "get_funeralPolicy",
+    "get_dialogStatus",
   ]),
 };
 </script>
