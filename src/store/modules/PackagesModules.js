@@ -304,6 +304,7 @@ const actions = {
     state.packagesError = null;
     await axios
       .put('/policyCover', {
+        policyBaseId: cover.policyBaseId,
         fPolicyId: cover.policyId,
         policyStateId: cover.policyState,
         id: cover.Cover.id,

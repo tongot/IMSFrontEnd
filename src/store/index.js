@@ -11,6 +11,7 @@ import dependentModule from './modules/DependentModule';
 import relationshipModule from './modules/RelationshipModule';
 import StateManager from './modules/StateManager';
 import PolicyModule from './modules/PolicyModule';
+import ChangeOwnerModule from './modules/ChangeOwnerModule';
 
 Vue.use(Vuex);
 
@@ -49,5 +50,6 @@ export default new Vuex.Store({
     relationshipModule,
     StateManager,
     PolicyModule,
+    ChangeOwnerModule,
   },
 });

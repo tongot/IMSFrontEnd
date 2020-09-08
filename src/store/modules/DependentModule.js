@@ -47,6 +47,7 @@ const actions = {
     state.dependentError = null;
     await axios
       .post('/policyHolder/addDependent', {
+        policyBaseId: dependent.policyBaseId,
         maritalStatus: dependent.person.maritalStatus,
         salutation: dependent.person.salutation,
         firstName: dependent.person.firstName,
@@ -95,6 +96,7 @@ const actions = {
     await axios
       .put('/policyHolder/UpdateDependent', {
         id: person.id,
+        policyBaseId: person.policyBaseId,
         policyId: person.policyId,
         createdOn: person.createdOn,
         maritalStatus: person.maritalStatus,

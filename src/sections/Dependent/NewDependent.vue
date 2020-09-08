@@ -412,6 +412,7 @@ export default {
       const dep = {
         stateId: this.get_funeralPolicy.stateId,
         person: this.dependent,
+        policyBaseId: this.get_funeralPolicy.id,
       };
       if (this.$refs.formAdd.validate()) {
         this.AddDependent(dep).then(() => {

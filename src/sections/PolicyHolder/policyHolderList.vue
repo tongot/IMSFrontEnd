@@ -29,6 +29,25 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-card outlined class="mb-1">
+      <v-card-actions>
+        <v-overflow-btn
+          dense
+          hint="Status"
+          :persistent-hint="true"
+          target="#newPolicy"
+          width="auto"
+          :items="getStatus()"
+          item-value="value"
+          item-text="name"
+          v-model="search.status"
+          @change="searchBtn()"
+        ></v-overflow-btn>
+        <v-spacer></v-spacer>
+        <v-text-field class="mt-6" v-model="search.search" placeholder="Name/Suraname/Id Number"></v-text-field>
+        <v-btn outlined @click="searchBtn()" class="ml-2">search</v-btn>
+      </v-card-actions>
+    </v-card>
     <v-card outlined>
       <v-simple-table dense>
         <template v-slot:default>
@@ -71,6 +90,26 @@
           </tbody>
         </template>
       </v-simple-table>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-pagination
+          v-model="search.page"
+          @input="searchBtn()"
+          :length="get_policyHolderPages"
+          circle
+        ></v-pagination>
+        <v-spacer></v-spacer>
+        <v-overflow-btn
+          reverse
+          hint="Page sise"
+          :persistent-hint="true"
+          dense
+          target="#newPolicy"
+          :items="pageSizes"
+          v-model="search.size"
+          @change="searchBtn()"
+        ></v-overflow-btn>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -81,8 +120,18 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     policyType: false,
+    pageSizes: [5, 10, 20, 50, 100],
+    search: {
+      page: 1,
+      search: "",
+      status: "",
+      size: 10,
+    },
   }),
   methods: {
+    searchBtn() {
+      this.GetPolicyHolders(this.search);
+    },
     getGender(g) {
       return enums.gender[g];
     },
@@ -96,6 +145,9 @@ export default {
         name: name,
       };
       this.setPolicyHolderId(holder);
+    },
+    getStatus() {
+      return enums.personState;
     },
     CheckPolicyExist() {
       this.HasPolicy();
@@ -116,9 +168,10 @@ export default {
     "get_policyHolders",
     "get_hasPolicy",
     "get_loadingFPolicy",
+    "get_policyHolderPages",
   ]),
   mounted() {
-    this.GetPolicyHolders();
+    this.GetPolicyHolders(this.search);
   },
 };
 </script>

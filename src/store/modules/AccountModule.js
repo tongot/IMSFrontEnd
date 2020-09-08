@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from '../../router';
+import _ from 'lodash';
 //import store from '..';
 
 const state = {
@@ -9,6 +10,8 @@ const state = {
   loginLoading: false,
   loadingRoles: false,
   roles: [],
+  users: [],
+  UserEdit: null,
 };
 const getters = {
   get_user: (state) => state.user,
@@ -16,14 +19,19 @@ const getters = {
   get_login_loading: (state) => state.loginLoading,
   get_loadingRoles: (state) => state.loadingRoles,
   get_roles: (state) => state.roles,
+  get_users: (state) => state.users,
+  get_userEdit: (state) => state.UserEdit,
 };
 const actions = {
   SetUser({ commit }, user) {
     commit('set_user', user);
   },
+  SetUserEdit({ commit }, user) {
+    commit('set_userEdit', _.cloneDeep(user));
+  },
   async Login({ commit, dispatch }, credentials) {
     state.loginLoading = true;
-    axios
+    await axios
       .post('/userAccount/login', {
         email: credentials.Email,
         password: credentials.Password,
@@ -61,9 +69,7 @@ const actions = {
         return response;
       }
     } catch (error) {
-      if (error.response.status !== 401 || error.response.status !== 403) {
-        alert('failed to load roles ' + error.response);
-      }
+      alert('failed to load roles ' + error);
     }
   },
   async GetUserDetails({ dispatch }) {
@@ -90,11 +96,60 @@ const actions = {
       }
     }
   },
+  async GetAllUsers({ commit }) {
+    state.loadingRoles = true;
+    await axios
+      .get('/userAccount/GetAllUsers/')
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            commit('set_allUsers', response.data.data);
+          }
+          state.loadingRoles = false;
+        },
+        () => {
+          state.loadingRoles = false;
+        }
+      )
+      .catch((ex) => {
+        state.loadingRoles = false;
+        alert(ex);
+      });
+  },
+  async UpdateUser({ dispatch }) {
+    state.loadingRoles = true;
+    await axios
+      .put('/userAccount/UpdateUser', {
+        id: state.UserEdit.id,
+        name: state.UserEdit.name,
+        surname: state.UserEdit.surname,
+        email: state.UserEdit.email,
+        roles: state.UserEdit.roles,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            dispatch('GetAllUsers');
+          }
+          state.loadingRoles = false;
+          return;
+        },
+        () => {
+          state.loadingRoles = false;
+        }
+      )
+      .catch((ex) => {
+        alert('Error ' + ex);
+        state.loadingRoles = false;
+      });
+  },
 };
 const mutations = {
   set_user: (state, data) => (state.user = data),
   set_loginError: (state, data) => (state.loginError = data),
   set_roles: (state, data) => (state.roles = data),
+  set_allUsers: (state, data) => (state.users = data),
+  set_userEdit: (state, data) => (state.UserEdit = data),
 };
 
 export default {

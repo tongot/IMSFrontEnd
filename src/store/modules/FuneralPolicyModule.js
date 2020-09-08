@@ -10,6 +10,7 @@ const state = {
   ModalAddNewFPolicy: false,
   NameOfHolder: '',
   funeralPolicyErrors: null,
+  FPolicyPages: 0,
 };
 const getters = {
   get_nameOfHolder: (state) => state.NameOfHolder,
@@ -19,6 +20,7 @@ const getters = {
   get_hasPolicy: (state) => state.hasPolicy,
   get_ModalAddNewFPolicy: (state) => state.ModalAddNewFPolicy,
   get_funeralPolicyErrors: (state) => state.funeralPolicyErrors,
+  get_FPolicyPages: (state) => state.FPolicyPages,
 };
 const actions = {
   setPolicyHolderId({ commit }, holder) {
@@ -29,15 +31,27 @@ const actions = {
   CloseModalAddNewFPolicy() {
     state.ModalAddNewFPolicy = !state.ModalAddNewFPolicy;
   },
-  async GetFuneralPolicies({ commit }) {
+  async GetFuneralPolicies({ commit }, search) {
     store.state.runningMethod = 'GetFuneralPolicies';
 
     state.loadingFPolicy = true;
     await axios
-      .get('/funeralPolicy/getAll/2')
+      .get(
+        '/funeralPolicy/GetFPolicies?page=' +
+          search.page +
+          '&size=' +
+          search.size +
+          '&Search=' +
+          search.search +
+          '&state=' +
+          search.status +
+          '&orgId=' +
+          search.orgId
+      )
       .then((response) => {
         if (response.status === 200) {
           commit('set_funeralPolicies', response.data.data);
+          state.FPolicyPages = response.data.numberOfPages;
           state.loadingFPolicy = false;
           return;
         }

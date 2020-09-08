@@ -145,7 +145,7 @@ export default {
       },
       {
         name: "Settings",
-        icon: "mdi-locker",
+        icon: "mdi-flower",
         roles: ["Admin", "Capturer"],
         items: [
           { name: "Global Entities", link: { name: "underwriters" } },

@@ -8,6 +8,7 @@ const state = {
   policyHolderError: null,
   dialogAddPolicyHolder: false,
   dialogEditPolicyHolder: false,
+  PolicyHolderPages: 0,
 };
 const getters = {
   get_policyHolder: (state) => state.policyHolder,
@@ -16,6 +17,7 @@ const getters = {
   get_policyHolderError: (state) => state.policyHolderError,
   get_dialogAddPolicyHolder: (state) => state.dialogAddPolicyHolder,
   get_dialogEditPolicyHolder: (state) => state.dialogEditPolicyHolder,
+  get_policyHolderPages: (state) => state.PolicyHolderPages,
 };
 const actions = {
   CloseAddPolicyHolderDialog() {
@@ -28,16 +30,26 @@ const actions = {
     commit('set_localPolicyHolder', policyHolder);
     state.dialogEditPolicyHolder = true;
   },
-  async GetPolicyHolders({ commit }) {
+  async GetPolicyHolders({ commit }, search) {
     store.state.runningMethod = 'GetPolicyHolders';
     state.policyHolderError = null;
     state.loadingPolicyHolder = true;
     axios
-      .get('PolicyHolder/getAll')
+      .get(
+        'PolicyHolder/getAll?page=' +
+          search.page +
+          '&size=' +
+          search.size +
+          '&Search=' +
+          search.search +
+          '&state=' +
+          search.status
+      )
       .then((response) => {
         if (response.status === 200) {
           state.policyHolders = [];
           commit('set_policyHolders', response.data.data);
+          commit('set_policyHolderPages', response.data.numberOfPages);
           state.loadingPolicyHolder = false;
           return;
         }
@@ -191,6 +203,7 @@ const mutations = {
       element.disabled = element.disabled ? 'Yes' : 'No';
       state.policyHolders.push(element);
     }),
+  set_policyHolderPages: (state, data) => (state.PolicyHolderPages = data),
 };
 export default {
   state,

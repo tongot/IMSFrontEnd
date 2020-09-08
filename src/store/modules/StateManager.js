@@ -55,6 +55,7 @@ const actions = {
             };
             dispatch('GetStatus', status);
             dispatch('GetPolicyOwner', response.data.message);
+            dispatch('GetPolicyById', newStatus.policyId);
             state.dialogStatus = false;
           }
           state.loadingState = false;

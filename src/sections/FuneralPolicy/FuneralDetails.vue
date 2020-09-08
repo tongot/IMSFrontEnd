@@ -8,6 +8,8 @@
     <v-card v-if="get_funeralPolicy.policyHolder != null" outlined>
       <v-toolbar dark color="light-blue" flat>
         <v-toolbar-title>Policy holder details</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <changeOwner />
       </v-toolbar>
 
       <v-row class="pa-2">
@@ -266,6 +268,9 @@
         <v-toolbar-title>Policy Details</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn depressed disabled>Funeral</v-btn>
+        <v-btn @click="opeModalEditPolicy(get_funeralPolicy)" icon>
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
       </v-toolbar>
       <v-row>
         <v-col md="4" xs="12" sm="12">
@@ -349,16 +354,28 @@
         </v-col>
       </v-row>
     </v-card>
+    <v-dialog width="500" v-model="modalEditPolicy">
+      <v-card width="500">
+        <policyEdit />
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import enums from "../../Dictionary/Dictionary";
 import statuses from "../../components/States";
+import changeOwner from "../../components/ChangeOwner";
+import policyEdit from "../../sections/Policy/EditPolicy";
 import { mapGetters, mapActions } from "vuex";
 export default {
+  data: () => ({
+    modalEditPolicy: false,
+  }),
   components: {
     statuses,
+    changeOwner,
+    policyEdit,
   },
   methods: {
     ...mapActions([
@@ -376,7 +393,12 @@ export default {
       "OpenEditDependentDialog",
       "GetStatus",
       "GetPolicyOwner",
+      "GetPolicyToEdit",
     ]),
+    opeModalEditPolicy(policy) {
+      this.GetPolicyToEdit(policy);
+      this.modalEditPolicy = true;
+    },
     openModalEditCover(id, policyId) {
       this.GetCoverById(id);
       this.OpenModalEditCover();
@@ -387,6 +409,7 @@ export default {
       this.GetCoverById(dependent.policyCover.id);
       this.GetDependentPackage(holderId);
       dependent.policyStateId = this.get_funeralPolicy.stateId;
+      dependent.policyBaseId = this.get_funeralPolicy.id;
       this.OpenEditDependentDialog(dependent);
     },
     getGender(n) {
