@@ -10,6 +10,7 @@
             label="Email"
             v-model="get_userEdit.email"
           ></v-text-field>
+          <v-checkbox v-model="get_userEdit.isActive" label="Active"></v-checkbox>
           <v-card outlined>
             <v-card-subtitle>User Roles</v-card-subtitle>
             <v-card-actions>

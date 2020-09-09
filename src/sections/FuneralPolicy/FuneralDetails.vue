@@ -447,7 +447,7 @@ export default {
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {
       const status = {
         id: this.get_funeralPolicy.stateId,
-        processId: this.get_funeralPolicy.processId,
+        policyId: this.get_funeralPolicy.id,
       };
       this.GetStatus(status);
       this.GetDependenciesForPolicy(this.get_funeralPolicy.funeralPolicy.id);

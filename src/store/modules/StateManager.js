@@ -20,7 +20,7 @@ const actions = {
     state.loadingState = true;
     state.stateError = null;
     await axios
-      .get('/stateManager/' + status.id + '/' + status.processId)
+      .get('/stateManager/' + status.id + '/' + status.policyId)
       .then(
         (response) => {
           if (response.status == 200) {
@@ -51,7 +51,40 @@ const actions = {
           if (response.status === 200) {
             const status = {
               id: newStatus.statusId,
-              processId: newStatus.processId,
+              policyId: newStatus.policyId,
+            };
+            dispatch('GetStatus', status);
+            dispatch('GetPolicyOwner', response.data.message);
+            dispatch('GetPolicyById', newStatus.policyId);
+            state.dialogStatus = false;
+          }
+          state.loadingState = false;
+        },
+        (e) => {
+          state.loadingState = false;
+          state.stateError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.loadingState = false;
+        state.stateError = ex;
+      });
+  },
+  async ReverseStatus({ dispatch }, newStatus) {
+    state.loadingState = true;
+    state.stateError = null;
+    await axios
+      .post('StateManager/ReverseStatus', {
+        statusId: newStatus.statusId,
+        policyId: newStatus.policyId,
+        comment: newStatus.statusComment,
+      })
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            const status = {
+              id: newStatus.statusId,
+              policyId: newStatus.policyId,
             };
             dispatch('GetStatus', status);
             dispatch('GetPolicyOwner', response.data.message);

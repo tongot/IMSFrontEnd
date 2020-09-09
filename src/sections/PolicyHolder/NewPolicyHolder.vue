@@ -256,8 +256,15 @@ export default {
     },
     PostHolder() {
       if (this.$refs.formAdd.validate()) {
-        console.log("hit");
-        this.AddPolicyHolder(this.holder);
+        this.AddPolicyHolder(this.holder).then(() => {
+          const search = {
+            page: 1,
+            search: "",
+            status: "",
+            size: 10,
+          };
+          this.GetPolicyHolders(search);
+        });
       }
     },
     Close() {
@@ -290,7 +297,11 @@ export default {
       this.holder.contact.postalAddress = "";
       this.holder.contact.physicalAddress = "";
     },
-    ...mapActions(["CloseAddPolicyHolderDialog", "AddPolicyHolder"]),
+    ...mapActions([
+      "CloseAddPolicyHolderDialog",
+      "AddPolicyHolder",
+      "GetPolicyHolders",
+    ]),
   },
   computed: mapGetters([
     "get_dialogAddPolicyHolder",

@@ -31,9 +31,25 @@
           <span v-if="status.isCurrent">{{status.name}}</span>
           <span v-if="!status.isCurrent">{{status.displayName}}</span>
         </v-btn>
+
         <v-spacer></v-spacer>
-        <v-chip color="success" small>{{getCurrentStatus()}}</v-chip>
+        <v-btn
+          v-if="CurrentStateNotOne()"
+          @click="setReverse()"
+          class="white--text mr-2"
+          small
+          color="pink darken-2"
+        >
+          <v-icon>mdi-arrow-left</v-icon>reverse state
+        </v-btn>
+        <v-chip color="success" small>{{getCurrentStatusName()}}</v-chip>
       </v-card-actions>
+      <div class="pa-2">
+        <v-alert prominent outlined type="info" border="left">
+          <div class="title">{{getCurrentStatuspActivity()}}</div>
+          <div>{{getCurrentStatusComment()}}</div>
+        </v-alert>
+      </div>
     </v-card>
   </div>
 </template>
@@ -42,6 +58,7 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
+    isReverse: false,
     btnText: "",
     status: {
       statusId: null,
@@ -61,6 +78,7 @@ export default {
       "ChangeStatus",
       "ClearStateMessage",
       "OpenDialogStatus",
+      "ReverseStatus",
     ]),
     getClass(isCurrent) {
       return isCurrent ? true : false;
@@ -72,19 +90,48 @@ export default {
         return status.hasPermission ? false : true;
       }
     },
-    getCurrentStatus() {
-      let names = this.get_Status.filter((item) => item.isCurrent === true);
+    CurrentStateNotOne() {
+      let names = this.get_Status.filter(
+        (item) => item.isCurrent === true && item.order === 1
+      );
 
-      return names.length > 0 ? names[0].name : "";
+      return names.length > 0 ? false : true;
+    },
+    getCurrentStatusName() {
+      return this.getCurrentStatus().length > 0
+        ? this.getCurrentStatus()[0].name
+        : "";
+    },
+    getCurrentStatusComment() {
+      return this.getCurrentStatus().length > 0
+        ? this.getCurrentStatus()[0].comment
+        : "";
+    },
+    getCurrentStatuspActivity() {
+      return this.getCurrentStatus().length > 0
+        ? this.getCurrentStatus()[0].activity
+        : "";
+    },
+    getCurrentStatus() {
+      return this.get_Status.filter((item) => item.isCurrent === true);
     },
     setPolicy(status) {
+      this.isReverse = false;
       this.OpenDialogStatus();
-      this.dialogComment = true;
       this.btnText = status.displayName;
       this.status.statusId = status.id;
       this.status.policyId = this.get_funeralPolicy.id;
       this.status.currentOwner = this.get_policyOwner.id;
       this.status.processId = status.processId;
+    },
+    setReverse() {
+      if (this.getCurrentStatus().length > 0) {
+        this.isReverse = true;
+        this.OpenDialogStatus();
+        this.btnText = "reverse";
+        this.status.statusId = this.getCurrentStatus()[0].id;
+        this.status.policyId = this.get_funeralPolicy.id;
+      }
     },
     cancel() {
       this.OpenDialogStatus();
@@ -95,8 +142,11 @@ export default {
     },
     postNewStatus() {
       if (this.$refs.commentForm.validate()) {
-        console.log(this.status);
-        this.ChangeStatus(this.status);
+        if (this.isReverse) {
+          this.ReverseStatus(this.status);
+        } else {
+          this.ChangeStatus(this.status);
+        }
       }
     },
   },
