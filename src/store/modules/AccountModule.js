@@ -12,6 +12,11 @@ const state = {
   roles: [],
   users: [],
   UserEdit: null,
+  AddOrgUserDialog: false,
+  AddOrgUserError: null,
+  AdminsForOrg: [],
+  EditOrgAdminDialog: false,
+  AdminUserEdit: null,
 };
 const getters = {
   get_user: (state) => state.user,
@@ -21,13 +26,28 @@ const getters = {
   get_roles: (state) => state.roles,
   get_users: (state) => state.users,
   get_userEdit: (state) => state.UserEdit,
+  get_addOrgUserDialog: (state) => state.AddOrgUserDialog,
+  get_AddOrgUserError: (state) => state.AddOrgUserError,
+  get_adminForOrg: (state) => state.AdminsForOrg,
+  get_editOrgAdminsDialog: (state) => state.EditOrgAdminDialog,
+  get_adminUserEdit: (state) => state.AdminUserEdit,
 };
 const actions = {
+  OpenDialogEditOrgAdmin() {
+    state.EditOrgAdminDialog = !state.EditOrgAdminDialog;
+  },
+  OpenAddOrgUserDialog() {
+    state.AddOrgUserDialog = !state.AddOrgUserDialog;
+  },
   SetUser({ commit }, user) {
     commit('set_user', user);
   },
   SetUserEdit({ commit }, user) {
     commit('set_userEdit', _.cloneDeep(user));
+  },
+  SetAdminUserEdit({ commit }, user) {
+    commit('set_adminUserEdit', _.clone(user));
+    state.EditOrgAdminDialog = true;
   },
   async Login({ commit, dispatch }, credentials) {
     state.loginLoading = true;
@@ -116,8 +136,61 @@ const actions = {
         alert(ex);
       });
   },
-  async UpdateUser({ dispatch }) {
+  async GetAdminsForOrganization({ commit }, orgId) {
+    state.AdminsForOrg = [];
     state.loadingRoles = true;
+    await axios
+      .get('/userAccount/GetAdminForOrg/' + orgId)
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            commit('set_adminsForOrg', response.data.data);
+          }
+          state.loadingRoles = false;
+        },
+        () => {
+          state.loadingRoles = false;
+        }
+      )
+      .catch((ex) => {
+        state.loadingRoles = false;
+        alert(ex);
+      });
+  },
+  async RegisterOrgAdminUser({ state }, User) {
+    state.AddOrgUserError = null;
+    state.loadingRoles = true;
+    await axios
+      .post('/userAccount/RegisterOrgAdmin', {
+        id: User.id,
+        name: User.name,
+        surname: User.surname,
+        email: User.email,
+        password: User.password,
+        passwordConfirm: User.passwordConfirm,
+        organizationId: User.organizationId,
+      })
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            router.go();
+          }
+          state.loadingRoles = false;
+          return;
+        },
+        (e) => {
+          state.loadingRoles = false;
+          state.AddOrgUserError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.AddOrgUserError = ex;
+        state.loadingRoles = false;
+      });
+  },
+  async UpdateUser({ state }) {
+    state.loadingRoles = true;
+    state.AddOrgUserError = null;
     await axios
       .put('/userAccount/UpdateUser', {
         id: state.UserEdit.id,
@@ -129,17 +202,47 @@ const actions = {
       .then(
         (response) => {
           if (response.status === 204) {
-            dispatch('GetAllUsers');
+            router.go();
           }
           state.loadingRoles = false;
           return;
         },
-        () => {
+        (e) => {
           state.loadingRoles = false;
+          state.AddOrgUserError = e.response.data.message;
         }
       )
       .catch((ex) => {
-        alert('Error ' + ex);
+        state.AddOrgUserError = ex;
+        state.loadingRoles = false;
+      });
+  },
+  async UpdateUserAdmin({ state }) {
+    state.loadingRoles = true;
+    state.AddOrgUserError = null;
+    await axios
+      .put('/userAccount/UpdateUserAdmin', {
+        id: state.AdminUserEdit.id,
+        name: state.AdminUserEdit.name,
+        surname: state.AdminUserEdit.surname,
+        email: state.AdminUserEdit.email,
+        isActive: state.AdminUserEdit.isActive,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            router.go();
+          }
+          state.loadingRoles = false;
+          return;
+        },
+        (e) => {
+          state.loadingRoles = false;
+          state.AddOrgUserError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.AddOrgUserError = ex;
         state.loadingRoles = false;
       });
   },
@@ -150,6 +253,8 @@ const mutations = {
   set_roles: (state, data) => (state.roles = data),
   set_allUsers: (state, data) => (state.users = data),
   set_userEdit: (state, data) => (state.UserEdit = data),
+  set_adminsForOrg: (state, data) => (state.AdminsForOrg = data),
+  set_adminUserEdit: (state, data) => (state.AdminUserEdit = data),
 };
 
 export default {

@@ -18,6 +18,9 @@ const getters = {
   get_organizationAddModal: (state) => state.organizationAddModal,
 };
 const actions = {
+  setCurrentOrganization({ commit }, org) {
+    commit('set_organization', org);
+  },
   CloseModalOrg() {
     state.organizationEditModal = !state.organizationEditModal;
   },
@@ -74,10 +77,7 @@ const actions = {
         }
       )
       .catch((ex) => {
-        if (ex.response.status === 401 || ex.response.status === 403) {
-          return;
-        }
-        alert('Error ' + ex.response.status);
+        commit('set_organizationError', ex);
         state.loadingPolicyHolder = false;
       });
   },
