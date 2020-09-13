@@ -223,6 +223,7 @@ export default {
       idType: "",
       countryOfIssue: "",
       disabled: "",
+      organizationId: "",
       contact: {
         mobile: "",
         telephoneHome: "",
@@ -256,6 +257,7 @@ export default {
     },
     PostHolder() {
       if (this.$refs.formAdd.validate()) {
+        this.holder.organizationId = this.get_user.organizationId;
         this.AddPolicyHolder(this.holder).then(() => {
           const search = {
             page: 1,
@@ -307,6 +309,7 @@ export default {
     "get_dialogAddPolicyHolder",
     "get_policyHolderError",
     "get_loadingPolicyHolder",
+    "get_user",
   ]),
 };
 </script>

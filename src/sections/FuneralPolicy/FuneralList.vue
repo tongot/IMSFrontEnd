@@ -3,6 +3,7 @@
     <v-card outlined class="mb-1">
       <v-card-actions>
         <v-overflow-btn
+          v-if="get_user.organizationType=='super'"
           hint="Organization"
           :persistent-hint="true"
           dense
@@ -11,6 +12,8 @@
           v-model="search.orgId"
           item-value="id"
           item-text="name"
+          @
+          @click="LoadOrganizations()"
           @change="searchBtn()"
         ></v-overflow-btn>
         <v-spacer></v-spacer>
@@ -79,6 +82,9 @@ export default {
     },
   }),
   methods: {
+    LoadOrganizations() {
+      this.GetOrganizations();
+    },
     searchBtn() {
       this.GetFuneralPolicies(this.search);
     },
@@ -97,10 +103,10 @@ export default {
     "get_loadingFPolicy",
     "get_Organizations",
     "get_FPolicyPages",
+    "get_user",
   ]),
-  mounted() {
+  created() {
     this.GetFuneralPolicies(this.search);
-    this.GetOrganizations();
   },
 };
 </script>

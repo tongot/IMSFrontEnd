@@ -67,7 +67,11 @@
 
       <v-app-bar app color="primary" clipped-left dark>
         <v-app-bar-nav-icon @click.stop="draw = !draw"></v-app-bar-nav-icon>
-        <v-toolbar-title>IMS</v-toolbar-title>
+        <v-toolbar-title v-if="get_Organization==null">IMS</v-toolbar-title>
+        <v-toolbar-title
+          v-if="get_Organization!=null"
+          class="text-capitalize"
+        >{{get_Organization.name}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <div>
           <v-chip v-if="get_user!=null" outlined small>{{get_user.email}}</v-chip>
@@ -158,7 +162,7 @@ export default {
     ],
   }),
   methods: {
-    ...mapActions(["GetUserDetails"]),
+    ...mapActions(["GetUserDetails", "GetOrganizationById"]),
     menuRights(roles) {
       let count = 0;
       roles.forEach((element) => {
@@ -169,9 +173,11 @@ export default {
       return count > 0 ? true : false;
     },
   },
-  computed: mapGetters(["get_user"]),
+  computed: mapGetters(["get_user", "get_Organization"]),
   mounted() {
-    this.GetUserDetails();
+    this.GetUserDetails().then(() => {
+      this.GetOrganizationById(this.get_user.organizationId);
+    });
   },
 };
 </script>

@@ -24,7 +24,7 @@ axios.interceptors.response.use(
     if (error.response.status === 403) {
       if (router.currentRoute.name != 'unauthorized') {
         router.push({ name: 'unauthorized' });
-        router.go();
+        //router.go();
       }
     }
     return Promise.reject(error);

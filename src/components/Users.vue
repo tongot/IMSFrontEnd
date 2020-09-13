@@ -5,8 +5,8 @@
         <v-btn :loading="get_loadingRoles" text>
           <v-icon left>mdi-plus</v-icon>Add New User
         </v-btn>
-        <v-btn :loading="get_loadingRoles" @click="GetAllUsers()" text>
-          <v-icon left>mdi-refresh</v-icon>Refresh
+        <v-btn :to="{name:'roles'}" text>
+          <v-icon left>mdi-plus</v-icon>Add New Roles
         </v-btn>
       </v-card-title>
       <v-card-text>
@@ -21,6 +21,7 @@
         </v-expansion-panels>
       </v-card-text>
     </v-card>
+    <router-view></router-view>
   </div>
 </template>
 

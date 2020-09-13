@@ -22,6 +22,7 @@ import Processes from '../components/Processes';
 import Status from '../sections/Processes/PolicyStates';
 
 import Users from '../components/Users';
+import Roles from '../sections/UserAccounts/UserRoles';
 
 import PolicyHolder from '../components/PolicyHolder';
 
@@ -91,6 +92,13 @@ const routes = [
         path: 'Users',
         name: 'users',
         component: Users,
+        children: [
+          {
+            path: 'roles',
+            name: 'roles',
+            component: Roles,
+          },
+        ],
       },
       {
         path: 'Packages',

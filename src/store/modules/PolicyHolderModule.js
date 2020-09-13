@@ -97,6 +97,7 @@ const actions = {
       .post('/PolicyHolder', {
         department: person.department,
         branch: person.branch,
+        organizationId: person.organizationId,
         maritalStatus: person.maritalStatus,
         occupation: person.occupation,
         salutation: person.salutation,
@@ -143,6 +144,7 @@ const actions = {
     axios
       .put('/PolicyHolder', {
         id: person.id,
+        organizationId: person.organizationId,
         department: person.department,
         branch: person.branch,
         maritalStatus: person.maritalStatus,

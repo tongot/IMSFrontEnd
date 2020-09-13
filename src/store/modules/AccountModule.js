@@ -17,6 +17,8 @@ const state = {
   AdminsForOrg: [],
   EditOrgAdminDialog: false,
   AdminUserEdit: null,
+  OrgRoles: [],
+  OrgRoleError: null,
 };
 const getters = {
   get_user: (state) => state.user,
@@ -31,6 +33,8 @@ const getters = {
   get_adminForOrg: (state) => state.AdminsForOrg,
   get_editOrgAdminsDialog: (state) => state.EditOrgAdminDialog,
   get_adminUserEdit: (state) => state.AdminUserEdit,
+  get_orgRoles: (state) => state.OrgRoles,
+  get_orgRoleError: (state) => state.OrgRoleError,
 };
 const actions = {
   OpenDialogEditOrgAdmin() {
@@ -243,6 +247,56 @@ const actions = {
       )
       .catch((ex) => {
         state.AddOrgUserError = ex;
+        state.loadingRoles = false;
+      });
+  },
+  async AddNewOrgRole({ state }, role) {
+    state.loadingRoles = true;
+    state.OrgRoleError = null;
+    await axios
+      .post('/userAccount/AddNewRole', {
+        name: role,
+      })
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            state.OrgRoles.push(response.data.data);
+          }
+          state.loadingRoles = false;
+          return;
+        },
+        (e) => {
+          state.loadingRoles = false;
+          state.OrgRoleError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.OrgRoleError = ex;
+        state.loadingRoles = false;
+      });
+  },
+  async GetOrgRoles({ state }, role) {
+    state.loadingRoles = true;
+    state.OrgRoleError = null;
+    await axios
+      .get('/userAccount/AllRoles', {
+        role: role,
+      })
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            state.OrgRoles = response.data.data;
+          }
+          state.loadingRoles = false;
+          return;
+        },
+        (e) => {
+          state.loadingRoles = false;
+          state.OrgRoleError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.OrgRoleError = ex;
         state.loadingRoles = false;
       });
   },
