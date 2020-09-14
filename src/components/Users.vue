@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        <v-btn :loading="get_loadingRoles" text>
+        <v-btn :to="{name:'newUser'}" :loading="get_loadingRoles" text>
           <v-icon left>mdi-plus</v-icon>Add New User
         </v-btn>
         <v-btn :to="{name:'roles'}" text>

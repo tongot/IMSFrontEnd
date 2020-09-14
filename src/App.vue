@@ -74,7 +74,13 @@
         >{{get_Organization.name}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <div>
-          <v-chip v-if="get_user!=null" outlined small>{{get_user.email}}</v-chip>
+          <v-chip v-if="get_user!=null" outlined>
+            {{get_user.email}}
+            <v-btn @click="logOut()" class="ml-2" small text>
+              Logout
+              <v-icon right>mdi-logout</v-icon>
+            </v-btn>
+          </v-chip>
         </div>
       </v-app-bar>
 
@@ -162,7 +168,7 @@ export default {
     ],
   }),
   methods: {
-    ...mapActions(["GetUserDetails", "GetOrganizationById"]),
+    ...mapActions(["GetUserDetails", "GetOrganizationById", "LogOut"]),
     menuRights(roles) {
       let count = 0;
       roles.forEach((element) => {
@@ -172,11 +178,16 @@ export default {
       });
       return count > 0 ? true : false;
     },
+    logOut() {
+      this.LogOut();
+    },
   },
   computed: mapGetters(["get_user", "get_Organization"]),
   mounted() {
     this.GetUserDetails().then(() => {
-      this.GetOrganizationById(this.get_user.organizationId);
+      if (this.get_user != null) {
+        this.GetOrganizationById(this.get_user.organizationId);
+      }
     });
   },
 };

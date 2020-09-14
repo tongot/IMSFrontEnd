@@ -1,5 +1,6 @@
 <template>
   <div>
+    <beneficiary />
     <v-dialog width="1000" persistent v-model="get_ModalAddNewFPolicy">
       <v-card>
         <v-card-title>
@@ -26,17 +27,7 @@
                   :rules="[rules.required]"
                   item-text="name"
                 ></v-overflow-btn>
-                <v-overflow-btn
-                  label="Select Organization"
-                  target="#newPolicy"
-                  width="auto"
-                  :items="get_Organizations"
-                  v-model="Policy.organizationId"
-                  item-value="id"
-                  :loading="get_loadingOrganization"
-                  :rules="[rules.required]"
-                  item-text="name"
-                ></v-overflow-btn>
+
                 <v-menu
                   ref="menuEdate"
                   v-model="effectiveDate"
@@ -236,7 +227,18 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn :loading="get_loadingFPolicy" depressed @click="savePolicy()">Add</v-btn>
+
+          <v-btn :loading="get_loadingFPolicy" depressed @click="OpenBeneficiaryDialog()">
+            <span v-if="get_beneficiary!=null">Amend Beneficiary</span>
+            <span v-if="get_beneficiary==null">Add Beneficiary</span>
+          </v-btn>
+          <v-btn
+            :loading="get_loadingFPolicy"
+            v-if="get_beneficiary!=null"
+            depressed
+            color="success"
+            @click="savePolicy()"
+          >Add</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -245,7 +247,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import beneficiary from "../FuneralPolicy/Beneficiary";
 export default {
+  components: {
+    beneficiary,
+  },
   data: () => ({
     dJCDate: false,
     dJFDate: false,
@@ -281,10 +287,12 @@ export default {
       "GetProcesses",
       "GetPackages",
       "AddFuneralPolicy",
+      "OpenBeneficiaryDialog",
     ]),
     savePolicy() {
       if (this.$refs.formAdd.validate()) {
         this.Policy.cover.effectiveDate = this.Policy.effectiveDate;
+        this.Policy.organizationId = this.get_user.organizationId;
         this.AddFuneralPolicy(this.Policy);
       }
     },
@@ -292,7 +300,6 @@ export default {
   computed: mapGetters([
     "get_loadingUnderwriter",
     "get_Underwriters",
-    "get_Organizations",
     "get_ModalAddNewFPolicy",
     "get_loadingOrganization",
     "get_loadingProcess",
@@ -302,12 +309,13 @@ export default {
     "get_loadingPackage",
     "get_loadingFPolicy",
     "get_funeralPolicyErrors",
+    "get_user",
+    "get_beneficiary",
   ]),
   watch: {
     get_ModalAddNewFPolicy(newV, oldV) {
       if (newV && !oldV) {
         this.GetUnderwriters();
-        this.GetOrganizations();
         this.GetProcesses();
         this.GetPackages();
       }

@@ -23,6 +23,7 @@ import Status from '../sections/Processes/PolicyStates';
 
 import Users from '../components/Users';
 import Roles from '../sections/UserAccounts/UserRoles';
+import newUser from '../sections/UserAccounts/AddNewUser';
 
 import PolicyHolder from '../components/PolicyHolder';
 
@@ -93,6 +94,11 @@ const routes = [
         name: 'users',
         component: Users,
         children: [
+          {
+            path: 'newUser',
+            name: 'newUser',
+            component: newUser,
+          },
           {
             path: 'roles',
             name: 'roles',

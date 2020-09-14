@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '../../router';
 const state = {
   status: [],
   loadingState: false,
@@ -70,7 +71,7 @@ const actions = {
         state.stateError = ex;
       });
   },
-  async ReverseStatus({ dispatch }, newStatus) {
+  async ReverseStatus({ state }, newStatus) {
     state.loadingState = true;
     state.stateError = null;
     await axios
@@ -82,13 +83,7 @@ const actions = {
       .then(
         (response) => {
           if (response.status === 200) {
-            const status = {
-              id: newStatus.statusId,
-              policyId: newStatus.policyId,
-            };
-            dispatch('GetStatus', status);
-            dispatch('GetPolicyOwner', response.data.message);
-            dispatch('GetPolicyById', newStatus.policyId);
+            router.go();
             state.dialogStatus = false;
           }
           state.loadingState = false;

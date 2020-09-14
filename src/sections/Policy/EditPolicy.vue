@@ -101,8 +101,11 @@
             :loading="get_loadingOrganization"
             :rules="[rules.required]"
             item-text="name"
+            disabled
           ></v-overflow-btn>
           <v-overflow-btn
+            :persistent-hint="true"
+            hint="Underwriter"
             label="Select Underwriter"
             target="#newPolicy"
             width="auto"

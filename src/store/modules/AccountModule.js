@@ -300,6 +300,46 @@ const actions = {
         state.loadingRoles = false;
       });
   },
+  async AddNewUser({ state }, User) {
+    state.AddOrgUserError = null;
+    state.loadingRoles = true;
+    await axios
+      .post('/userAccount/Register', {
+        id: User.id,
+        name: User.name,
+        surname: User.surname,
+        email: User.email,
+        password: User.password,
+        passwordConfirm: User.passwordConfirm,
+        organizationId: User.organizationId,
+        roles: User.roles,
+      })
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            router.push({ name: 'users' });
+            router.go();
+          }
+          state.loadingRoles = false;
+          return;
+        },
+        (e) => {
+          state.loadingRoles = false;
+          state.AddOrgUserError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.AddOrgUserError = ex;
+        state.loadingRoles = false;
+      });
+  },
+  LogOut() {
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('ref');
+    sessionStorage.removeItem('Oid');
+    router.push({ name: 'login' });
+    router.go();
+  },
 };
 const mutations = {
   set_user: (state, data) => (state.user = data),

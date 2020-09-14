@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card outlined class="mb-1">
-      <v-card-actions>
+      <v-card-actions v-if="get_user!=null">
         <v-overflow-btn
           v-if="get_user.organizationType=='super'"
           hint="Organization"

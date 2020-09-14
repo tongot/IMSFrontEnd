@@ -1,7 +1,7 @@
 //order matters enums from back end must match indexing
 const enums = {
   gender: ['Male', 'Female'],
-  maritalStatus: ['Single', 'Married', 'Divorced'],
+  maritalStatus: ['Single', 'Married', 'Divorced', 'Widowed'],
   policyTerm: ['Short', 'Long'],
   personStatus: ['Active', 'Deceased'],
   typeOfRelationship: [

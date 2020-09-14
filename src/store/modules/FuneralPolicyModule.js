@@ -11,6 +11,8 @@ const state = {
   NameOfHolder: '',
   funeralPolicyErrors: null,
   FPolicyPages: 0,
+  Beneficiary: null,
+  BeneficiaryDialog: false,
 };
 const getters = {
   get_nameOfHolder: (state) => state.NameOfHolder,
@@ -21,12 +23,20 @@ const getters = {
   get_ModalAddNewFPolicy: (state) => state.ModalAddNewFPolicy,
   get_funeralPolicyErrors: (state) => state.funeralPolicyErrors,
   get_FPolicyPages: (state) => state.FPolicyPages,
+  get_beneficiaryDialog: (state) => state.BeneficiaryDialog,
+  get_beneficiary: (state) => state.Beneficiary,
 };
 const actions = {
+  OpenBeneficiaryDialog() {
+    state.BeneficiaryDialog = !state.BeneficiaryDialog;
+  },
   setPolicyHolderId({ commit }, holder) {
     state.hasPolicy = null;
     state.NameOfHolder = holder.name;
     commit('set_newPolicyHolderId', holder.id);
+  },
+  SetBeneficiary({ commit }, beneficiary) {
+    commit('set_Beneficiary', beneficiary);
   },
   CloseModalAddNewFPolicy() {
     state.ModalAddNewFPolicy = !state.ModalAddNewFPolicy;
@@ -139,6 +149,7 @@ const actions = {
         processId: policy.processId,
         cover: policy.cover,
         policyHolderId: state.newPolicyHolderId,
+        beneficiary: state.Beneficiary,
       })
       .then(
         (response) => {
@@ -147,6 +158,7 @@ const actions = {
             state.loadingFPolicy = false;
             state.funeralPolicyErrors = null;
             state.ModalAddNewFPolicy = false;
+            state.Beneficiary = null;
             router.push({ name: 'funeralDetail', params: { PolicyId: response.data.data.id } });
           }
           state.loadingFPolicy = false;
@@ -171,6 +183,7 @@ const mutations = {
   set_funeralPolicy: (state, data) => (state.funeralPolicy = data),
   set_newPolicyHolderId: (state, data) => (state.newPolicyHolderId = data),
   set_hasPolicy: (state, data) => (state.hasPolicy = data),
+  set_Beneficiary: (state, data) => (state.Beneficiary = data),
 };
 export default {
   state,
