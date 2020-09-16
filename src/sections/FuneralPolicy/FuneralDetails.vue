@@ -262,7 +262,9 @@
         </v-row>
       </v-card-text>
     </v-card>
-
+    <div class="mt-2">
+      <Beneficiary />
+    </div>
     <v-card class="mt-2" outlined>
       <v-toolbar dark color="light-blue" flat>
         <v-toolbar-title>Policy Details</v-toolbar-title>
@@ -367,6 +369,7 @@ import enums from "../../Dictionary/Dictionary";
 import statuses from "../../components/States";
 import changeOwner from "../../components/ChangeOwner";
 import policyEdit from "../../sections/Policy/EditPolicy";
+import Beneficiary from "../../sections/FuneralPolicy/BeneficiaryDetail";
 import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
@@ -376,6 +379,7 @@ export default {
     statuses,
     changeOwner,
     policyEdit,
+    Beneficiary,
   },
   methods: {
     ...mapActions([
@@ -394,6 +398,7 @@ export default {
       "GetStatus",
       "GetPolicyOwner",
       "GetPolicyToEdit",
+      "GetBeneficiaryById",
     ]),
     opeModalEditPolicy(policy) {
       this.GetPolicyToEdit(policy);
@@ -454,6 +459,7 @@ export default {
       this.GetPolicyHolderCover(this.get_funeralPolicy.policyHolder.id);
       this.GetPolicyOwner(this.get_funeralPolicy.owner);
       this.GetRelationships();
+      this.GetBeneficiaryById(this.get_funeralPolicy.id);
     });
   },
 };

@@ -247,7 +247,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import beneficiary from "../FuneralPolicy/Beneficiary";
+import beneficiary from "../FuneralPolicy/NewBeneficiary";
 export default {
   components: {
     beneficiary,

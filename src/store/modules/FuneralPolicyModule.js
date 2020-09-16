@@ -1,6 +1,8 @@
 import axios from 'axios';
 import router from '../../router';
 import store from '../index';
+import enums from '../../Dictionary/Dictionary';
+import _ from 'lodash';
 const state = {
   funeralPolicy: null,
   funeralPolicies: [],
@@ -13,6 +15,9 @@ const state = {
   FPolicyPages: 0,
   Beneficiary: null,
   BeneficiaryDialog: false,
+  BeneficiaryEditDialog: false,
+  EditBeneficiary: null,
+  BeneficiaryError: null,
 };
 const getters = {
   get_nameOfHolder: (state) => state.NameOfHolder,
@@ -25,8 +30,18 @@ const getters = {
   get_FPolicyPages: (state) => state.FPolicyPages,
   get_beneficiaryDialog: (state) => state.BeneficiaryDialog,
   get_beneficiary: (state) => state.Beneficiary,
+  get_beneficiaryEditDialog: (state) => state.BeneficiaryEditDialog,
+  get_editBeneficiary: (state) => state.EditBeneficiary,
+  get_beneficiaryError: (state) => state.BeneficiaryError,
 };
 const actions = {
+  SetEditBeneficiary({ commit }, beneficiary) {
+    commit('set_EditBeneficiary', _.clone(beneficiary));
+    state.BeneficiaryEditDialog = true;
+  },
+  OpenBeneficiaryEditDialog() {
+    state.BeneficiaryEditDialog = !state.BeneficiaryEditDialog;
+  },
   OpenBeneficiaryDialog() {
     state.BeneficiaryDialog = !state.BeneficiaryDialog;
   },
@@ -177,13 +192,86 @@ const actions = {
         state.loadingPolicyHolder = false;
       });
   },
+  async GetBeneficiaryById({ commit }, id) {
+    state.loadingFPolicy = true;
+    await axios
+      .get('/funeralPolicy/GetBeneficiary/' + id)
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            commit('set_Beneficiary', response.data.data);
+            state.loadingFPolicy = false;
+            return;
+          }
+          alert(response.data.message);
+          state.loadingFPolicy = false;
+        },
+        (e) => {
+          alert('failed to load beneficiary ' + e.response);
+          state.loadingFPolicy = false;
+        }
+      )
+      .catch((ex) => {
+        alert('Error ' + ex);
+        state.loadingPolicyHolder = false;
+      });
+  },
+  async UpdateBeneficiary({ dispatch }, beneficiary) {
+    console.log(beneficiary);
+    state.loadingFPolicy = true;
+    state.BeneficiaryError = null;
+    await axios
+      .put('/funeralPolicy/UpdateBeneficiary', {
+        id: beneficiary.id,
+        maritalStatus: beneficiary.maritalStatus,
+        salutation: beneficiary.salutation,
+        firstName: beneficiary.firstName,
+        lastName: beneficiary.lastName,
+        middleName: beneficiary.middleName,
+        gender: beneficiary.gender,
+        dateOfBirth: beneficiary.dateOfBirth,
+        idNumber: beneficiary.idNumber,
+        idType: beneficiary.idType,
+        countryOfIssue: beneficiary.countryOfIssue,
+        disabled: beneficiary.disabled == 'Yes' ? true : false,
+        phoneNumber: beneficiary.phoneNumber,
+        address: beneficiary.address,
+        relationshipId: beneficiary.relationshipId,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            dispatch('GetBeneficiaryById', beneficiary.id);
+            state.BeneficiaryEditDialog = false;
+          }
+          state.loadingFPolicy = false;
+          state.BeneficiaryError = response.data.message;
+        },
+        (e) => {
+          state.loadingFPolicy = false;
+          state.BeneficiaryError = e.response.data.message;
+        }
+      )
+      .catch((ex) => {
+        state.loadingPolicyHolder = false;
+        alert('Error ' + ex.response.status);
+      });
+  },
 };
 const mutations = {
   set_funeralPolicies: (state, data) => (state.funeralPolicies = data),
   set_funeralPolicy: (state, data) => (state.funeralPolicy = data),
   set_newPolicyHolderId: (state, data) => (state.newPolicyHolderId = data),
   set_hasPolicy: (state, data) => (state.hasPolicy = data),
-  set_Beneficiary: (state, data) => (state.Beneficiary = data),
+  set_Beneficiary: (state, data) => (
+    (data.salutation = enums.title[data.salutation]),
+    (data.maritalStatus = enums.maritalStatus[data.maritalStatus]),
+    (data.gender = enums.gender[data.gender]),
+    (data.idType = enums.idType[data.idType]),
+    (data.disabled = data.disabled ? 'Yes' : 'No'),
+    (state.Beneficiary = data)
+  ),
+  set_EditBeneficiary: (state, data) => (state.EditBeneficiary = data),
 };
 export default {
   state,

@@ -121,6 +121,7 @@ const actions = {
         processId: status.processId,
         active: true,
         isFinal: status.isFinal,
+        isActiveState: state.isActiveState,
         rolesAllowed: status.roles,
       })
       .then(
@@ -137,10 +138,7 @@ const actions = {
         }
       )
       .catch((ex) => {
-        if (ex.response.status === 401 || ex.response.status === 403) {
-          return;
-        }
-        alert('Error ' + ex.response.status);
+        state.processError = ex.response.status;
         state.loadingPolicyHolder = false;
       });
   },
@@ -161,6 +159,7 @@ const actions = {
         Active: status.active,
         isFinal: status.isFinal,
         rolesAllowed: status.roles,
+        isActiveState: status.isActiveState,
       })
       .then(
         (response) => {

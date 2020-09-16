@@ -92,10 +92,14 @@ export default {
     },
     CurrentStateNotOne() {
       let names = this.get_Status.filter(
-        (item) => item.isCurrent === true && item.order === 1
+        (item) =>
+          item.isCurrent === true && item.order !== 1 && item.name != "Deceased"
       );
-
-      return names.length > 0 ? false : true;
+      if (names.length == 0) {
+        return false;
+      } else {
+        return true;
+      }
     },
     getCurrentStatusName() {
       return this.getCurrentStatus().length > 0

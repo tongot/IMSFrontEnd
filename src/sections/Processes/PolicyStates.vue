@@ -50,6 +50,7 @@
                 :rules="[rules.required]"
                 label="Order"
               ></v-text-field>
+              <v-checkbox v-model="State.isActiveState" label="Is Active state"></v-checkbox>
               <v-checkbox v-model="State.isFinal" label="Is Final"></v-checkbox>
               <v-card outlined :loading="loadingRoles">
                 <v-card-text>
@@ -99,6 +100,7 @@
                   :rules="[rules.required]"
                   label="Order"
                 ></v-text-field>
+                <v-checkbox v-model="StateEdit.isActiveState" label="Is Active state"></v-checkbox>
                 <v-checkbox v-model="StateEdit.active" label="Active"></v-checkbox>
                 <v-checkbox v-model="StateEdit.isFinal" label="Is Final"></v-checkbox>
                 <v-card outlined :loading="loadingRoles">
@@ -146,7 +148,7 @@
         </v-card>
       </v-form>
       <div class="ma-2 d-flex justify-md-space-around">
-        <v-card width="300" v-for="process in get_processes" :key="process.id">
+        <v-card width="400" v-for="process in get_processes" :key="process.id">
           <v-card-title>
             {{ process.name }}
             <v-spacer></v-spacer>
@@ -166,16 +168,20 @@
                 <v-icon left>mdi-plus</v-icon>State
               </v-btn>
               <v-list-item-group>
-                <v-list-item v-for="state in process.state" :key="state.id">
+                <v-list-item
+                  :disabled="state.name=='Deceased'"
+                  v-for="state in process.state"
+                  :key="state.id"
+                >
                   <v-list-item-title>
-                    <v-avatar color="primary" size="30">
+                    <v-avatar v-if="state.name!='Deceased'" color="primary" size="30">
                       <span class="white--text">{{ state.order }}</span>
                     </v-avatar>&nbsp;
                     <span>{{ state.displayName }}</span>&nbsp;
                     <v-chip small>{{ state.name }}</v-chip>
                   </v-list-item-title>
                   <v-list-item-action>
-                    <v-btn @click.prevent="OpenEditState(state)" icon>
+                    <v-btn v-if="state.name!='Deceased'" @click.prevent="OpenEditState(state)" icon>
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -224,6 +230,7 @@ export default {
       active: null,
       roles: "",
       isFinal: false,
+      isActiveState: false,
     },
     PolicyTypes: [{ nama: "Funeral", isSelected: true }],
     rules: {
@@ -272,6 +279,7 @@ export default {
       this.StateEdit.processId = state.processId;
       this.StateEdit.active = state.active;
       this.StateEdit.isFinal = state.isFinal;
+      this.StateEdit.isActiveState = state.isActiveState;
       this.dialogEditStatus = true;
     },
     Add() {
