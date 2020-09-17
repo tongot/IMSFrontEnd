@@ -12,6 +12,7 @@ import relationshipModule from './modules/RelationshipModule';
 import StateManager from './modules/StateManager';
 import PolicyModule from './modules/PolicyModule';
 import ChangeOwnerModule from './modules/ChangeOwnerModule';
+import FuneralClams from './modules/FuneralClaims';
 
 Vue.use(Vuex);
 
@@ -51,5 +52,6 @@ export default new Vuex.Store({
     StateManager,
     PolicyModule,
     ChangeOwnerModule,
+    FuneralClams,
   },
 });

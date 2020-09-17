@@ -124,8 +124,14 @@ export default {
       this.OpenDialogStatus();
       this.btnText = status.displayName;
       this.status.statusId = status.id;
-      this.status.policyId = this.get_funeralPolicy.id;
-      this.status.currentOwner = this.get_policyOwner.id;
+      if (this.get_stateType == "policy") {
+        this.status.policyId = this.get_funeralPolicy.id;
+        this.status.currentOwner = this.get_policyOwner.id;
+      } else {
+        this.status.policyId = this.get_funeralClaim.claimId;
+        this.status.currentOwner = this.get_policyOwner.owner;
+      }
+
       this.status.processId = status.processId;
     },
     setReverse() {
@@ -134,7 +140,11 @@ export default {
         this.OpenDialogStatus();
         this.btnText = "reverse";
         this.status.statusId = this.getCurrentStatus()[0].id;
-        this.status.policyId = this.get_funeralPolicy.id;
+        if (this.get_stateType == "policy") {
+          this.status.policyId = this.get_funeralPolicy.id;
+        } else {
+          this.status.policyId = this.get_funeralClaim.claimId;
+        }
       }
     },
     cancel() {
@@ -161,6 +171,8 @@ export default {
     "get_policyOwner",
     "get_funeralPolicy",
     "get_dialogStatus",
+    "get_stateType",
+    "get_funeralClaim",
   ]),
 };
 </script>

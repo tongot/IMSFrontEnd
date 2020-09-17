@@ -8,7 +8,14 @@
     <v-card v-if="get_funeralPolicy.policyHolder != null" outlined>
       <v-toolbar dark color="light-blue" flat>
         <v-toolbar-title>Policy holder details</v-toolbar-title>
+        <v-chip
+          depressed
+          small
+          @click="createClaim('member',get_funeralPolicy.policyHolder.id)"
+          class="ml-2"
+        >Claim</v-chip>
         <v-spacer></v-spacer>
+
         <changeOwner />
       </v-toolbar>
 
@@ -125,7 +132,10 @@
     <!--dependencies card -->
     <v-card class="mt-2" outlined>
       <v-toolbar flat dark color="light-blue">
-        <v-toolbar-title>Dependencies</v-toolbar-title>
+        <v-toolbar-title>
+          Dependencies
+          <v-avatar size="30" color="blue">{{get_Dependencies.length}}</v-avatar>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
           :loading="get_loadingDependent"
@@ -144,6 +154,7 @@
           >
             <v-expansion-panel-header>
               {{dependent.firstName +" "+dependent.middleName+" "+dependent.lastName}}
+              <v-chip depressed :color="stateColor" class="ml-2">{{getState(dependent.status)}}</v-chip>
               <v-spacer></v-spacer>
               <v-overflow-btn
                 label="Relationship"
@@ -158,11 +169,16 @@
               ></v-overflow-btn>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-card flat>
+              <v-card outlined>
                 <v-card-title>
-                  <v-spacer>
-                    <v-spacer></v-spacer>
-                  </v-spacer>
+                  <v-chip
+                    depressed
+                    small
+                    @click="createClaim('dependent',dependent.id)"
+                    class="ml-2"
+                  >Claim</v-chip>
+                  <v-spacer></v-spacer>
+
                   <v-btn
                     icon
                     :loading="get_loadingPackage"
@@ -361,6 +377,7 @@
         <policyEdit />
       </v-card>
     </v-dialog>
+    <CreateClaim />
   </div>
 </template>
 
@@ -370,16 +387,19 @@ import statuses from "../../components/States";
 import changeOwner from "../../components/ChangeOwner";
 import policyEdit from "../../sections/Policy/EditPolicy";
 import Beneficiary from "../../sections/FuneralPolicy/BeneficiaryDetail";
+import CreateClaim from "../Claims/CreateClaim";
 import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     modalEditPolicy: false,
+    stateColor: "",
   }),
   components: {
     statuses,
     changeOwner,
     policyEdit,
     Beneficiary,
+    CreateClaim,
   },
   methods: {
     ...mapActions([
@@ -399,7 +419,27 @@ export default {
       "GetPolicyOwner",
       "GetPolicyToEdit",
       "GetBeneficiaryById",
+      "CreateClaim",
+      "CloseCreateClaimDialog",
+      "SetStateType",
     ]),
+
+    createClaim(typeOfDeceased, IdOfDeceased) {
+      const claim = {
+        funeralPolicyId: this.get_funeralPolicy.funeralPolicy.id,
+        deceasedType: typeOfDeceased,
+        deceased: IdOfDeceased,
+        policyId: this.get_funeralPolicy.id,
+        policyProcessId: this.get_funeralPolicy.processId,
+        claimBase: {
+          organizationId: this.get_user.organizationId,
+          processId: null,
+          applicationDate: null,
+        },
+      };
+      this.CreateClaim(claim);
+      this.CloseCreateClaimDialog();
+    },
     opeModalEditPolicy(policy) {
       this.GetPolicyToEdit(policy);
       this.modalEditPolicy = true;
@@ -426,6 +466,15 @@ export default {
     getMaritalState(m) {
       return enums.maritalStatus[m];
     },
+    getState(stateId) {
+      let state = enums.personStatus[stateId];
+      if (state == "Deceased") {
+        this.stateColor = "pink darken-3";
+      } else {
+        this.stateColor = "success";
+      }
+      return state;
+    },
     getIdType(id) {
       return enums.idType[id];
     },
@@ -447,8 +496,10 @@ export default {
     "get_loadingPackage",
     "get_Relationships",
     "get_loadingRelationship",
+    "get_user",
   ]),
   mounted() {
+    this.SetStateType("policy");
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {
       const status = {
         id: this.get_funeralPolicy.stateId,

@@ -1,8 +1,6 @@
 <template>
   <div v-if="get_user!=null">
-    <v-toolbar>
-      <v-toolbar-title>Dashboard</v-toolbar-title>
-    </v-toolbar>
+    <router-view></router-view>
   </div>
 </template>
 

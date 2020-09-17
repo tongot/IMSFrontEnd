@@ -5,6 +5,7 @@ const state = {
   loadingState: false,
   stateError: null,
   dialogStatus: false,
+  stateType: 'policy',
 };
 const getters = {
   get_Status: (state) => state.status,
@@ -13,6 +14,9 @@ const getters = {
   get_dialogStatus: (state) => state.dialogStatus,
 };
 const actions = {
+  SetStateType({ commit }, data) {
+    commit('set_stateType', data);
+  },
   OpenDialogStatus() {
     state.stateError = null;
     state.dialogStatus = !state.dialogStatus;
@@ -46,6 +50,7 @@ const actions = {
         currentOwner: newStatus.currentOwner,
         statusComment: newStatus.statusComment,
         processId: newStatus.processId,
+        type: state.stateType,
       })
       .then(
         (response) => {
@@ -101,6 +106,7 @@ const actions = {
 };
 const mutations = {
   set_Statuses: (state, data) => (state.status = data),
+  set_stateType: (state, data) => (state.stateType = data),
 };
 export default {
   state,

@@ -1,20 +1,21 @@
 <template>
   <div>
     <v-card v-if="get_policyHolder != null" outlined>
-      <v-card-title
-        >{{
-          get_policyHolder.salutation +
-            ' ' +
-            get_policyHolder.firstName +
-            ' ' +
-            get_policyHolder.middleName +
-            ' ' +
-            get_policyHolder.lastName
+      <v-card-title>
+        {{
+        get_policyHolder.salutation +
+        ' ' +
+        get_policyHolder.firstName +
+        ' ' +
+        get_policyHolder.middleName +
+        ' ' +
+        get_policyHolder.lastName
         }}
         <v-spacer></v-spacer>
-        <v-btn @click="setPolicyHolderToEdit(get_policyHolder)" icon>
+        <v-btn v-if="canEdit" @click="setPolicyHolderToEdit(get_policyHolder)" icon>
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
+        <v-chip small :color="stateColor" class="white--text">{{getState(get_policyHolder.status)}}</v-chip>
       </v-card-title>
       <v-divider></v-divider>
       <v-row class="pa-2">
@@ -24,9 +25,7 @@
           <v-subheader>Salutation</v-subheader>
           <p class="pl-4">{{ get_policyHolder.salutation }}</p>
           <v-subheader>Name</v-subheader>
-          <p class="pl-4">
-            {{ get_policyHolder.firstName + ' ' + get_policyHolder.middleName }}
-          </p>
+          <p class="pl-4">{{ get_policyHolder.firstName + ' ' + get_policyHolder.middleName }}</p>
           <v-subheader>Surname</v-subheader>
           <p class="pl-4">{{ get_policyHolder.lastName }}</p>
           <v-subheader>Marital Status</v-subheader>
@@ -62,7 +61,7 @@
           <p class="pl-4">{{ get_policyHolder.countryOfIssue }}</p>
         </v-col>
       </v-row>
-      <v-card v-if="get_policyHolder.contact != null" outlined="">
+      <v-card v-if="get_policyHolder.contact != null" outlined>
         <v-card-title>Contact details</v-card-title>
         <v-divider></v-divider>
         <v-row>
@@ -91,14 +90,32 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
+import enums from "../../Dictionary/Dictionary";
 export default {
+  data: () => ({
+    canEdit: true,
+    stateColor: "black",
+  }),
   methods: {
-    ...mapActions(['GetPolicyHolderById', 'setPolicyHolderToEdit']),
+    ...mapActions(["GetPolicyHolderById", "setPolicyHolderToEdit"]),
+    getState(stateId) {
+      let state = enums.personStatus[stateId];
+      if (state == "Deceased") {
+        this.stateColor = "pink darken-3";
+      } else {
+        this.stateColor = "success";
+      }
+      return state;
+    },
   },
-  computed: mapGetters(['get_policyHolder']),
+  computed: mapGetters(["get_policyHolder"]),
   mounted() {
-    this.GetPolicyHolderById(this.$route.params.policyHolderId);
+    if (typeof this.$route.params.policyHolderId != "undefined") {
+      this.GetPolicyHolderById(this.$route.params.policyHolderId);
+    } else {
+      this.canEdit = false;
+    }
   },
 };
 </script>

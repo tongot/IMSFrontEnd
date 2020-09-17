@@ -85,7 +85,7 @@
       </v-app-bar>
 
       <v-main>
-        <div fluid>
+        <div>
           <router-view></router-view>
         </div>
       </v-main>
@@ -133,7 +133,7 @@ export default {
         roles: ["Data"],
       },
       {
-        name: "Policies",
+        name: "Policies/claims",
         icon: "mdi-sitemap",
         roles: ["Admin", "Capturer"],
         terms: [
@@ -144,6 +144,12 @@ export default {
           {
             term: "Short term",
             items: [],
+          },
+          {
+            term: "Claims",
+            items: [
+              { name: "Funeral Claims", link: { name: "funeralClaimList" } },
+            ],
           },
         ],
       },
@@ -187,6 +193,8 @@ export default {
     this.GetUserDetails().then(() => {
       if (this.get_user != null) {
         this.GetOrganizationById(this.get_user.organizationId);
+      } else {
+        this.$route.push({ name: "login" });
       }
     });
   },

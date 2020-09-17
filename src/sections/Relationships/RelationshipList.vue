@@ -40,7 +40,7 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <v-list v-for="(relation,index) in get_Relationships" :key="relation.id">
+        <v-list dense v-for="(relation,index) in get_Relationships" :key="relation.id">
           <v-list-item-group>
             <v-list-item>
               <v-list-item-title>{{relation.name}}</v-list-item-title>

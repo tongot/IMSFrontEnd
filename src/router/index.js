@@ -35,6 +35,11 @@ import Relationship from '../components/Relationship';
 import relationshipList from '../sections/Relationships/RelationshipList';
 import Forbidden from '../views/Forbidden';
 
+import Claim from '../views/Claims.vue';
+import FuneralClaim from '../components/Claims';
+import FuneralClaimList from '../sections/Claims/FuneralClaimList';
+import FuneralClaimDetail from '../sections/Claims/FuneralClaimDetail';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -139,6 +144,30 @@ const routes = [
             path: ':PolicyId',
             name: 'funeralDetail',
             component: FuneralDetail,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/Claim',
+    name: 'claim',
+    component: Claim,
+    children: [
+      {
+        path: 'funeral-claim',
+        name: 'funeralClaim',
+        component: FuneralClaim,
+        children: [
+          {
+            path: 'list',
+            name: 'funeralClaimList',
+            component: FuneralClaimList,
+          },
+          {
+            path: 'details/:deceased/:claimOwnerId',
+            name: 'funeralClaimDetail',
+            component: FuneralClaimDetail,
           },
         ],
       },

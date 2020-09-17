@@ -1,11 +1,14 @@
 <template>
-  <div>
+  <div v-if="get_user!=null">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+export default {
+  computed: mapGetters(["get_user"]),
+};
 </script>
 
 <style></style>

@@ -184,17 +184,34 @@ const actions = {
           state.loadingDependent = false;
         },
         (e) => {
-          console.log(e.response);
+          state.dependentError = e.response.message;
           state.loadingDependent = false;
-          //alert('Error ' + e.response.data.message);
         }
       )
       .catch((ex) => {
-        if (ex.response.status === 401 || ex.response.status === 403) {
-          return;
+        state.loadingDependent = false;
+        alert('Error ' + ex);
+      });
+  },
+  async GetDependentById({ commit }, id) {
+    state.loadingDependent = true;
+    await axios
+      .get('/PolicyHolder/GetDependent/' + id)
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            commit('set_Dependent', response.data.data);
+          }
+          state.loadingDependent = false;
+        },
+        (e) => {
+          state.dependentError = e.response.message;
+          state.loadingDependent = false;
         }
-        alert('Error ' + ex.response.status);
-        state.loadingPolicyHolder = false;
+      )
+      .catch((ex) => {
+        state.loadingDependent = false;
+        alert('Error ' + ex);
       });
   },
 };
