@@ -15,18 +15,24 @@ axios.interceptors.response.use(
     return response;
   },
   function(error) {
-    if (error.response.status === 401) {
-      if (router.currentRoute.name != 'login') {
-        router.push({ name: 'login' });
-        sessionStorage.clear();
+    try {
+      if (error.response.status === 401) {
+        if (router.currentRoute.name != 'login') {
+          router.push({ name: 'login' });
+          sessionStorage.clear();
+        }
       }
-    }
-    if (error.response.status === 403) {
-      if (router.currentRoute.name != 'unauthorized') {
-        router.push({ name: 'unauthorized' });
-        //router.go();
+      if (error.response.status === 403) {
+        if (router.currentRoute.name != 'unauthorized') {
+          router.push({ name: 'unauthorized' });
+          //router.go();
+        }
       }
+    } catch {
+      alert('Connection error');
+      return Promise.reject(error);
     }
+
     return Promise.reject(error);
   }
 );

@@ -165,7 +165,7 @@ const routes = [
             component: FuneralClaimList,
           },
           {
-            path: 'details/:deceased/:claimOwnerId',
+            path: ':claimId',
             name: 'funeralClaimDetail',
             component: FuneralClaimDetail,
           },

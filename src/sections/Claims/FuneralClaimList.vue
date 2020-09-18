@@ -47,12 +47,7 @@
               <td>{{ claim.applicationDate }}</td>
               <td>{{ claim.deceaseType }}</td>
               <td>
-                <v-btn
-                  @click="Details(claim.deceaseType,claim.deceased,claim)"
-                  color="success"
-                  small
-                  depressed
-                >details</v-btn>
+                <v-btn @click="Details(claim.claimId)" color="success" small depressed>details</v-btn>
               </td>
             </tr>
           </tbody>
@@ -102,11 +97,11 @@ export default {
         return "success";
       }
     },
-    Details(deceaseType, deceased, claim) {
+    Details(claim) {
       this.CreateClaim(claim);
       this.$router.push({
         name: "funeralClaimDetail",
-        params: { claimOwnerId: deceased, deceased: deceaseType },
+        params: { claimId: claim },
       });
     },
     ...mapActions(["GetFuneralClaims", "GetOrganizations", "CreateClaim"]),

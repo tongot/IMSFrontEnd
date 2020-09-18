@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <statuses />
+      <status />
     </div>
     <div v-if="get_Dependent!=null">
       <dependent />
@@ -17,20 +17,21 @@ import { mapActions, mapGetters } from "vuex";
 import dependent from "../Dependent/DependentDetails";
 import policyHolder from "../PolicyHolder/policyHolderDetail";
 import PolicyHolderCoverDetails from "../Covers/PolicyHolderCoverDetails";
-import statuses from "../../components/States";
+import status from "../Claims/ClaimStatus";
 export default {
   components: {
     dependent,
     policyHolder,
     PolicyHolderCoverDetails,
-    statuses,
+    status,
   },
   methods: {
     ...mapActions([
       "GetDependentById",
       "GetPolicyHolderById",
-      "SetStateType",
-      "GetStatus",
+      "GetClaimStatus",
+      "GetFuneralClaimById",
+      "GetClaimOwner",
     ]),
   },
   computed: mapGetters([
@@ -39,10 +40,23 @@ export default {
     "get_funeralClaim",
   ]),
   mounted() {
-    this.SetStateType("claim");
-    if (this.$route.params.deceased == "member") {
-      this.GetPolicyHolderById(this.$route.params.claimOwnerId);
-    }
+    this.GetFuneralClaimById(this.$route.params.claimId).then(() => {
+      if (this.get_funeralClaim != null) {
+        if (this.get_funeralClaim.deceaseType == "member") {
+          this.GetPolicyHolderById(this.get_funeralClaim.deceased);
+        } else {
+          this.GetDependentById(this.get_funeralClaim.deceased);
+        }
+
+        const status = {
+          statusId: this.get_funeralClaim.statusId,
+          claimId: this.get_funeralClaim.claimId,
+        };
+
+        this.GetClaimStatus(status);
+        this.GetClaimOwner(this.get_funeralClaim.owner);
+      }
+    });
   },
 };
 </script>

@@ -421,7 +421,6 @@ export default {
       "GetBeneficiaryById",
       "CreateClaim",
       "CloseCreateClaimDialog",
-      "SetStateType",
     ]),
 
     createClaim(typeOfDeceased, IdOfDeceased) {
@@ -499,7 +498,6 @@ export default {
     "get_user",
   ]),
   mounted() {
-    this.SetStateType("policy");
     this.GetPolicyById(this.$route.params.PolicyId).then(() => {
       const status = {
         id: this.get_funeralPolicy.stateId,

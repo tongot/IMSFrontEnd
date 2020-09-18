@@ -56,6 +56,24 @@ const actions = {
         state.FuneralClaimLoading = false;
       });
   },
+  async GetFuneralClaimById({ commit }, id) {
+    state.FuneralClaimLoading = true;
+    await axios
+      .get('/funeralClaims/GetFuneralClaimById/' + id)
+      .then((response) => {
+        if (response.status === 200) {
+          commit('set_funeralClaim', response.data.data);
+          state.FuneralClaimLoading = false;
+          return;
+        }
+        alert(response.data.message);
+        state.FuneralClaimLoading = false;
+      })
+      .catch((ex) => {
+        alert('Error ' + ex);
+        state.FuneralClaimLoading = false;
+      });
+  },
   async AddClaim({ state }) {
     state.FuneralClaimLoading = true;
     state.FuneralClaimError = null;

@@ -39,10 +39,7 @@ const actions = {
         }
       )
       .catch((ex) => {
-        if (ex.response.status === 401 || ex.response.status === 403) {
-          return;
-        }
-        alert('Error ' + ex.response.status);
+        alert('Error ' + ex);
         state.loadingPolicyHolder = false;
       });
   },
@@ -73,10 +70,7 @@ const actions = {
         }
       )
       .catch((ex) => {
-        if (ex.response.status === 401 || ex.response.status === 403) {
-          return;
-        }
-        alert('Error ' + ex.response.status);
+        alert('Error ' + ex);
         state.loadingPolicyHolder = false;
       });
   },
@@ -108,10 +102,7 @@ const actions = {
         }
       )
       .catch((ex) => {
-        if (ex.response.status === 401 || ex.response.status === 403) {
-          return;
-        }
-        alert('Error ' + ex.response.status);
+        alert('Error ' + ex);
         state.loadingPolicyHolder = false;
       });
   },

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-dialog persistent width="500" v-model="get_dialogStatus">
+    <v-dialog persistent width="500" v-model="get_dialogClaimStatus">
       <v-form ref="commentForm">
         <v-card>
-          <v-alert type="error" v-if="get_statusError!=null">{{get_statusError}}</v-alert>
+          <v-alert type="error" v-if="get_claimStatusError!=null">{{get_claimStatusError}}</v-alert>
           <v-card-title>Enter Status Comment</v-card-title>
           <v-card-text>
             <v-textarea :rules="[rules.required]" label="Comment" v-model="status.statusComment"></v-textarea>
@@ -17,14 +17,14 @@
       </v-form>
     </v-dialog>
 
-    <v-card v-if="get_Status!=null" outlined>
-      <v-alert v-if="get_statusError!=null" type="error">{{get_statusError}}</v-alert>
+    <v-card v-if="get_claimStatus!=null" outlined>
+      <v-alert v-if="get_claimStatusError!=null" type="error">{{get_claimStatusError}}</v-alert>
       <v-card-actions>
-        <v-btn :loading="get_loadingStatus" text>Status</v-btn>
+        <v-btn :loading="get_loadingClaimStatus" text>Status</v-btn>
         <v-btn
           :disabled="getClass(status.isCurrent)"
           small
-          v-for="status in  get_Status"
+          v-for="status in  get_claimStatus"
           :key="status.id"
           @click="setPolicy(status)"
         >
@@ -62,7 +62,7 @@ export default {
     btnText: "",
     status: {
       statusId: null,
-      policyId: null,
+      claimId: null,
       currentOwner: null,
       statusComment: null,
       processId: null,
@@ -74,11 +74,10 @@ export default {
   }),
   methods: {
     ...mapActions([
-      "GetStatus",
-      "ChangeStatus",
-      "ClearStateMessage",
-      "OpenDialogStatus",
-      "ReverseStatus",
+      "GetClaimStatus",
+      "ChangeClaimStatus",
+      "OpenDialogClaimStatus",
+      "ReverseClaimStatus",
     ]),
     getClass(isCurrent) {
       return isCurrent ? true : false;
@@ -91,7 +90,7 @@ export default {
       }
     },
     CurrentStateNotOne() {
-      let names = this.get_Status.filter(
+      let names = this.get_claimStatus.filter(
         (item) =>
           item.isCurrent === true && item.order !== 1 && item.name != "Deceased"
       );
@@ -117,28 +116,28 @@ export default {
         : "";
     },
     getCurrentStatus() {
-      return this.get_Status.filter((item) => item.isCurrent === true);
+      return this.get_claimStatus.filter((item) => item.isCurrent === true);
     },
     setPolicy(status) {
       this.isReverse = false;
-      this.OpenDialogStatus();
+      this.OpenDialogClaimStatus();
       this.btnText = status.displayName;
       this.status.statusId = status.id;
-      this.status.policyId = this.get_funeralPolicy.id;
-      this.status.currentOwner = this.get_policyOwner.id;
+      this.status.claimId = this.get_funeralClaim.claimId;
+      this.status.currentOwner = this.get_claimOwner.id;
       this.status.processId = status.processId;
     },
     setReverse() {
       if (this.getCurrentStatus().length > 0) {
         this.isReverse = true;
-        this.OpenDialogStatus();
+        this.OpenDialogClaimStatus();
         this.btnText = "reverse";
         this.status.statusId = this.getCurrentStatus()[0].id;
-        this.status.policyId = this.get_funeralPolicy.id;
+        this.status.claimId = this.get_funeralClaim.claimId;
       }
     },
     cancel() {
-      this.OpenDialogStatus();
+      this.OpenDialogClaimStatus();
       this.dialogComment = false;
       this.btnText = "";
       this.status.statusId = null;
@@ -147,20 +146,20 @@ export default {
     postNewStatus() {
       if (this.$refs.commentForm.validate()) {
         if (this.isReverse) {
-          this.ReverseStatus(this.status);
+          this.ReverseClaimStatus(this.status);
         } else {
-          this.ChangeStatus(this.status);
+          this.ChangeClaimStatus(this.status);
         }
       }
     },
   },
   computed: mapGetters([
-    "get_Status",
-    "get_loadingStatus",
-    "get_statusError",
-    "get_policyOwner",
-    "get_funeralPolicy",
-    "get_dialogStatus",
+    "get_claimStatus",
+    "get_loadingClaimStatus",
+    "get_claimStatusError",
+    "get_claimOwner",
+    "get_funeralClaim",
+    "get_dialogClaimStatus",
   ]),
 };
 </script>
