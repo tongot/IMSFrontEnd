@@ -9,6 +9,12 @@ Vue.config.productionTip = false;
 axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('authToken');
 
+Vue.filter('Date', (value) => {
+  if (!value) return '';
+  var date = new Date(value);
+  return date.getDay() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getFullYear();
+});
+
 axios.interceptors.response.use(
   function(response) {
     // Do something with response data

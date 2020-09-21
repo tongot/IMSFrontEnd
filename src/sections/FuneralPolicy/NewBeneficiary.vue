@@ -4,7 +4,7 @@
       <v-card class="mt-1">
         <v-card-text>
           <v-card-title>
-            Person details
+            Beneficiary Details
             <v-spacer></v-spacer>
             <v-btn color="red" icon @click="Close()">
               <v-icon>mdi-close</v-icon>
@@ -82,6 +82,7 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      :rules="[rules.required]"
                     ></v-text-field>
                   </template>
                   <v-date-picker v-model="beneficiary.dateOfBirth" no-title scrollable>
@@ -192,6 +193,7 @@ export default {
       "OpenBeneficiaryDialog",
       "GetRelationships",
       "SetBeneficiary",
+      "ClearBeneficiary",
     ]),
     getTitle() {
       return enums.title;
@@ -211,7 +213,7 @@ export default {
     Close() {
       this.OpenBeneficiaryDialog();
       this.Clear();
-      this.SetBeneficiary(null);
+      this.ClearBeneficiary();
     },
     Clear() {
       this.beneficiary.department = "";

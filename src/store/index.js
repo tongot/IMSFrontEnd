@@ -15,6 +15,7 @@ import ChangeOwnerModule from './modules/ChangeOwnerModule';
 import FuneralClams from './modules/FuneralClaims';
 import ClaimModule from './modules/ClaimModule';
 import ClaimStateManger from './modules/ClaimStateManager';
+import ChangeClaimOwner from './modules/ChangeClaimOwner';
 
 Vue.use(Vuex);
 
@@ -57,5 +58,6 @@ export default new Vuex.Store({
     FuneralClams,
     ClaimModule,
     ClaimStateManger,
+    ChangeClaimOwner,
   },
 });

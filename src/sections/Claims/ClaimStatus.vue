@@ -119,6 +119,13 @@ export default {
       return this.get_claimStatus.filter((item) => item.isCurrent === true);
     },
     setPolicy(status) {
+      if (
+        this.get_funeralClaim.bankDetail == null &&
+        status.isActiveState == true
+      ) {
+        this.$router.push({ name: "funeralClaimAdd-bank" });
+        return;
+      }
       this.isReverse = false;
       this.OpenDialogClaimStatus();
       this.btnText = status.displayName;

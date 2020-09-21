@@ -1,5 +1,6 @@
 import axios from 'axios';
 import enums from '../../Dictionary/Dictionary';
+import router from '../../router';
 import store from '../index';
 const state = {
   policyHolder: null,
@@ -119,6 +120,7 @@ const actions = {
             state.policyHolderError = null;
             state.loadingPolicyHolder = false;
             state.dialogAddPolicyHolder = false;
+            router.go();
           }
           state.loadingPolicyHolder = false;
           state.policyHolderError = response.data.message;

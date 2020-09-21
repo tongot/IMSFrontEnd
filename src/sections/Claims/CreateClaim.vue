@@ -9,7 +9,7 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
-        <v-card-text>
+        <v-card-text v-if="get_funeralClaim.claimBase!=null">
           <v-form ref="formAdd" @submit.prevent="addClaim()">
             <v-alert type="error" v-if="get_funeralClaimError!=null">{{get_funeralClaimError}}</v-alert>
             <v-overflow-btn
@@ -23,6 +23,11 @@
               :rules="[rules.required]"
               item-text="name"
             ></v-overflow-btn>
+            <v-textarea
+              placeholder="Cause of death"
+              :rules="[rules.required]"
+              v-model="get_funeralClaim.causeOfDeath"
+            ></v-textarea>
             <v-menu
               ref="menuAppDate"
               v-model="applicationaDateMenu"
@@ -57,6 +62,36 @@
                 >OK</v-btn>
               </v-date-picker>
             </v-menu>
+            <v-menu
+              ref="menuDD"
+              v-model="dateOfDeath"
+              :close-on-content-click="false"
+              :return-value.sync="get_funeralClaim.dateOfDeath"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="get_funeralClaim.dateOfDeath"
+                  label="Date Of death"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  :rules="[rules.required]"
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="get_funeralClaim.dateOfDeath" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="applicationaDateMenu = false">Cancel</v-btn>
+                <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.menuDD.save(get_funeralClaim.dateOfDeath)"
+                >OK</v-btn>
+              </v-date-picker>
+            </v-menu>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -72,6 +107,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     applicationaDateMenu: false,
+    dateOfDeath: false,
     rules: {
       required: (v) => !!v || "This fieled is required",
     },

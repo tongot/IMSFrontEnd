@@ -83,6 +83,7 @@
                           label="Picker in menu"
                           prepend-icon="mdi-calendar"
                           readonly
+                          :rules="[rules.required]"
                           v-bind="attrs"
                           v-on="on"
                         ></v-text-field>

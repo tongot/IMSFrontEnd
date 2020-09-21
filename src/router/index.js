@@ -39,6 +39,7 @@ import Claim from '../views/Claims.vue';
 import FuneralClaim from '../components/Claims';
 import FuneralClaimList from '../sections/Claims/FuneralClaimList';
 import FuneralClaimDetail from '../sections/Claims/FuneralClaimDetail';
+import AddFuneralBank from '../sections/Claims/NewBankingDetail';
 
 Vue.use(VueRouter);
 
@@ -168,6 +169,13 @@ const routes = [
             path: ':claimId',
             name: 'funeralClaimDetail',
             component: FuneralClaimDetail,
+            children: [
+              {
+                path: 'AddBank',
+                name: 'funeralClaimAdd-bank',
+                component: AddFuneralBank,
+              },
+            ],
           },
         ],
       },

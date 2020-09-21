@@ -1,6 +1,6 @@
 import axios from 'axios';
 import router from '../../router';
-//import _ from 'lodash';
+import _ from 'lodash';
 const state = {
   FuneralClaims: [],
   FuneralClaim: null,
@@ -8,6 +8,10 @@ const state = {
   FuneralClaimError: null,
   FClaimsPages: 0,
   CreateClaimDialog: false,
+  BankingDetail: null,
+  ClaimBankError: null,
+  EditClaim: null,
+  ModalEditClaim: false,
 };
 const getters = {
   get_funeralClaims: (state) => state.FuneralClaims,
@@ -16,10 +20,21 @@ const getters = {
   get_funeralClaimError: (state) => state.FuneralClaimError,
   get_FClaimsPages: (state) => state.FClaimsPages,
   get_createClaimDialog: (state) => state.CreateClaimDialog,
+  get_claimBankError: (state) => state.ClaimBankError,
+  get_EditFClaim: (state) => state.EditClaim,
+  get_ModalEditClaim: (state) => state.ModalEditClaim,
 };
 const actions = {
   CreateClaim({ commit }, claim) {
     commit('set_funeralClaim', claim);
+  },
+  SetEditClaim({ commit }, claim) {
+    console.log(claim);
+    commit('set_EditClaim', _.cloneDeep(claim));
+    state.ModalEditClaim = true;
+  },
+  CloseModalEditClaim() {
+    state.ModalEditClaim = false;
   },
   CloseCreateClaimDialog() {
     state.FuneralClaimLoading = false;
@@ -85,6 +100,8 @@ const actions = {
         policyId: state.FuneralClaim.policyId,
         policyProcessId: state.FuneralClaim.policyProcessId,
         claimBase: state.FuneralClaim.claimBase,
+        causeOfDeath: state.FuneralClaim.causeOfDeath,
+        dateOfDeath: state.FuneralClaim.dateOfDeath,
       })
       .then(
         (response) => {
@@ -104,10 +121,75 @@ const actions = {
         state.FuneralClaimLoading = false;
       });
   },
+  async AddClaimBanking({ state }, bank) {
+    console.warn(bank);
+    state.FuneralClaimLoading = true;
+    state.ClaimBankError = null;
+    axios
+      .post('/funeralClaims/AddBankingDetails', {
+        name: bank.name,
+        bankAccount: bank.bankAccount,
+        branchName: bank.branchName,
+        holderName: bank.holderName,
+        claimId: bank.claimId,
+        paymentMethods: bank.paymentMethods,
+        statusId: bank.statusId,
+        isSettled: bank.isSettled,
+      })
+      .then(
+        (response) => {
+          if (response.status === 200) {
+            state.FuneralClaimLoading = false;
+            state.CreateClaimDialog = false;
+            router.go();
+          }
+        },
+        (e) => {
+          state.ClaimBankError = e.response.data.message;
+          state.FuneralClaimLoading = false;
+        }
+      )
+      .catch((ex) => {
+        state.ClaimBankError = ex;
+        state.FuneralClaimLoading = false;
+      });
+  },
+  async EditFClaim({ state }) {
+    console.log(state.EditClaim);
+    state.FuneralClaimLoading = true;
+    state.ClaimBankError = null;
+    axios
+      .put('/funeralClaims/UpdateFClaim', {
+        causeOfDeath: state.EditClaim.causeOfDeaeth,
+        claimId: state.EditClaim.claimId,
+        statusId: state.EditClaim.statusId,
+        applicationDate: state.EditClaim.applicationDate,
+        dateOfDeath: state.EditClaim.dateOfDeath,
+        bank: state.EditClaim.bankDetail,
+      })
+      .then(
+        (response) => {
+          if (response.status === 204) {
+            state.FuneralClaimLoading = false;
+            state.CreateClaimDialog = false;
+            router.go();
+          }
+        },
+        (e) => {
+          state.ClaimBankError = e.response.data.message;
+          state.FuneralClaimLoading = false;
+        }
+      )
+      .catch((ex) => {
+        state.ClaimBankError = ex;
+        state.FuneralClaimLoading = false;
+      });
+  },
 };
 const mutations = {
   set_funeralClaims: (state, data) => (state.FuneralClaims = data),
   set_funeralClaim: (state, data) => (state.FuneralClaim = data),
+  set_EditClaim: (state, data) => (state.EditClaim = data),
 };
 
 export default {

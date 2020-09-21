@@ -51,6 +51,7 @@
                 label="Order"
               ></v-text-field>
               <v-checkbox v-model="State.isActiveState" label="Is Active state"></v-checkbox>
+              <v-checkbox v-model="State.active" label="Active"></v-checkbox>
               <v-checkbox v-model="State.isFinal" label="Is Final"></v-checkbox>
               <v-card outlined :loading="loadingRoles">
                 <v-card-text>

@@ -43,6 +43,7 @@ const actions = {
     state.BeneficiaryEditDialog = !state.BeneficiaryEditDialog;
   },
   OpenBeneficiaryDialog() {
+    console.log(state.Beneficiary);
     state.BeneficiaryDialog = !state.BeneficiaryDialog;
   },
   setPolicyHolderId({ commit }, holder) {
@@ -51,7 +52,10 @@ const actions = {
     commit('set_newPolicyHolderId', holder.id);
   },
   SetBeneficiary({ commit }, beneficiary) {
-    commit('set_Beneficiary', beneficiary);
+    commit('set_BeneficiaryLocal', beneficiary);
+  },
+  ClearBeneficiary() {
+    state.Beneficiary = null;
   },
   CloseModalAddNewFPolicy() {
     state.ModalAddNewFPolicy = !state.ModalAddNewFPolicy;
@@ -271,6 +275,7 @@ const mutations = {
     (data.disabled = data.disabled ? 'Yes' : 'No'),
     (state.Beneficiary = data)
   ),
+  set_BeneficiaryLocal: (state, data) => (state.Beneficiary = data),
   set_EditBeneficiary: (state, data) => (state.EditBeneficiary = data),
 };
 export default {

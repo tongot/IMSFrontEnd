@@ -99,6 +99,7 @@
                           prepend-icon="mdi-calendar"
                           readonly
                           v-bind="attrs"
+                          :rules="[rules.required]"
                           v-on="on"
                         ></v-text-field>
                       </template>

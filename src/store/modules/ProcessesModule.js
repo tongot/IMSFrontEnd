@@ -121,7 +121,7 @@ const actions = {
         processId: status.processId,
         active: true,
         isFinal: status.isFinal,
-        isActiveState: state.isActiveState,
+        isActiveState: status.isActiveState,
         rolesAllowed: status.roles,
       })
       .then(

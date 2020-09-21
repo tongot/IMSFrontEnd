@@ -14,7 +14,7 @@
     <v-app id="inspire">
       <v-navigation-drawer v-if="get_user!=null" v-model="draw" left clipped app>
         <v-list dense>
-          <v-list-item v-if="menuRights(get_user.roles)" link :to="menus[0].link">
+          <v-list-item v-if="menuRights(menus[0].roles)" link :to="menus[0].link">
             <v-list-item-action>
               <v-icon>{{ menus[0].icon }}</v-icon>
             </v-list-item-action>
@@ -35,12 +35,14 @@
             >
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title :to="term.link">{{ term.term }}</v-list-item-title>
+                  <v-list-item-title v-if="menuRights()" :to="term.link">{{ term.term }}</v-list-item-title>
                 </v-list-item-content>
               </template>
-              <v-list-item :to="item.link" link v-for="(item, index) in term.items" :key="index">
-                <v-list-item-title>{{ item.name }}</v-list-item-title>
-              </v-list-item>
+              <span v-for="(item, index) in term.items" :key="index">
+                <v-list-item :to="item.link" link v-if="menuRights(item.roles)">
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
+                </v-list-item>
+              </span>
             </v-list-group>
           </v-list-group>
           <v-list-item link :to="menus[2].link">
@@ -58,9 +60,11 @@
               </v-list-item-action>
               <v-list-item-title>{{ menus[3].name }}</v-list-item-title>
             </template>
-            <v-list-item :to="item.link" link v-for="(item, index) in menus[3].items" :key="index">
-              <v-list-item-title>{{ item.name }}</v-list-item-title>
-            </v-list-item>
+            <span link v-for="(item, index) in menus[3].items" :key="index">
+              <v-list-item :to="item.link" v-if="menuRights(item.roles)">
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+              </v-list-item>
+            </span>
           </v-list-group>
         </v-list>
       </v-navigation-drawer>
@@ -130,59 +134,110 @@ export default {
         name: "Dashboard",
         link: { name: "dashboard" },
         icon: "mdi-view-dashboard",
-        roles: ["Data"],
+        roles: "",
       },
       {
         name: "Policies/claims",
         icon: "mdi-sitemap",
-        roles: ["Admin", "Capturer"],
+        roles: "",
         terms: [
           {
             term: "Long term",
-            items: [{ name: "Funeral", link: { name: "funeralList" } }],
+            items: [
+              { name: "Funeral", link: { name: "funeralList" }, roles: "" },
+            ],
           },
           {
             term: "Short term",
+            roles: "",
             items: [],
           },
           {
             term: "Claims",
             items: [
-              { name: "Funeral Claims", link: { name: "funeralClaimList" } },
+              {
+                name: "Funeral Claims",
+                link: { name: "funeralClaimList" },
+                roles: "",
+              },
             ],
           },
         ],
       },
       {
         name: "Policy Holders",
-        roles: ["Admin", "Capturer"],
+        roles: "",
         icon: "mdi-account-multiple",
         link: { name: "policyholderList" },
       },
       {
         name: "Settings",
         icon: "mdi-flower",
-        roles: ["Admin", "Capturer"],
+        roles: "admin",
         items: [
-          { name: "Global Entities", link: { name: "underwriters" } },
-          { name: "Processes", link: { name: "status" } },
-          { name: "Users", link: { name: "users" } },
-          { name: "Funera Policy Packages", link: { name: "packagesList" } },
-          { name: "Relationships", link: { name: "relationshipList" } },
+          {
+            name: "Global Entities",
+            link: { name: "underwriters" },
+            roles: "super",
+          },
+          { name: "Processes", link: { name: "status" }, roles: "isOrgAdmin" },
+          { name: "Users", link: { name: "users" }, roles: "admin" },
+          {
+            name: "Funera Policy Packages",
+            link: { name: "packagesList" },
+            roles: "isOrgAdmin",
+          },
+          {
+            name: "Relationships",
+            link: { name: "relationshipList" },
+            roles: "admin",
+          },
         ],
       },
     ],
   }),
   methods: {
     ...mapActions(["GetUserDetails", "GetOrganizationById", "LogOut"]),
-    menuRights(roles) {
-      let count = 0;
-      roles.forEach((element) => {
-        if (this.get_user.roles.includes(element)) {
-          count++;
-        }
-      });
-      return count > 0 ? true : false;
+    menuRights(role) {
+      if (role == "admin") {
+        return this.isAdmin();
+      } else if (role == "super") {
+        return this.isSuper();
+      } else if (role == "isOrgAdmin") {
+        return this.isOrgAdmin();
+      } else {
+        return true;
+      }
+    },
+    isSuper() {
+      let role = this.get_user.roles.filter(
+        (item) => item.toLowerCase() === "admin"
+      )[0];
+      if (typeof role != "undefined") {
+        return true;
+      } else {
+        false;
+      }
+    },
+    isOrgAdmin() {
+      let role = this.get_user.roles.filter(
+        (item) => item.toLowerCase().slice(0, 5) === "admin"
+      )[0];
+      if (typeof role != "undefined") {
+        return role.length == "admin".length + 1 ? true : false;
+      } else {
+        false;
+      }
+    },
+    isAdmin() {
+      let role = this.get_user.roles.filter(
+        (item) => item.toLowerCase().slice(0, 5) === "admin"
+      )[0];
+      if (typeof role != "undefined") {
+        return true;
+      } else {
+        false;
+      }
     },
     logOut() {
       this.LogOut();

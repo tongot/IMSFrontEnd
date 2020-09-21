@@ -193,6 +193,7 @@ const actions = {
       });
   },
   async UpdateUser({ state }) {
+    console.log(state.UserEdit);
     state.loadingRoles = true;
     state.AddOrgUserError = null;
     await axios
@@ -202,6 +203,7 @@ const actions = {
         surname: state.UserEdit.surname,
         email: state.UserEdit.email,
         roles: state.UserEdit.roles,
+        isActive: state.UserEdit.isActive,
       })
       .then(
         (response) => {
@@ -261,6 +263,7 @@ const actions = {
         (response) => {
           if (response.status === 200) {
             state.OrgRoles.push(response.data.data);
+            router.go();
           }
           state.loadingRoles = false;
           return;

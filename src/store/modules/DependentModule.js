@@ -223,7 +223,6 @@ const mutations = {
     (data.salutation = enums.title[data.salutation]),
     (data.maritalStatus = enums.maritalStatus[data.maritalStatus]),
     (data.gender = enums.gender[data.gender]),
-    (data.relationship = enums.relationships[data.relationship]),
     (data.idType = enums.idType[data.idType]),
     (data.disabled = data.disabled ? 'Yes' : 'No'),
     (state.Dependent = data)

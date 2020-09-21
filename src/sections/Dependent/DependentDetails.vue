@@ -1,10 +1,11 @@
 <template>
-  <v-card flat>
+  <v-card class="mt-2" outlined>
     <v-card-title>
-      <v-spacer>
-        <v-spacer></v-spacer>
-      </v-spacer>
+      Dependent
+      <v-spacer></v-spacer>
+      <v-chip color="black" class="white--text">{{get_Dependent.relationship.name}}</v-chip>
     </v-card-title>
+
     <v-row class="ma-1">
       <v-col md="4" sm="12">
         <v-subheader>Salutation</v-subheader>
@@ -79,8 +80,14 @@
   </v-card>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  computed: mapGetters(["get_Dependent"]),
+  methods: {
+    ...mapActions(["GetDependentCover"]),
+  },
+  computed: mapGetters(["get_Dependent", "get_dependentCover"]),
+  mounted() {
+    this.GetDependentCover(this.get_Dependent.policyCover.dependentPackageId);
+  },
 };
 </script>
