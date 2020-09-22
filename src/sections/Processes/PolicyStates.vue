@@ -148,49 +148,55 @@
           </v-card-actions>
         </v-card>
       </v-form>
-      <div class="ma-2 d-flex justify-md-space-around">
-        <v-card width="400" v-for="process in get_processes" :key="process.id">
-          <v-card-title>
-            {{ process.name }}
-            <v-spacer></v-spacer>
-            <v-btn @click.prevent="OpenEditProcess(process)" icon>
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </v-card-title>
-          <v-card-text>
-            <v-list>
-              <v-subheader>State Order</v-subheader>
-              <v-btn
-                :loading="get_loadingState"
-                @click.prevent="OpenAddState(process.id)"
-                small
-                text
-              >
-                <v-icon left>mdi-plus</v-icon>State
+      <div class="ma-2">
+        <v-row>
+          <v-card width="400" class="ma-1" v-for="process in get_processes" :key="process.id">
+            <v-card-title>
+              {{ process.name }}
+              <v-spacer></v-spacer>
+              <v-btn @click.prevent="OpenEditProcess(process)" icon>
+                <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-list-item-group>
-                <v-list-item
-                  :disabled="state.name=='Deceased'"
-                  v-for="state in process.state"
-                  :key="state.id"
+            </v-card-title>
+            <v-card-text>
+              <v-list>
+                <v-subheader>State Order</v-subheader>
+                <v-btn
+                  :loading="get_loadingState"
+                  @click.prevent="OpenAddState(process.id)"
+                  small
+                  text
                 >
-                  <v-list-item-title>
-                    <v-avatar v-if="state.name!='Deceased'" color="primary" size="30">
-                      <span class="white--text">{{ state.order }}</span>
-                    </v-avatar>&nbsp;
-                    <span>{{ state.displayName }}</span>&nbsp;
-                    <v-chip small>{{ state.name }}</v-chip>
-                  </v-list-item-title>
-                  <v-list-item-action>
-                    <v-btn v-if="state.name!='Deceased'" @click.prevent="OpenEditState(state)" icon>
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-card-text>
-        </v-card>
+                  <v-icon left>mdi-plus</v-icon>State
+                </v-btn>
+                <v-list-item-group>
+                  <v-list-item
+                    :disabled="state.name=='Deceased'"
+                    v-for="state in process.state"
+                    :key="state.id"
+                  >
+                    <v-list-item-title>
+                      <v-avatar v-if="state.name!='Deceased'" color="primary" size="30">
+                        <span class="white--text">{{ state.order }}</span>
+                      </v-avatar>&nbsp;
+                      <span>{{ state.displayName }}</span>&nbsp;
+                      <v-chip small>{{ state.name }}</v-chip>
+                    </v-list-item-title>
+                    <v-list-item-action>
+                      <v-btn
+                        v-if="state.name!='Deceased'"
+                        @click.prevent="OpenEditState(state)"
+                        icon
+                      >
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-row>
       </div>
     </div>
   </div>
