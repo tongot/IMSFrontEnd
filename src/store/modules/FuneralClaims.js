@@ -141,7 +141,7 @@ const actions = {
           if (response.status === 200) {
             state.FuneralClaimLoading = false;
             state.CreateClaimDialog = false;
-            router.go();
+            router.go(-1);
           }
         },
         (e) => {

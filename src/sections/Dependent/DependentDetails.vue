@@ -7,7 +7,7 @@
     </v-card-title>
 
     <v-row class="ma-1">
-      <v-col md="4" sm="12">
+      <v-col md="4" cols="12" sm="12">
         <v-subheader>Salutation</v-subheader>
         <p class="pl-4">{{get_Dependent.salutation}}</p>
         <v-subheader>Name</v-subheader>
@@ -28,7 +28,7 @@
           <v-chip small class="red white--text" v-if="get_Dependent.disabled=='Yes'">Yes</v-chip>
         </span>
       </v-col>
-      <v-col md="4" sm="12">
+      <v-col md="4" cols="12" sm="12">
         <v-card outlined>
           <v-card-title>Cover details</v-card-title>
           <div class="ma-2">
@@ -45,7 +45,7 @@
           </div>
         </v-card>
       </v-col>
-      <v-col md="4" sm="12">
+      <v-col md="4" cols="12" sm="12">
         <v-card v-if="get_dependentCover!=null" outlined>
           <v-card-title>Package details</v-card-title>
           <div class="ma-2">

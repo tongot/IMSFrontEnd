@@ -31,7 +31,7 @@
               <v-divider></v-divider>
               <v-form ref="formAdd">
                 <v-row>
-                  <v-col md="1" sm="4" xs="4">
+                  <v-col md="1" cols="12" sm="4" xs="4">
                     <v-combobox
                       label="Title"
                       :items="getTitle()"
@@ -39,7 +39,7 @@
                       v-model="holder.salutation"
                     ></v-combobox>
                   </v-col>
-                  <v-col md="1" sm="4" xs="4">
+                  <v-col md="1" cols="12" sm="4" xs="4">
                     <v-combobox
                       label="Gender"
                       :rules="[rules.required]"
@@ -47,17 +47,17 @@
                       v-model="holder.gender"
                     ></v-combobox>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="holder.firstName"
                       :rules="[rules.required]"
                       label="Fisrt Name"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field v-model="holder.middleName" label="Middle Name"></v-text-field>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" sm="12" cols="12" xs="12">
                     <v-text-field
                       v-model="holder.lastName"
                       :rules="[rules.required]"
@@ -67,7 +67,7 @@
                   <v-col cols="12" md="4" sm="12"></v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" sm="12" cols="12" xs="12">
                     <v-menu
                       ref="menu"
                       v-model="menu"
@@ -95,7 +95,7 @@
                       </v-date-picker>
                     </v-menu>
                   </v-col>
-                  <v-col md="2" sm="4" xs="4">
+                  <v-col md="2" sm="4" cols="12" xs="4">
                     <v-combobox
                       label="Id Type"
                       :rules="[rules.required]"
@@ -103,14 +103,14 @@
                       v-model="holder.idType"
                     ></v-combobox>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" sm="12" cols="12" xs="12">
                     <v-text-field
                       v-model="holder.idNumber"
                       :rules="[rules.required]"
                       label="Id Number"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" sm="12" cols="12" xs="12">
                     <v-text-field
                       v-model="holder.countryOfIssue"
                       :rules="[rules.required]"
@@ -119,7 +119,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="4" sm="12">
+                  <v-col md="4" cols="12" sm="12">
                     <v-subheader>Disabled</v-subheader>
                     <v-divider></v-divider>
                     <v-radio-group :rules="[rules.required]" v-model="holder.disabled" row>
@@ -127,7 +127,7 @@
                       <v-radio value="false" label="No"></v-radio>
                     </v-radio-group>
                   </v-col>
-                  <v-col md="4" sm="12">
+                  <v-col md="4" cols="12" sm="12">
                     <v-combobox
                       label="Marital Status"
                       :rules="[rules.required]"
@@ -137,41 +137,41 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field v-model="holder.occupation" label="Occupation"></v-text-field>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field v-model="holder.department" label="Department"></v-text-field>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" cols="12" sm="12" xs="12">
                     <v-text-field v-model="holder.branch" label="Branch"></v-text-field>
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
                 <v-card-title>Contact details</v-card-title>
                 <v-row>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="holder.contact.mobile"
                       :rules="[rules.required]"
                       label="Mobile Number"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="holder.contact.telephoneHome"
                       :rules="[rules.required]"
                       label="Home Telephone"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="holder.contact.telephoneWork"
                       :rules="[rules.required]"
                       label="Work Telephone"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="holder.contact.primaryEmail"
                       :rules="[rules.email]"
@@ -180,17 +180,17 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" cols="12" sm="12" xs="12">
                     <v-textarea
                       v-model="holder.contact.physicalAddress"
                       :rules="[rules.required]"
                       label="Physical Address"
                     ></v-textarea>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" cols="12" sm="12" xs="12">
                     <v-textarea v-model="holder.contact.postalAddress" label="Postal Address"></v-textarea>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" cols="12" sm="12" xs="12">
                     <v-textarea v-model="holder.contact.workAddress" label="Work Address"></v-textarea>
                   </v-col>
                 </v-row>

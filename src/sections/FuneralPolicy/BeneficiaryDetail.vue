@@ -23,7 +23,7 @@
       </v-card-title>
       <v-divider></v-divider>
       <v-row class="pa-2">
-        <v-col md="4" xs="12" sm="12">
+        <v-col cols="12" md="4" xs="12" sm="12">
           <h4>Personal Details</h4>
           <v-divider></v-divider>
           <v-subheader>Salutation</v-subheader>
@@ -45,7 +45,7 @@
           </span>
         </v-col>
 
-        <v-col md="4" xs="12" sm="12">
+        <v-col cols="12" md="4" xs="12" sm="12">
           <h4>Identity</h4>
           <v-divider></v-divider>
           <v-subheader>National Id Number</v-subheader>

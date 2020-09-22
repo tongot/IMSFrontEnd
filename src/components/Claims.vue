@@ -2,7 +2,7 @@
   <div>
     <v-toolbar dark class="mt-0" flat max-height="60px">
       <v-toolbar-title>Claims</v-toolbar-title>
-      <v-btn :to="{name:'funeralClaimList'}" text class="ml-2">
+      <v-btn :to="{name:'funeralClaimList'}" :loading="get_loadingFClaims" text class="ml-2">
         <v-icon left>mdi-format-list-bulleted</v-icon>Funeral Claims
       </v-btn>
     </v-toolbar>
@@ -13,9 +13,9 @@
 </template>
 
 <script>
-//import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
-  //computed: mapGetters(["get_loadingFPolicy"]),
+  computed: mapGetters(["get_loadingFClaims"]),
 };
 </script>
 <style></style>

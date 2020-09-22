@@ -16,7 +16,7 @@
           <v-card-text v-if="get_EditFClaim!=null">
             <v-alert type="error" v-if="get_claimBankError!=null">{{get_claimBankError}}</v-alert>
             <v-row>
-              <v-col md="6" sm="12">
+              <v-col md="6" cols="12" sm="12">
                 <v-card outlined>
                   <v-card-text>
                     <v-textarea
@@ -87,7 +87,7 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-              <v-col md="6" sm="12">
+              <v-col md="6" cols="12" sm="12">
                 <v-card v-if="get_EditFClaim.bankDetail" class="mt-2 pa-2" outlined>
                   <v-card-text>
                     <v-text-field
@@ -176,7 +176,7 @@
         <v-card-text>
           <div v-if="get_funeralClaim.bankDetail!=null">
             <v-row>
-              <v-col md="4" sm="12">
+              <v-col md="4" cols="12" sm="12">
                 <v-subheader>Bank name</v-subheader>
                 <p class="pl-4">{{get_funeralClaim.bankDetail.name}}</p>
                 <v-subheader>Branch</v-subheader>
@@ -184,7 +184,7 @@
                 <v-subheader>Holder</v-subheader>
                 <p class="pl-4">{{ get_funeralClaim.bankDetail.holderName }}</p>
               </v-col>
-              <v-col md="4" sm="12">
+              <v-col md="4" cols="12" sm="12">
                 <v-card outlined>
                   <v-card-title></v-card-title>
                   <div class="ma-2">

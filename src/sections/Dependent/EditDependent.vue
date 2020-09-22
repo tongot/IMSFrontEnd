@@ -45,7 +45,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="1" sm="4" xs="4">
+                  <v-col md="1" cols="12" sm="4" xs="4">
                     <v-combobox
                       label="Title"
                       :items="getTitle()"
@@ -53,7 +53,7 @@
                       v-model="get_EditDependent.salutation"
                     ></v-combobox>
                   </v-col>
-                  <v-col md="1" sm="4" xs="4">
+                  <v-col md="1" cols="12" sm="4" xs="4">
                     <v-combobox
                       label="Gender"
                       :rules="[rules.required]"
@@ -61,17 +61,17 @@
                       v-model="get_EditDependent.gender"
                     ></v-combobox>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="get_EditDependent.firstName"
                       :rules="[rules.required]"
                       label="Fisrt Name"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field v-model="get_EditDependent.middleName" label="Middle Name"></v-text-field>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="get_EditDependent.lastName"
                       :rules="[rules.required]"
@@ -81,7 +81,7 @@
                   <v-col cols="12" md="4" sm="12"></v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-menu
                       ref="menu"
                       v-model="menu"
@@ -112,7 +112,7 @@
                       </v-date-picker>
                     </v-menu>
                   </v-col>
-                  <v-col md="2" sm="4" xs="4">
+                  <v-col md="2" cols="12" sm="4" xs="4">
                     <v-combobox
                       label="Id Type"
                       :rules="[rules.required]"
@@ -120,14 +120,14 @@
                       v-model="get_EditDependent.idType"
                     ></v-combobox>
                   </v-col>
-                  <v-col md="3" sm="12" xs="12">
+                  <v-col md="3" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="get_EditDependent.idNumber"
                       :rules="[rules.required]"
                       label="Id Number"
                     ></v-text-field>
                   </v-col>
-                  <v-col md="4" sm="12" xs="12">
+                  <v-col md="4" cols="12" sm="12" xs="12">
                     <v-text-field
                       v-model="get_EditDependent.countryOfIssue"
                       :rules="[rules.required]"
@@ -136,7 +136,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col md="4" sm="12">
+                  <v-col md="4" cols="12" sm="12">
                     <v-subheader>Disabled</v-subheader>
                     <v-divider></v-divider>
                     <v-radio-group
@@ -148,7 +148,7 @@
                       <v-radio :value="'No'" label="No"></v-radio>
                     </v-radio-group>
                   </v-col>
-                  <v-col md="4" sm="12">
+                  <v-col md="4" cols="12" sm="12">
                     <v-combobox
                       label="Marital Status"
                       :rules="[rules.required]"
@@ -159,7 +159,7 @@
                 </v-row>
                 <v-divider></v-divider>
                 <v-row justify="end">
-                  <v-col md="6" sm="12">
+                  <v-col md="6" cols="12" sm="12">
                     <v-card>
                       <v-card-title>Cover Details</v-card-title>
                       <v-card-text>

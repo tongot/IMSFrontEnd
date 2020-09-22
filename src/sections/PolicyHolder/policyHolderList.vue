@@ -30,23 +30,30 @@
       </v-card>
     </v-dialog>
     <v-card outlined class="mb-1">
-      <v-card-actions>
-        <v-overflow-btn
-          dense
-          hint="Status"
-          :persistent-hint="true"
-          target="#newPolicy"
-          width="auto"
-          :items="getStatus()"
-          item-value="value"
-          item-text="name"
-          v-model="search.status"
-          @change="searchBtn()"
-        ></v-overflow-btn>
-        <v-spacer></v-spacer>
-        <v-text-field class="mt-6" v-model="search.search" placeholder="Name/Suraname/Id Number"></v-text-field>
-        <v-btn outlined @click="searchBtn()" class="ml-2">search</v-btn>
-      </v-card-actions>
+      <v-card class="pa-2" outlined>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-overflow-btn
+              dense
+              hint="Status"
+              :persistent-hint="true"
+              target="#newPolicy"
+              width="auto"
+              :items="getStatus()"
+              item-value="value"
+              item-text="name"
+              v-model="search.status"
+              @change="searchBtn()"
+            ></v-overflow-btn>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="search.search" placeholder="Name/Suraname/Id Number"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-btn outlined @click="searchBtn()" class="mt-4">search</v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
     </v-card>
     <v-card outlined>
       <v-simple-table dense>

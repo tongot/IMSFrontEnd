@@ -19,7 +19,7 @@
       </v-card-title>
       <v-divider></v-divider>
       <v-row class="pa-2">
-        <v-col md="4" xs="12" sm="12">
+        <v-col md="4" cols="12" xs="12" sm="12">
           <h4>Personal Details</h4>
           <v-divider></v-divider>
           <v-subheader>Salutation</v-subheader>
@@ -40,7 +40,7 @@
             <v-chip small class="red white--text" v-if="get_policyHolder.disabled == 'Yes'">Yes</v-chip>
           </span>
         </v-col>
-        <v-col md="4" xs="12" sm="12">
+        <v-col md="4" cols="12" xs="12" sm="12">
           <h4>Employment</h4>
           <v-divider></v-divider>
           <v-subheader>Department</v-subheader>
@@ -65,7 +65,7 @@
         <v-card-title>Contact details</v-card-title>
         <v-divider></v-divider>
         <v-row>
-          <v-col md="6" xs="12" sm="12">
+          <v-col md="6" cols="12" xs="12" sm="12">
             <v-subheader>Mobile</v-subheader>
             <p class="pl-4">{{ get_policyHolder.contact.mobile }}</p>
             <v-subheader>Home Phone</v-subheader>
@@ -75,7 +75,7 @@
             <v-subheader>Primary Email</v-subheader>
             <p class="pl-4">{{ get_policyHolder.contact.primaryEmail }}</p>
           </v-col>
-          <v-col md="6" xs="12" sm="12">
+          <v-col md="6" cols="12" xs="12" sm="12">
             <v-subheader>Work Address</v-subheader>
             <p class="pl-4">{{ get_policyHolder.contact.workAddress }}</p>
             <v-subheader>Postal Address</v-subheader>

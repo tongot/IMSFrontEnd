@@ -19,31 +19,38 @@
 
     <v-card v-if="get_Status!=null" outlined>
       <v-alert v-if="get_statusError!=null" type="error">{{get_statusError}}</v-alert>
-      <v-card-actions>
-        <v-btn :loading="get_loadingStatus" text>Status</v-btn>
-        <v-btn
-          :disabled="getClass(status.isCurrent)"
-          small
-          v-for="status in  get_Status"
-          :key="status.id"
-          @click="setPolicy(status)"
-        >
-          <span v-if="status.isCurrent">{{status.name}}</span>
-          <span v-if="!status.isCurrent">{{status.displayName}}</span>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-        <v-btn
-          v-if="CurrentStateNotOne()"
-          @click="setReverse()"
-          class="white--text mr-2"
-          small
-          color="pink darken-2"
-        >
-          <v-icon>mdi-arrow-left</v-icon>reverse state
-        </v-btn>
-        <v-chip color="success" small>{{getCurrentStatusName()}}</v-chip>
-      </v-card-actions>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-btn :loading="get_loadingStatus" text>Status</v-btn>
+            <v-btn
+              :disabled="getClass(status.isCurrent)"
+              small
+              v-for="status in  get_Status"
+              :key="status.id"
+              @click="setPolicy(status)"
+            >
+              <span v-if="status.isCurrent">{{status.name}}</span>
+              <span v-if="!status.isCurrent">{{status.displayName}}</span>
+            </v-btn>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-btn
+                v-if="CurrentStateNotOne()"
+                @click="setReverse()"
+                class="white--text mr-2"
+                small
+                color="pink darken-2"
+              >
+                <v-icon>mdi-arrow-left</v-icon>reverse state
+              </v-btn>
+              <v-chip color="success" small>{{getCurrentStatusName()}}</v-chip>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card-text>
       <div class="pa-2">
         <v-alert prominent outlined type="info" border="left">
           <div class="title">{{getCurrentStatuspActivity()}}</div>

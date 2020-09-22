@@ -13,7 +13,7 @@
           <v-divider></v-divider>
           <v-form ref="formAdd" id="newDependent">
             <v-row>
-              <v-col md="4" sm="12">
+              <v-col md="4" cols="12" sm="12">
                 <v-overflow-btn
                   label="Relationship"
                   target="#newDependent"
@@ -28,7 +28,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col md="1" sm="4" xs="4">
+              <v-col md="1" cols="12" sm="4" xs="4">
                 <v-combobox
                   label="Title"
                   :items="getTitle()"
@@ -36,7 +36,7 @@
                   v-model="beneficiary.salutation"
                 ></v-combobox>
               </v-col>
-              <v-col md="1" sm="4" xs="4">
+              <v-col md="1" cols="12" sm="4" xs="4">
                 <v-combobox
                   label="Gender"
                   :rules="[rules.required]"
@@ -44,27 +44,27 @@
                   v-model="beneficiary.gender"
                 ></v-combobox>
               </v-col>
-              <v-col md="3" sm="12" xs="12">
+              <v-col md="3" cols="12" sm="12" xs="12">
                 <v-text-field
                   v-model="beneficiary.firstName"
                   :rules="[rules.required]"
                   label="Fisrt Name"
                 ></v-text-field>
               </v-col>
-              <v-col md="3" sm="12" xs="12">
+              <v-col md="3" cols="12" sm="12" xs="12">
                 <v-text-field v-model="beneficiary.middleName" label="Middle Name"></v-text-field>
               </v-col>
-              <v-col md="4" sm="12" xs="12">
+              <v-col md="4" cols="12" sm="12" xs="12">
                 <v-text-field
                   v-model="beneficiary.lastName"
                   :rules="[rules.required]"
                   label="Last Name"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="4" sm="12"></v-col>
+              <v-col cols="12" ols="12" md="4" sm="12"></v-col>
             </v-row>
             <v-row>
-              <v-col md="3" sm="12" xs="12">
+              <v-col md="3" cols="12" sm="12" xs="12">
                 <v-menu
                   ref="menu"
                   v-model="menu"
@@ -92,7 +92,7 @@
                   </v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col md="2" sm="4" xs="4">
+              <v-col md="2" cols="12" sm="4" xs="4">
                 <v-combobox
                   label="Id Type"
                   :rules="[rules.required]"
@@ -100,14 +100,14 @@
                   v-model="beneficiary.idType"
                 ></v-combobox>
               </v-col>
-              <v-col md="3" sm="12" xs="12">
+              <v-col md="3" cols="12" sm="12" xs="12">
                 <v-text-field
                   v-model="beneficiary.idNumber"
                   :rules="[rules.required]"
                   label="Id Number"
                 ></v-text-field>
               </v-col>
-              <v-col md="4" sm="12" xs="12">
+              <v-col md="4" cols="12" sm="12" xs="12">
                 <v-text-field
                   v-model="beneficiary.countryOfIssue"
                   :rules="[rules.required]"
@@ -116,7 +116,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col md="4" sm="12">
+              <v-col md="4" cols="12" sm="12">
                 <v-subheader>Disabled</v-subheader>
                 <v-divider></v-divider>
                 <v-radio-group :rules="[rules.required]" v-model="beneficiary.disabled" row>
@@ -124,7 +124,7 @@
                   <v-radio value="false" label="No"></v-radio>
                 </v-radio-group>
               </v-col>
-              <v-col md="4" sm="12">
+              <v-col md="4" cols="12" sm="12">
                 <v-combobox
                   label="Marital Status"
                   :rules="[rules.required]"
@@ -132,7 +132,7 @@
                   :items="getMaritalState()"
                 ></v-combobox>
               </v-col>
-              <v-col md="4" sm="12">
+              <v-col md="4" cols="12" sm="12">
                 <v-text-field
                   v-model="beneficiary.phoneNumber"
                   :rules="[rules.required]"

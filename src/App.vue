@@ -70,8 +70,8 @@
       </v-navigation-drawer>
 
       <v-app-bar app color="primary" clipped-left dark>
-        <v-app-bar-nav-icon @click.stop="draw = !draw"></v-app-bar-nav-icon>
-        <v-toolbar-title v-if="get_Organization==null">IMS 2.0.1</v-toolbar-title>
+        <v-app-bar-nav-icon v-if="get_user!=null" @click.stop="draw = !draw"></v-app-bar-nav-icon>
+        <v-toolbar-title v-if="get_Organization==null"></v-toolbar-title>
         <v-toolbar-title
           v-if="get_Organization!=null"
           class="text-capitalize"
@@ -249,7 +249,9 @@ export default {
       if (this.get_user != null) {
         this.GetOrganizationById(this.get_user.organizationId);
       } else {
-        this.$route.push({ name: "login" });
+        if (this.$router.name != "login") {
+          this.$router.push({ name: "login" });
+        }
       }
     });
   },

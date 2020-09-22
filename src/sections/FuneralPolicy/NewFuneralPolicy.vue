@@ -15,7 +15,7 @@
           <v-form id="newPolicy" ref="formAdd">
             <v-alert type="error" v-if="get_funeralPolicyErrors!= null">{{get_funeralPolicyErrors}}</v-alert>
             <v-row>
-              <v-col md="6" sm="12">
+              <v-col md="6" cols="12" sm="12">
                 <v-overflow-btn
                   label="Select underwriter"
                   target="#newPolicy"
@@ -126,7 +126,7 @@
                   item-text="name"
                 ></v-overflow-btn>
               </v-col>
-              <v-col md="6" sm="12">
+              <v-col md="6" cols="12" sm="12">
                 <v-text-field
                   v-model="Policy.cover.payPoint"
                   :rules="[rules.required]"
