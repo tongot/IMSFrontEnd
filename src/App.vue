@@ -71,7 +71,7 @@
 
       <v-app-bar app color="primary" clipped-left dark>
         <v-app-bar-nav-icon @click.stop="draw = !draw"></v-app-bar-nav-icon>
-        <v-toolbar-title v-if="get_Organization==null">IMS 2.0</v-toolbar-title>
+        <v-toolbar-title v-if="get_Organization==null">IMS</v-toolbar-title>
         <v-toolbar-title
           v-if="get_Organization!=null"
           class="text-capitalize"
