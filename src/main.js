@@ -6,8 +6,8 @@ import vuetify from './plugins/vuetify';
 import axios from 'axios';
 
 Vue.config.productionTip = false;
-axios.defaults.baseURL = 'https://localhost:5001/';
-//axios.defaults.baseURL = 'https://imsnew.azurewebsites.net';
+//axios.defaults.baseURL = 'https://localhost:5001/';
+axios.defaults.baseURL = 'https://imsnew.azurewebsites.net';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionStorage.getItem('authToken');
 
 Vue.filter('Date', (value) => {
