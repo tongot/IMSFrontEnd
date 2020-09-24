@@ -307,6 +307,7 @@
               Policy
               <v-spacer></v-spacer>
               <v-btn depressed disabled>Funeral</v-btn>
+              <v-btn class="ml-1" :to="{name:'policyAudit'}" depressed>View Audit</v-btn>
             </v-card-title>
             <v-divider></v-divider>
             <v-subheader>Status</v-subheader>
@@ -388,6 +389,7 @@
       </v-card>
     </v-dialog>
     <CreateClaim />
+    <router-view></router-view>
   </div>
 </template>
 

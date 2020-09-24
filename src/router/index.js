@@ -8,6 +8,7 @@ import Policy from '../views/Policy.vue';
 import Funeral from '../components/Funeral.vue';
 import FuneralList from '../sections/FuneralPolicy/FuneralList';
 import FuneralDetail from '../sections/FuneralPolicy/FuneralDetails';
+import PolicyAudit from '../sections/PolicyAudit/AuditList';
 
 import Settings from '../views/Settings';
 
@@ -145,6 +146,13 @@ const routes = [
             path: ':PolicyId',
             name: 'funeralDetail',
             component: FuneralDetail,
+            children: [
+              {
+                path: 'policyAudit',
+                name: 'policyAudit',
+                component: PolicyAudit,
+              },
+            ],
           },
         ],
       },
