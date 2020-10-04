@@ -97,7 +97,6 @@ const actions = {
     }
   },
   async GetUserDetails({ dispatch }) {
-    dispatch('SetActionRunning', { name: 'GetUserDetails', data: null });
     if (state.user == null) {
       let response;
       let id = sessionStorage.getItem('Oid');
@@ -108,10 +107,7 @@ const actions = {
             dispatch('SetUser', response.data);
           }
         } catch (error) {
-          if (error.response.status === 401 || error.response.status === 403) {
-            return;
-          }
-          alert('failed to load roles ' + error.response);
+          alert('Failed to load account');
         }
       } else {
         if (router.currentRoute.name != 'login') {
@@ -202,6 +198,7 @@ const actions = {
         name: state.UserEdit.name,
         surname: state.UserEdit.surname,
         email: state.UserEdit.email,
+        branchId: state.UserEdit.branchId,
         roles: state.UserEdit.roles,
         isActive: state.UserEdit.isActive,
       })
@@ -315,6 +312,7 @@ const actions = {
         password: User.password,
         passwordConfirm: User.passwordConfirm,
         organizationId: User.organizationId,
+        branchId: User.branchId,
         roles: User.roles,
       })
       .then(

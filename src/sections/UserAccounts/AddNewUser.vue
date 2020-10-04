@@ -1,46 +1,86 @@
 <template>
   <div>
-    <v-dialog width="600" v-model="dialog">
+    <v-dialog width="600" persistent v-model="dialog">
       <v-card outlined>
         <v-card-title>
           Add New User
           <v-spacer></v-spacer>
-          <v-btn icon :to="{name:'users'}">
+          <v-btn icon :to="{ name: 'users' }">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <v-alert type="error" v-if="get_AddOrgUserError!=null">{{get_AddOrgUserError}}</v-alert>
+          <v-alert type="error" v-if="get_AddOrgUserError != null">{{
+            get_AddOrgUserError
+          }}</v-alert>
           <v-form ref="formEdit" @submit.prevent="addUser()">
-            <v-text-field :rules="[rules.required]" label="Name" v-model="user.name"></v-text-field>
-            <v-text-field :rules="[rules.required]" label="Suname" v-model="user.surname"></v-text-field>
-            <v-text-field :rules="[rules.required,rules.email]" label="Email" v-model="user.email"></v-text-field>
+            <v-text-field
+              :rules="[rules.required]"
+              label="Name"
+              v-model="user.name"
+            ></v-text-field>
+            <v-text-field
+              :rules="[rules.required]"
+              label="Suname"
+              v-model="user.surname"
+            ></v-text-field>
+            <v-text-field
+              :rules="[rules.required, rules.email]"
+              label="Email"
+              v-model="user.email"
+            ></v-text-field>
+            <v-overflow-btn
+              label="Select Branch"
+              target="#newPolicy"
+              width="auto"
+              :items="get_Branches"
+              v-model="user.branchId"
+              item-value="id"
+              :loading="get_loadBranch"
+              :rules="[rules.required]"
+              item-text="name"
+            ></v-overflow-btn>
             <v-text-field
               type="password"
               :rules="passWordMatch"
               label="Password"
               v-model="user.password"
             ></v-text-field>
-            <v-text-field type="password" label="Confirm Password" v-model="user.passwordConfirm"></v-text-field>
+            <v-text-field
+              type="password"
+              label="Confirm Password"
+              v-model="user.passwordConfirm"
+            ></v-text-field>
             <v-card outlined>
-              <v-alert type="warning" v-if="RoleError!=null">{{RoleError}}</v-alert>
+              <v-alert type="warning" v-if="RoleError != null">{{
+                RoleError
+              }}</v-alert>
               <v-card-subtitle>User Roles</v-card-subtitle>
-              <v-card-actions>
-                <v-checkbox
-                  class="ml-5"
-                  v-for="role in get_orgRoles"
-                  :key="role.name"
-                  v-model="user.roles"
-                  :label="role.name+' |'"
-                  :value="role.name"
-                ></v-checkbox>
-              </v-card-actions>
+              <v-card-text>
+                <div class="d-flex flex-wrap">
+                  <v-checkbox
+                    class="ml-5"
+                    v-for="role in get_orgRoles"
+                    :key="role.name"
+                    v-model="user.roles"
+                    :label="role.name + ' |'"
+                    :value="role.name"
+                  ></v-checkbox>
+                </div>
+              </v-card-text>
             </v-card>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn depressed small @click="addUser()" :loading="get_loadingRoles" color="success">Add</v-btn>
+          <v-btn
+            depressed
+            small
+            @click="addUser()"
+            :loading="get_loadingRoles"
+            color="success"
+            >Add</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -59,6 +99,7 @@ export default {
       password: "",
       passwordConfirm: "",
       organizationId: "",
+      branchId: "",
       roles: [],
     },
     rules: {
@@ -70,7 +111,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["AddNewUser", "GetOrgRoles"]),
+    ...mapActions(["AddNewUser", "GetOrgRoles", "GetBranches"]),
     addUser() {
       this.RoleError = null;
       if (this.$refs.formEdit.validate()) {
@@ -91,6 +132,8 @@ export default {
       "get_orgRoles",
       "get_user",
       "get_AddOrgUserError",
+      "get_Branches",
+      "get_loadBranch",
     ]),
     passWordMatch() {
       let errors = [];
@@ -108,6 +151,7 @@ export default {
   mounted() {
     this.dialog = true;
     this.GetOrgRoles();
+    this.GetBranches(this.get_user.organizationId);
   },
 };
 </script>

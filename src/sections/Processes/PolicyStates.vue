@@ -12,8 +12,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-alert dismissible type="error" v-if="get_processError != null">{{ get_processError }}</v-alert>
-            <v-text-field v-model="EProcess.name" :rules="[rules.required]" label="Process Name"></v-text-field>
+            <v-alert dismissible type="error" v-if="get_processError != null">{{
+              get_processError
+            }}</v-alert>
+            <v-text-field
+              v-model="EProcess.name"
+              :rules="[rules.required]"
+              label="Process Name"
+            ></v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-btn @click.prevent="EditPro()" depressed>Edit</v-btn>
@@ -27,7 +33,9 @@
     <div>
       <v-dialog width="500" persistent v-model="dialogAddStatus">
         <v-card>
-          <v-alert type="error" v-if="errorRoles != null">{{ errorRoles }}</v-alert>
+          <v-alert type="error" v-if="errorRoles != null">{{
+            errorRoles
+          }}</v-alert>
           <v-card-title>
             Add New Status
             <v-spacer></v-spacer>
@@ -37,8 +45,14 @@
           </v-card-title>
           <v-card-text>
             <v-form ref="formAddState">
-              <v-alert type="error" v-if="get_stateError != null">{{ get_stateError }}</v-alert>
-              <v-text-field v-model="State.name" :rules="[rules.required]" label="State Name"></v-text-field>
+              <v-alert type="error" v-if="get_stateError != null">{{
+                get_stateError
+              }}</v-alert>
+              <v-text-field
+                v-model="State.name"
+                :rules="[rules.required]"
+                label="State Name"
+              ></v-text-field>
               <v-text-field
                 v-model="State.displayName"
                 :rules="[rules.required]"
@@ -50,11 +64,14 @@
                 :rules="[rules.required]"
                 label="Order"
               ></v-text-field>
-              <v-checkbox v-model="State.isActiveState" label="Is Active state"></v-checkbox>
+              <v-checkbox
+                v-model="State.isActiveState"
+                label="Is Active state"
+              ></v-checkbox>
               <v-checkbox v-model="State.active" label="Active"></v-checkbox>
               <v-checkbox v-model="State.isFinal" label="Is Final"></v-checkbox>
               <v-card outlined :loading="loadingRoles">
-                <v-card-text>
+                <v-card-text class="d-flex flex-wrap">
                   <v-checkbox
                     v-for="role in Roles"
                     :key="role.name"
@@ -66,7 +83,9 @@
               </v-card>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn :loading="get_loadingState" depressed @click="AddState()">Add</v-btn>
+                <v-btn :loading="get_loadingState" depressed @click="AddState()"
+                  >Add</v-btn
+                >
               </v-card-actions>
             </v-form>
           </v-card-text>
@@ -78,7 +97,9 @@
       <div>
         <v-dialog width="500" persistent v-model="dialogEditStatus">
           <v-card>
-            <v-alert type="error" v-if="errorRoles != null">{{ errorRoles }}</v-alert>
+            <v-alert type="error" v-if="errorRoles != null">{{
+              errorRoles
+            }}</v-alert>
             <v-card-title>
               Edit Status
               <v-spacer></v-spacer>
@@ -88,8 +109,14 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="formEditState">
-                <v-alert type="error" v-if="get_stateError != null">{{ get_stateError }}</v-alert>
-                <v-text-field v-model="StateEdit.name" :rules="[rules.required]" label="State Name"></v-text-field>
+                <v-alert type="error" v-if="get_stateError != null">{{
+                  get_stateError
+                }}</v-alert>
+                <v-text-field
+                  v-model="StateEdit.name"
+                  :rules="[rules.required]"
+                  label="State Name"
+                ></v-text-field>
                 <v-text-field
                   v-model="StateEdit.displayName"
                   :rules="[rules.required]"
@@ -101,11 +128,20 @@
                   :rules="[rules.required]"
                   label="Order"
                 ></v-text-field>
-                <v-checkbox v-model="StateEdit.isActiveState" label="Is Active state"></v-checkbox>
-                <v-checkbox v-model="StateEdit.active" label="Active"></v-checkbox>
-                <v-checkbox v-model="StateEdit.isFinal" label="Is Final"></v-checkbox>
+                <v-checkbox
+                  v-model="StateEdit.isActiveState"
+                  label="Is Active state"
+                ></v-checkbox>
+                <v-checkbox
+                  v-model="StateEdit.active"
+                  label="Active"
+                ></v-checkbox>
+                <v-checkbox
+                  v-model="StateEdit.isFinal"
+                  label="Is Final"
+                ></v-checkbox>
                 <v-card outlined :loading="loadingRoles">
-                  <v-card-text>
+                  <v-card-text class="d-flex flex-wrap">
                     <v-checkbox
                       v-for="role in Roles"
                       :key="role.name"
@@ -117,7 +153,12 @@
                 </v-card>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn :loading="get_loadingState" depressed @click="EditState()">Edit</v-btn>
+                  <v-btn
+                    :loading="get_loadingState"
+                    depressed
+                    @click="EditState()"
+                    >Edit</v-btn
+                  >
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -140,8 +181,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-alert dismissible type="error" v-if="get_processError != null">{{ get_processError }}</v-alert>
-            <v-text-field v-model="Process.name" :rules="[rules.required]" label="Process Name"></v-text-field>
+            <v-alert dismissible type="error" v-if="get_processError != null">{{
+              get_processError
+            }}</v-alert>
+            <v-text-field
+              v-model="Process.name"
+              :rules="[rules.required]"
+              label="Process Name"
+            ></v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-btn @click.prevent="Add()" depressed>Add</v-btn>
@@ -150,7 +197,12 @@
       </v-form>
       <div class="ma-2">
         <v-row>
-          <v-card width="400" class="ma-1" v-for="process in get_processes" :key="process.id">
+          <v-card
+            width="400"
+            class="ma-1"
+            v-for="process in get_processes"
+            :key="process.id"
+          >
             <v-card-title>
               {{ process.name }}
               <v-spacer></v-spacer>
@@ -171,20 +223,26 @@
                 </v-btn>
                 <v-list-item-group>
                   <v-list-item
-                    :disabled="state.name=='Deceased'"
+                    :disabled="state.name == 'Deceased'"
                     v-for="state in process.state"
                     :key="state.id"
                   >
                     <v-list-item-title>
-                      <v-avatar v-if="state.name!='Deceased'" color="primary" size="30">
-                        <span class="white--text">{{ state.order }}</span>
-                      </v-avatar>&nbsp;
-                      <span>{{ state.displayName }}</span>&nbsp;
+                      <v-avatar
+                        v-if="state.name != 'Deceased'"
+                        color="primary"
+                        size="30"
+                      >
+                        <span class="white--text">{{
+                          state.order
+                        }}</span> </v-avatar
+                      >&nbsp; <span>{{ state.displayName }}</span
+                      >&nbsp;
                       <v-chip small>{{ state.name }}</v-chip>
                     </v-list-item-title>
                     <v-list-item-action>
                       <v-btn
-                        v-if="state.name!='Deceased'"
+                        v-if="state.name != 'Deceased'"
                         @click.prevent="OpenEditState(state)"
                         icon
                       >

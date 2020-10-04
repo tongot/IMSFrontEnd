@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
+import Dash from '../components/Dash';
+import OrgDash from '../sections/Dashboard/OrgDash';
 
 import Policy from '../views/Policy.vue';
 
@@ -25,6 +27,10 @@ import Status from '../sections/Processes/PolicyStates';
 import Users from '../components/Users';
 import Roles from '../sections/UserAccounts/UserRoles';
 import newUser from '../sections/UserAccounts/AddNewUser';
+
+import Branches from '../components/Branch';
+import branchList from '../sections/Branch/ListBranch';
+import branchEdit from '../sections/Branch/EditBranch';
 
 import PolicyHolder from '../components/PolicyHolder';
 
@@ -125,6 +131,23 @@ const routes = [
           },
         ],
       },
+      {
+        path: 'Branches',
+        name: 'branches',
+        component: Branches,
+        children: [
+          {
+            path: 'list',
+            name: 'branchList',
+            component: branchList,
+          },
+          {
+            path: 'edit/:branchId',
+            name: 'branchEdit',
+            component: branchEdit,
+          },
+        ],
+      },
     ],
   },
   {
@@ -210,6 +233,20 @@ const routes = [
     path: '/',
     name: 'dashboard',
     component: Dashboard,
+    children: [
+      {
+        path: 'main-dashboard',
+        name: 'main-dash',
+        component: Dash,
+        children: [
+          {
+            path: 'organizations',
+            name: 'dash-organizations',
+            component: OrgDash,
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/unauthorized',

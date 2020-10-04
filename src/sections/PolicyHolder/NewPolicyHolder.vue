@@ -11,14 +11,17 @@
         <v-toolbar dark>
           <v-toolbar-title>Add New Policy Holder</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="error" class="mr-2" @click="Cancel()" depressed>Cancel</v-btn>
+          <v-btn color="error" class="mr-2" @click="Cancel()" depressed
+            >Cancel</v-btn
+          >
           <v-btn
             color="grey"
             @click.prevent="PostHolder()"
             class="mr-2"
             :loading="get_loadingPolicyHolder"
             depressed
-          >Add</v-btn>
+            >Add</v-btn
+          >
           <v-btn color="red" icon @click="Close()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -26,7 +29,9 @@
         <v-card-text>
           <v-card class="mt-1" outlined>
             <v-card-text>
-              <v-alert type="error" v-if="get_policyHolderError != null">{{ get_policyHolderError }}</v-alert>
+              <v-alert type="error" v-if="get_policyHolderError != null">{{
+                get_policyHolderError
+              }}</v-alert>
               <v-card-title>Person details</v-card-title>
               <v-divider></v-divider>
               <v-form ref="formAdd">
@@ -55,7 +60,10 @@
                     ></v-text-field>
                   </v-col>
                   <v-col md="3" cols="12" sm="12" xs="12">
-                    <v-text-field v-model="holder.middleName" label="Middle Name"></v-text-field>
+                    <v-text-field
+                      v-model="holder.middleName"
+                      label="Middle Name"
+                    ></v-text-field>
                   </v-col>
                   <v-col md="4" sm="12" cols="12" xs="12">
                     <v-text-field
@@ -88,10 +96,21 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="holder.dateOfBirth" no-title scrollable>
+                      <v-date-picker
+                        v-model="holder.dateOfBirth"
+                        no-title
+                        scrollable
+                      >
                         <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.menu.save(holder.dateOfBirth)">OK</v-btn>
+                        <v-btn text color="primary" @click="menu = false"
+                          >Cancel</v-btn
+                        >
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.menu.save(holder.dateOfBirth)"
+                          >OK</v-btn
+                        >
                       </v-date-picker>
                     </v-menu>
                   </v-col>
@@ -122,7 +141,11 @@
                   <v-col md="4" cols="12" sm="12">
                     <v-subheader>Disabled</v-subheader>
                     <v-divider></v-divider>
-                    <v-radio-group :rules="[rules.required]" v-model="holder.disabled" row>
+                    <v-radio-group
+                      :rules="[rules.required]"
+                      v-model="holder.disabled"
+                      row
+                    >
                       <v-radio value="true" label="Yes"></v-radio>
                       <v-radio value="false" label="No"></v-radio>
                     </v-radio-group>
@@ -138,13 +161,16 @@
                 </v-row>
                 <v-row>
                   <v-col md="3" cols="12" sm="12" xs="12">
-                    <v-text-field v-model="holder.occupation" label="Occupation"></v-text-field>
+                    <v-text-field
+                      v-model="holder.occupation"
+                      label="Occupation"
+                    ></v-text-field>
                   </v-col>
                   <v-col md="3" cols="12" sm="12" xs="12">
-                    <v-text-field v-model="holder.department" label="Department"></v-text-field>
-                  </v-col>
-                  <v-col md="4" cols="12" sm="12" xs="12">
-                    <v-text-field v-model="holder.branch" label="Branch"></v-text-field>
+                    <v-text-field
+                      v-model="holder.department"
+                      label="Department"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
@@ -188,10 +214,16 @@
                     ></v-textarea>
                   </v-col>
                   <v-col md="4" cols="12" sm="12" xs="12">
-                    <v-textarea v-model="holder.contact.postalAddress" label="Postal Address"></v-textarea>
+                    <v-textarea
+                      v-model="holder.contact.postalAddress"
+                      label="Postal Address"
+                    ></v-textarea>
                   </v-col>
                   <v-col md="4" cols="12" sm="12" xs="12">
-                    <v-textarea v-model="holder.contact.workAddress" label="Work Address"></v-textarea>
+                    <v-textarea
+                      v-model="holder.contact.workAddress"
+                      label="Work Address"
+                    ></v-textarea>
                   </v-col>
                 </v-row>
               </v-form>
@@ -211,7 +243,6 @@ export default {
     menu: false,
     holder: {
       department: "",
-      branch: "",
       maritalStatus: "",
       occupation: "",
       salutation: "",
@@ -279,7 +310,6 @@ export default {
     },
     clearForm() {
       this.holder.department = "";
-      this.holder.branch = "";
       this.holder.maritalStatus = "";
       this.holder.occupation = "";
       this.holder.salutation = "";

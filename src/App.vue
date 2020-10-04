@@ -12,9 +12,19 @@
     <editCover />
     <editDependent />
     <v-app id="inspire">
-      <v-navigation-drawer v-if="get_user!=null" v-model="draw" left clipped app>
+      <v-navigation-drawer
+        v-if="get_user != null"
+        v-model="draw"
+        left
+        clipped
+        app
+      >
         <v-list dense>
-          <v-list-item v-if="menuRights(menus[0].roles)" link :to="menus[0].link">
+          <v-list-item
+            v-if="menuRights(menus[0].roles)"
+            link
+            :to="menus[0].link"
+          >
             <v-list-item-action>
               <v-icon>{{ menus[0].icon }}</v-icon>
             </v-list-item-action>
@@ -35,7 +45,9 @@
             >
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title v-if="menuRights()" :to="term.link">{{ term.term }}</v-list-item-title>
+                  <v-list-item-title v-if="menuRights()" :to="term.link">{{
+                    term.term
+                  }}</v-list-item-title>
                 </v-list-item-content>
               </template>
               <span v-for="(item, index) in term.items" :key="index">
@@ -70,16 +82,20 @@
       </v-navigation-drawer>
 
       <v-app-bar app color="primary" clipped-left dark>
-        <v-app-bar-nav-icon v-if="get_user!=null" @click.stop="draw = !draw"></v-app-bar-nav-icon>
-        <v-toolbar-title v-if="get_Organization==null"></v-toolbar-title>
+        <v-app-bar-nav-icon
+          v-if="get_user != null"
+          @click.stop="draw = !draw"
+        ></v-app-bar-nav-icon>
+        <v-toolbar-title v-if="get_Organization == null"></v-toolbar-title>
         <v-toolbar-title
-          v-if="get_Organization!=null"
+          v-if="get_Organization != null"
           class="text-capitalize"
-        >{{get_Organization.name}}</v-toolbar-title>
+          >{{ get_Organization.name }}</v-toolbar-title
+        >
         <v-spacer></v-spacer>
         <div>
-          <v-chip v-if="get_user!=null" outlined>
-            {{get_user.email}}
+          <v-chip v-if="get_user != null" outlined>
+            {{ get_user.email }}
             <v-btn @click="logOut()" class="ml-2" small text>
               Logout
               <v-icon right>mdi-logout</v-icon>
@@ -179,6 +195,11 @@ export default {
             name: "Global Entities",
             link: { name: "underwriters" },
             roles: "super",
+          },
+          {
+            name: "Branches",
+            link: { name: "branchList" },
+            roles: "admin",
           },
           { name: "Processes", link: { name: "status" }, roles: "isOrgAdmin" },
           { name: "Users", link: { name: "users" }, roles: "admin" },
