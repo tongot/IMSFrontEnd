@@ -12,7 +12,27 @@
         <v-card-text>
           <v-alert type="error" v-if="get_policyHolderError != null">{{ get_policyHolderError }}</v-alert>
           <v-divider></v-divider>
-          <v-card-title>Person details</v-card-title>
+          <v-card-title>Person details
+<v-spacer></v-spacer>
+<v-chip>
+{{get_policyHolder.branch.name}}
+
+</v-chip>
+          </v-card-title>
+
+              <v-col md="4" cols="12" sm="12" xs="12">
+                       <!-- <v-overflow-btn
+                      label="Branch"
+                      width="auto"
+                      :items="get_Branches"
+                      v-model="get_policyHolder.branchId"
+                      item-value="id"
+                      :loading="get_loadBranch"
+                      :rules="[rules.required]"
+                      item-text="name"
+                      disabled
+                    ></v-overflow-btn> -->
+              </v-col>
           <v-form ref="formAdd">
             <v-row>
               <v-col md="1" cols="12" sm="4" xs="4">
@@ -128,10 +148,7 @@
                 <v-text-field v-model="get_policyHolder.occupation" label="Occupation"></v-text-field>
               </v-col>
               <v-col md="3" cols="12" sm="12" xs="12">
-                <v-text-field v-model="get_policyHolder.department" label="Department"></v-text-field>
-              </v-col>
-              <v-col md="4" cols="12" sm="12" xs="12">
-                <v-text-field v-model="get_policyHolder.branch" label="Branch"></v-text-field>
+                <v-text-field v-model="get_policyHolder.department" label="Employer"></v-text-field>
               </v-col>
             </v-row>
             <v-divider></v-divider>
@@ -234,6 +251,7 @@ export default {
       "CloseEditPolicyHolderDialog",
       "AddPolicyHolder",
       "EditPolicyHolder",
+      "GetBranches"
     ]),
   },
   computed: mapGetters([
@@ -241,7 +259,17 @@ export default {
     "get_policyHolderError",
     "get_loadingPolicyHolder",
     "get_policyHolder",
+    "get_Branches",
+    "get_loadBranch",
+    "get_user"
   ]),
+  mounted(){
+      if(this.get_user!=null)
+      {
+        this.GetBranches()
+      }
+
+  }
 };
 </script>
 

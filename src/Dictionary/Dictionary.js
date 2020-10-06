@@ -3,7 +3,7 @@ const enums = {
   gender: ['Male', 'Female'],
   maritalStatus: ['Single', 'Married', 'Divorced', 'Widowed'],
   policyTerm: ['Short', 'Long'],
-  personStatus: ['Active', 'Deceased'],
+  personStatus: ['Active', 'Deceased','InActive'],
   typeOfRelationship: [
     'Spouse',
     'Son',
@@ -22,6 +22,7 @@ const enums = {
     { name: 'All', value: '' },
     { name: 'Active', value: 0 },
     { name: 'Deceased', value: 1 },
+    { name: 'Inactive', value: 2 },
   ],
 };
 export default enums;

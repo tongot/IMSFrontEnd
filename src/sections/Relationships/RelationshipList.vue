@@ -40,18 +40,10 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <v-list dense v-for="(relation,index) in get_Relationships" :key="relation.id">
-          <v-list-item-group>
-            <v-list-item>
-              <v-list-item-title>{{relation.name}}</v-list-item-title>
-              <v-list-item-action>
-                <v-btn @click="openModalEdit(index,relation)" icon>
-                  <v-icon>mdi-pencil</v-icon>
+                <v-btn v-for="(relation,index) in get_Relationships" :key="relation.id" @click="openModalEdit(index,relation)" depressed class="ma-1">
+                  {{relation.name}}
+                  <v-icon right>mdi-pencil</v-icon>
                 </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
       </v-card-text>
     </v-card>
   </v-container>

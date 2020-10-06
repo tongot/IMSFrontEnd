@@ -68,15 +68,17 @@
               <th class="text-left">Branch</th>
             </tr>
           </thead>
+
           <tbody>
             <tr v-for="holder in get_policyHolders" :key="holder.id">
+             
               <td>{{ holder.salutation }}</td>
               <td>{{ holder.firstName + ' ' + holder.middleName }}</td>
               <td>{{ holder.lastName }}</td>
               <td>{{ holder.gender }}</td>
 
               <td>{{ holder.idNumber }}</td>
-              <td>{{ holder.branch }}</td>
+              <td>{{ holder.branch.name }}</td>
               <td>
                 <v-btn
                   small
@@ -100,8 +102,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-pagination
+          total-visible="10"
           v-model="search.page"
-          @input="searchBtn()"
+          @input="searchBtn(true)"
           :length="get_policyHolderPages"
           circle
         ></v-pagination>
@@ -136,7 +139,9 @@ export default {
     },
   }),
   methods: {
-    searchBtn() {
+    searchBtn(isPageBtn) {
+      
+      this.search.page=isPageBtn==true?this.search.page:1;
       this.GetPolicyHolders(this.search);
     },
     getGender(g) {

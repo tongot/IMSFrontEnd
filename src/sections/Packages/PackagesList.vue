@@ -166,7 +166,7 @@
     <v-card flat>
       <v-card-text>
         <v-row>
-          <v-col md="4" sm="12" v-for="(Package, index) in get_Packages" :key="Package.id">
+          <v-col md="12" sm="12" v-for="(Package, index) in get_Packages" :key="Package.id">
             <v-card>
               <v-card-title>
                 {{ Package.name }}
@@ -199,11 +199,12 @@
                     </v-btn>
                   </v-card-title>
 
-                  <v-card-text>
+                  <v-card-text class="d-flex flex-wrap justify-start">
                     <v-card
-                      class="mb-2"
+                      class="ma-2"
                       v-for="(dep, index2) in Package.dependentPackages"
                       :key="dep.id"
+                      width="300"
                     >
                       <v-card-title>
                         {{ dep.name }}

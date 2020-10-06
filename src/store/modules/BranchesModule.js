@@ -17,10 +17,10 @@ const actions = {
   SetEditBranch({ commit }, branch) {
     commit('set_EditBranch', _.clone(branch));
   },
-  async GetBranches({ commit }, id) {
+  async GetBranches({ commit }) {
     state.loadBranch = true;
     await axios
-      .get('Branch/GetForOrg/' + id)
+      .get('Branch/GetForOrg')
       .then((response) => {
         if (response.status === 200) {
           commit('set_Branches', response.data.data);

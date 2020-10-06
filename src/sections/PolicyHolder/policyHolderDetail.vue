@@ -43,12 +43,12 @@
         <v-col md="4" cols="12" xs="12" sm="12">
           <h4>Employment</h4>
           <v-divider></v-divider>
-          <v-subheader>Department</v-subheader>
+          <v-subheader>Employer</v-subheader>
           <p class="pl-4">{{ get_policyHolder.department }}</p>
           <v-subheader>Occupation</v-subheader>
           <p class="pl-4">{{ get_policyHolder.occupation }}</p>
           <v-subheader>Branch</v-subheader>
-          <p class="pl-4">{{ get_policyHolder.branch }}</p>
+          <p class="pl-4">{{ get_policyHolder.branch.name }}</p>
         </v-col>
         <v-col md="4" xs="12" sm="12">
           <h4>Identity</h4>
