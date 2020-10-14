@@ -18,10 +18,10 @@
           </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
-      <v-card flat color="grey lighten-3" class="container">
+      <v-card v-if="get_dashCounts" flat color="grey lighten-3" class="container">
         <v-row>
-          <v-col cols="4">
-            <v-card width="480px" color="primary" class="white--text">
+          <v-col cols="3">
+            <v-card width="450px" color="primary" class="white--text">
               <v-card-title>
                 Policy Holders
                 <v-spacer></v-spacer>
@@ -29,12 +29,12 @@
               </v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <span class="display-3">20000</span>
+                <span class="display-3">{{get_dashCounts.numberOfPolicyHolders}}</span>
               </v-card-actions>
             </v-card>
           </v-col>
-          <v-col cols="4">
-            <v-card width="480px" color="success" class="white--text">
+          <v-col cols="3">
+            <v-card width="450px" color="success" class="white--text">
               <v-card-title
                 >Active
                 <v-spacer></v-spacer>
@@ -42,20 +42,33 @@
               </v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <span class="display-3">19000</span>
+                <span class="display-3">{{get_dashCounts.numberOfActivePolicyHolders}}</span>
               </v-card-actions>
             </v-card>
           </v-col>
-          <v-col cols="4">
-            <v-card width="480px" color="pink darken-3" class="white--text">
+          <v-col cols="3">
+            <v-card width="450px" color="red darken-3" class="white--text">
               <v-card-title
                 >Deceased
+                <v-spacer></v-spacer>
+                <v-icon size="50"> mdi-skull</v-icon>
+              </v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <span class="display-3">{{get_dashCounts.numberOfDeceasedPolicyHolders}}</span>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+           <v-col cols="3">
+            <v-card width="450px" color="pink darken-3" class="white--text">
+              <v-card-title
+                >Inative
                 <v-spacer></v-spacer>
                 <v-icon size="50"> mdi-account-alert</v-icon>
               </v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <span class="display-3">300</span>
+                <span class="display-3">{{get_dashCounts.numberOfInActivePolicyHolders}}</span>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -95,11 +108,12 @@ export default {
       this.menuWidth = 1;
       this.viewWidth = 11;
     },
-    ...mapActions(["GetOrganizations"]),
+    ...mapActions(["GetOrganizations",'GetDashCounts']),
   },
-  computed: mapGetters(["get_Organizations"]),
+  computed: mapGetters(["get_Organizations",'get_dashCounts']),
   mounted() {
     this.GetOrganizations();
+    this.GetDashCounts()
   },
 };
 </script>
@@ -107,5 +121,6 @@ export default {
 <style scoped>
 .container {
   margin-left: 50px;
+  padding-right:50px ;
 }
 </style>>

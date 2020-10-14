@@ -18,6 +18,8 @@ import ClaimStateManger from './modules/ClaimStateManager';
 import ChangeClaimOwner from './modules/ChangeClaimOwner';
 import AuditModule from './modules/AuditModule';
 import BranchesModule from './modules/BranchesModule';
+import DashboardModule from './modules/DashboardModule';
+
 
 Vue.use(Vuex);
 
@@ -63,5 +65,6 @@ export default new Vuex.Store({
     ChangeClaimOwner,
     AuditModule,
     BranchesModule,
+    DashboardModule
   },
 });
