@@ -84,7 +84,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="get_policyHolder.dateOfBirth"
-                      label="Picker in menu"
+                      label="Date Of Birth"
                       prepend-icon="mdi-calendar"
                       readonly
                       v-bind="attrs"
